@@ -346,7 +346,7 @@ class MySceneGraph {
 
                 var persp = new CGFcamera(angle, near, far, fromVec, toVec);
     
-                this.views.push(persp);
+                this.views[this.views.length < 1 ? 1 : this.views.length] = persp;
             }
             else {
                 // left
@@ -396,14 +396,13 @@ class MySceneGraph {
 
                 var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, from, to, up );
 
-                this.views.push(orth);
+                this.views[this.views.length < 1 ? 1 : this.views.length].push(orth);
             }
 
             this.scene.viewList[viewId] = this.views.length - 1;
         }
 
         this.log("Parsed views");
-        console.log(this.scene.viewList);
         return null;
     }
 
