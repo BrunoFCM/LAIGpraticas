@@ -6,6 +6,10 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+        <perspective id="testPerspectiveCamera" near="0.2" far="250" angle="65">
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+        </perspective>
     </views>
 
     <ambient>
