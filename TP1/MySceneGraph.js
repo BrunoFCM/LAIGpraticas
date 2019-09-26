@@ -283,13 +283,6 @@ class MySceneGraph {
                 this.onXMLMinorError("unexpected number of grandchildren of the view for ID = " + viewId);
                 continue;
             }
-            /*
-            //position vec3
-            var position = this.reader.getVector3(grandChildren[0], 'from');
-            if(position == null){
-                return "unable to parse 'from' vector from the view parameters for ID = " + viewId;
-            }
-*/
             
             //check for "from"
             if (grandChildren[0].nodeName != "from") {
