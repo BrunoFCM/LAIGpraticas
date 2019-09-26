@@ -12,6 +12,11 @@ class XMLscene extends CGFscene {
         super();
 
         this.interface = myinterface;
+
+        
+
+        this.selectedView = 0;
+        this.viewList = {'ActiveCamera' : 0};
     }
 
     /**
@@ -100,6 +105,14 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         this.sceneInited = true;
+        
+        this.graph.views[0] = this.camera;
+
+        this.interface.updateGUI();
+    }
+
+    onSelectedViewChanged(value){
+        this.camera = this.graph.views[value];
     }
 
     /**

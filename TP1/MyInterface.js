@@ -21,6 +21,8 @@ class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         // add a group of controls (and open/expand by defult)
+        
+		this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
 
         this.initKeys();
 
@@ -46,5 +48,10 @@ class MyInterface extends CGFinterface {
 
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
+    }
+
+    updateGUI() {
+        this.gui.__controllers[0].remove();
+        this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View');
     }
 }

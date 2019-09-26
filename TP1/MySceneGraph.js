@@ -227,8 +227,182 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        // Get default of the views.
+        var viewsDefault = this.reader.getString(viewsNode, 'default')
+        if (viewsDefault == null)
+            return "no default defined for views";
 
+        this.idDefault = viewsDefault;
+
+        var children = viewsNode.children;
+
+        this.views = [];
+
+        var grandChildren = [];
+
+        if(children.length <= 0) {
+            return "There must be at least one defined view";
+        }
+
+        // Any number of views.
+        for (var i = 0; i < children.length; i++) {
+
+            // Validate the view type
+            if (children[i].nodeName != 'perspective' && children[i].nodeName != 'ortho') {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current view.
+            var viewId = this.reader.getString(children[i], 'id');
+            if (viewId == null)
+                return "no ID defined for view";
+
+            // Checks for repeated IDs.
+            if (this.views[viewId] != null)
+                return "ID must be unique for each view (conflict: ID = " + viewId + ")";
+
+            var viewType = children[i].nodeName;
+            grandChildren = children[i].children;
+
+            // Retrieves the view parameters.
+            // near
+            var near = this.reader.getFloat(children[i], 'near');
+            if (!(near != null && !isNaN(near)))
+                return "unable to parse near of the view parameters for ID = " + viewId;
+
+            // far
+            var far = this.reader.getFloat(children[i], 'far');
+            if (!(far != null && !isNaN(far)))
+                return "unable to parse far of the view parameters for ID = " + viewId;
+
+            if (grandChildren.length < 2 || 
+                (grandChildren.length > 2 && viewType == 'perspective') || 
+                (grandChildren.length > 3 && viewType == 'ortho')){
+
+                this.onXMLMinorError("unexpected number of grandchildren of the view for ID = " + viewId);
+                continue;
+            }
+            /*
+            //position vec3
+            var position = this.reader.getVector3(grandChildren[0], 'from');
+            if(position == null){
+                return "unable to parse 'from' vector from the view parameters for ID = " + viewId;
+            }
+*/
+            
+            //check for "from"
+            if (grandChildren[0].nodeName != "from") {
+                this.onXMLMinorError("unexpected tag \"" + grandChildren[0].nodeName + "\" of grandchild of the view for ID = " + viewId);
+                continue;
+            }
+
+            // x from
+            var xFrom = this.reader.getFloat(grandChildren[0], 'x');
+            if (!(xFrom != null && !isNaN(xFrom)))
+                return "unable to parse xFrom of the view parameters for ID = " + viewId;
+        
+            // y from
+            var yFrom = this.reader.getFloat(grandChildren[0], 'y');
+            if (!(yFrom != null && !isNaN(yFrom)))
+                return "unable to parse yFrom of the view parameters for ID = " + viewId;
+                
+            // z from
+            var zFrom = this.reader.getFloat(grandChildren[0], 'z');
+            if (!(zFrom != null && !isNaN(zFrom)))
+                return "unable to parse zFrom of the view parameters for ID = " + viewId;
+
+            var fromVec = new vec4.fromValues(xFrom, yFrom, zFrom);
+
+            //check for "to"
+            if (grandChildren[1].nodeName != "to") {
+                this.onXMLMinorError("unexpected tag \"" + grandChildren[1].nodeName + "\" of grandchild of the view for ID = " + viewId);
+                continue;
+            }
+
+            // x to
+            var xTo = this.reader.getFloat(grandChildren[1], 'x');
+            if (!(xTo != null && !isNaN(xTo)))
+                return "unable to parse xTo of the view parameters for ID = " + viewId;
+        
+            // y to
+            var yTo = this.reader.getFloat(grandChildren[1], 'y');
+            if (!(yTo != null && !isNaN(yTo)))
+                return "unable to parse yTo of the view parameters for ID = " + viewId;
+                
+            // z to
+            var zTo = this.reader.getFloat(grandChildren[1], 'z');
+            if (!(zTo != null && !isNaN(zTo)))
+                return "unable to parse zTo of the view parameters for ID = " + viewId;
+                
+            var toVec = new vec4.fromValues(xTo, yTo, zTo);
+
+            // Specifications for the current view.
+            if (viewType == 'perspective'){
+                // angle
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle of the view parameters for ID = " + viewId;
+
+                var persp = new CGFcamera(angle, near, far, fromVec, toVec);
+    
+                this.views[this.views.length < 1 ? 1 : this.views.length] = persp;
+            }
+            else {
+                // left
+                var left = this.reader.getFloat(children[i], 'left');
+                if (!(left != null && !isNaN(left)))
+                    return "unable to parse left of the view parameters for ID = " + viewId;
+
+                // right
+                var right = this.reader.getFloat(children[i], 'right');
+                if (!(right != null && !isNaN(right)))
+                    return "unable to parse right of the view parameters for ID = " + viewId;
+                    
+                // top
+                var top = this.reader.getFloat(children[i], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the view parameters for ID = " + viewId;
+                    
+                // bottom
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+                if (!(bottom != null && !isNaN(bottom)))
+                    return "unable to parse bottom of the view parameters for ID = " + viewId;
+
+                var up;
+                //Checks for "up" grandchild
+                if (grandChildren.length == 3){
+                    // x up
+                    var xUp = this.reader.getFloat(grandChildren[2], 'x');
+                    if (!(xUp != null && !isNaN(xUp)))
+                        return "unable to parse xTo of the view parameters for ID = " + viewId;
+                
+                    // y up
+                    var yUp = this.reader.getFloat(grandChildren[2], 'y');
+                    if (!(yUp != null && !isNaN(yUp)))
+                        return "unable to parse yUp of the view parameters for ID = " + viewId;
+                        
+                    // z up
+                    var zUp = this.reader.getFloat(grandChildren[2], 'z');
+                    if (!(zUp != null && !isNaN(zUp)))
+                        return "unable to parse zUp of the view parameters for ID = " + viewId;
+                        
+                    up = new vec3.fromValues(xUp, yUp, zUp);
+                }
+                else {
+                    //default up value
+                    up = new vec3.fromValues(0,1,0);
+                }
+
+                var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, from, to, up );
+
+                this.views[this.views.length < 1 ? 1 : this.views.length].push(orth);
+            }
+
+            this.scene.viewList[viewId] = this.views.length - 1;
+        }
+
+        this.log("Parsed views");
         return null;
     }
 
