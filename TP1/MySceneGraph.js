@@ -559,13 +559,44 @@ class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
+        var children = texturesNode.children;
+
+        this.textures = [];
+        var numTextures = 0;
+
+        if(children.length == 0){
+            this.onXMLMinorError("No Textures.");
+        }
+
+        for (var i = 0; i < children.length; i++){
+            var textureId = this.reader.getString(children[i], 'id');
+            var textureFile = this.reader.getString(children[i], 'file');
+            var png = textureFile.search(".png");
+            var jpg = textureFile.search(".jpg");
+            if (png == -1 && jpg == -1){
+                return "Texture must be either a PNG or a JPG";
+            }
+            if (textureId == null){
+                return "no ID defined for texture";
+            }
+
+            // Checks for repeated IDs.
+            if (this.textures[textureId] != null){
+                return "ID must be unique for each light (conflict: ID = " + textureId + ")";
+            }
+
+            this.textures[textureId] = textureFile;
+        }
+            
+
         //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        this.log("Parsed textures");
         return null;
     }
 
     /**
      * Parses the <materials> node.
+     * Material = [shininess, emission values, ambient values, difuse values, specular values]
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
@@ -576,8 +607,13 @@ class MySceneGraph {
         var grandChildren = [];
         var nodeNames = [];
 
+        if(children.length == 0){
+            this.onXMLMinorError("No Materials.");
+        }
+
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
+            var global = [];
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -594,10 +630,29 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
             //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            var materialShininess = this.reader.getFloat(children[i], 'shininess');
+            global.push(materialShininess);
+
+            grandChildren = children[i].children;
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (var i = 0; i < grandChildren.length; i++) {
+                if (grandChildren[i].nodeName != "emission" && grandChildren[i].nodeName != "diffuse" && grandChildren[i].nodeName != "specular" && grandChildren[i].nodeName != "ambient") {
+                this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">");
+                continue;
+                }
+
+                var aux = this.parseColor(grandChildren[i], grandChildren[i].nodeName + " for ID" + materialID)
+                global.push(aux);
+            }
+            this.materials[materialID] = global;
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -643,12 +698,55 @@ class MySceneGraph {
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    case 'scale':
+                    let x = parseFloat(currGrandchild.getAttribute("x"));
+                    let y = parseFloat(currGrandchild.getAttribute("y"));
+                    let z = parseFloat(currGrandchild.getAttribute("z"));
+                    if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                        this.onXMLMinorError(currChild.getAttribute("id") + " has one or more invalid '" + currGrandchild.nodeName + "' xyz values, using default value x = y = z = " + DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("x", DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("y", DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("z", DEFAULT_SCALE_VALUE);
+                    }
+                    let vector1 = vec3.fromValues(parseFloat(currGrandchild.getAttribute("x")), parseFloat(currGrandchild.getAttribute("y")), parseFloat(currGrandchild.getAttribute("z")));
+                    mat4.scale(matrix, matrix, vector1);               
+                        
                         break;
                     case 'rotate':
                         // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                         let angle = parseFloat(currGrandchild.getAttribute("angle"));
+                         let axis = currGrandchild.getAttribute("axis");
+                         if (!this.isValidNumber(angle)) {
+                            let defAngle = 0;
+                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
+                            currGrandchild.setAttribute("angle", defAngle);
+                         }
+                         if (axis != "x" && axis != "y" && axis != "z") {
+                           let defAxis = "x";
+                           this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid axis value, using default value axis = " + defAxis);
+                           currGrandchild.setAttribute("angle", defAxis);
+                         }
+
+                        let vector2 = vec3.create();
+                        switch (currGrandchild.getAttribute("axis")) {
+                            case "x":
+                            {
+                                  vector2 = vec3.fromValues(1, 0, 0);
+                                  break;
+                            }
+                            case "y":
+                            {
+                                  vector2 = vec3.fromValues(0, 1, 0);
+                                  break;
+                            }
+                            case "z":
+                            {
+                                  vector2 = vec3.fromValues(0, 0, 1);
+                                  break;
+                            }
+                        }
+                        angle = parseFloat(currGrandchild.getAttribute("angle")) * DEGREE_TO_RAD;
+                        mat4.rotate(matrix, matrix, angle, vector2);
                         break;
                 }
             }
