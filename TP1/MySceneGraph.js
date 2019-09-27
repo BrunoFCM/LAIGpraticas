@@ -848,6 +848,7 @@ class MySceneGraph {
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
+            var newComponent;
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -876,11 +877,106 @@ class MySceneGraph {
             var childrenIndex = nodeNames.indexOf("children");
 
             this.onXMLMinorError("To do: Parse components.");
+            
             // Transformations
+            grandgrandChildren = grandChildren[transformationIndex].children;
+
+            for (var j = 0; j < grandgrandchildren.length; j++) {
+
+                if (grandgrandchildren[j].nodeName != "transformationref" || 
+                grandgrandchildren[j].nodeName != "translate" ||
+                grandgrandchildren[j].nodeName != "scale" ||
+                grandgrandchildren[j].nodeName != "rotate") {
+                    this.onXMLMinorError("unknown tag <" + grandgrandchildren[j].nodeName + ">");
+                    continue;
+                }
+    
+                // Reference to another transformation
+                if (grandgrandchildren[j].nodeName == "transformationref"){
+                    var referencedTransformation = this.reader.getString(grandgrandChildren[j], "id");
+                    
+                    if (referencedTransformation == null){
+                        this.onXMLMinorError("no ID defined for transformation");
+                        continue;
+                    }
+
+                    // Checks for a missing ID.
+                    if(this.transformations[referencedTransformation] == null){
+                        this.onXMLMinorError("reference to unknown transformation " + referencedTransformation);
+                        continue;
+                    }
+
+                    newComponent.transformations.push(this.transformations[referencedTransformation]);
+                }
+
+                // Specifications for the current transformation.
+                var transfMatrix = mat4.create();
+                    
+                switch (grandChildren[j].nodeName) {
+                    case 'translate':
+                        var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        break;
+                    case 'scale':
+                    let x = parseFloat(currGrandchild.getAttribute("x"));
+                    let y = parseFloat(currGrandchild.getAttribute("y"));
+                    let z = parseFloat(currGrandchild.getAttribute("z"));
+                    if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                        this.onXMLMinorError(currChild.getAttribute("id") + " has one or more invalid '" + currGrandchild.nodeName + "' xyz values, using default value x = y = z = " + DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("x", DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("y", DEFAULT_SCALE_VALUE);
+                        currGrandchild.setAttribute("z", DEFAULT_SCALE_VALUE);
+                    }
+                    let vector1 = vec3.fromValues(parseFloat(currGrandchild.getAttribute("x")), parseFloat(currGrandchild.getAttribute("y")), parseFloat(currGrandchild.getAttribute("z")));
+                    mat4.scale(matrix, matrix, vector1);               
+                        
+                        break;
+                    case 'rotate':
+                        // angle
+                            let angle = parseFloat(currGrandchild.getAttribute("angle"));
+                            let axis = currGrandchild.getAttribute("axis");
+                            if (!this.isValidNumber(angle)) {
+                            let defAngle = 0;
+                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
+                            currGrandchild.setAttribute("angle", defAngle);
+                            }
+                            if (axis != "x" && axis != "y" && axis != "z") {
+                            let defAxis = "x";
+                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid axis value, using default value axis = " + defAxis);
+                            currGrandchild.setAttribute("angle", defAxis);
+                            }
+
+                        let vector2 = vec3.create();
+                        switch (currGrandchild.getAttribute("axis")) {
+                            case "x":
+                            {
+                                    vector2 = vec3.fromValues(1, 0, 0);
+                                    break;
+                            }
+                            case "y":
+                            {
+                                    vector2 = vec3.fromValues(0, 1, 0);
+                                    break;
+                            }
+                            case "z":
+                            {
+                                    vector2 = vec3.fromValues(0, 0, 1);
+                                    break;
+                            }
+                        }
+                        angle = parseFloat(currGrandchild.getAttribute("angle")) * DEGREE_TO_RAD;
+                        mat4.rotate(matrix, matrix, angle, vector2);
+                        break;
+                }
 
             // Materials
 
+
             // Texture
+
 
             // Children
         }
