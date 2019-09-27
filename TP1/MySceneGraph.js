@@ -592,7 +592,9 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + textureId + ")";
             }
 
-            this.textures[textureId] = textureFile;
+            var filep = children[i].getAttribute("id");
+            //this.textures[textureId] = textureFile;
+            his.textures[textureId] = new CGFtexture(this.scene, "./scenes/images/" + filep);
         }
             
 
@@ -637,8 +639,9 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
             //Continue here
+            this.materials[materialID] = new CGFappearance(this.scene);
             var materialShininess = this.reader.getFloat(children[i], 'shininess');
-            global.push(materialShininess);
+            this.materials[materialID].setShininess(materialShininess);
 
             grandChildren = children[i].children;
 
@@ -652,11 +655,22 @@ class MySceneGraph {
                 this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">");
                 continue;
                 }
-
-                var aux = this.parseColor(grandChildren[i], grandChildren[i].nodeName + " for ID" + materialID)
-                global.push(aux);
+                switch(grandChildren[i].nodeName){
+                    case "emission":
+                        this.materials[materialID].setEmission(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        break;
+                    case "ambient":
+                        this.materials[materialID].setAmbient(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        break;
+                    case "diffuse":
+                        this.materials[materialID].setDiffuse(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        break;
+                    case "specular":
+                        this.materials[materialID].setSpecular(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        break;
+                
+                }
             }
-            this.materials[materialID] = global;
         }
 
         this.log("Parsed materials");
