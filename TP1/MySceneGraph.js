@@ -587,7 +587,7 @@ class MySceneGraph {
 
             var filep = children[i].getAttribute("id");
             //this.textures[textureId] = textureFile;
-            his.textures[textureId] = new CGFtexture(this.scene, "./scenes/images/" + filep);
+            this.textures[textureId] = new CGFtexture(this.scene, "./scenes/images/" + filep);
         }
             
 
@@ -890,23 +890,28 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            if(transformationIndex == -1 || childrenIndex == -1 || textureIndex == -1 || materialsIndex == -1){
+                this.onXMLMinorError("missing block(s) from " + componentID);
+                continue;
+            }
+
             this.onXMLMinorError("To do: Parse components.");
             
             // Transformations
             grandgrandChildren = grandChildren[transformationIndex].children;
 
-            for (var j = 0; j < grandgrandchildren.length; j++) {
+            for (var j = 0; j < grandgrandChildren.length; j++) {
 
-                if (grandgrandchildren[j].nodeName != "transformationref" || 
-                grandgrandchildren[j].nodeName != "translate" ||
-                grandgrandchildren[j].nodeName != "scale" ||
-                grandgrandchildren[j].nodeName != "rotate") {
-                    this.onXMLMinorError("unknown tag <" + grandgrandchildren[j].nodeName + ">");
+                if (grandgrandChildren[j].nodeName != "transformationref" && 
+                grandgrandChildren[j].nodeName != "translate" &&
+                grandgrandChildren[j].nodeName != "scale" &&
+                grandgrandChildren[j].nodeName != "rotate") {
+                    this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
                     continue;
                 }
     
                 // Reference to another transformation
-                if (grandgrandchildren[j].nodeName == "transformationref"){
+                if (grandgrandChildren[j].nodeName == "transformationref"){
                     var referencedTransformation = this.reader.getString(grandgrandChildren[j], "id");
                     
                     if (referencedTransformation == null){
@@ -926,45 +931,53 @@ class MySceneGraph {
                 // Specifications for the current transformation.
                 var transfMatrix = mat4.create();
                     
-                switch (grandChildren[j].nodeName) {
+                switch (grandgrandChildren[j].nodeName) {
                     case 'translate':
-                        var coordinates = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
+                        let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
+                        let y = parseFloat(grandgrandChildren[j].getAttribute("y"));
+                        let z = parseFloat(grandgrandChildren[j].getAttribute("z"));
 
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(x,y,z));
+
+                        if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                            this.onXMLMinorError("a transformation (" + children[i].componentID + ") has one or more invalid xyz values");
+                            continue;
+                        }
+                        
+                        newComponent.transformations.push(transfMatrix);
+
                         break;
                     case 'scale':
-                    let x = parseFloat(currGrandchild.getAttribute("x"));
-                    let y = parseFloat(currGrandchild.getAttribute("y"));
-                    let z = parseFloat(currGrandchild.getAttribute("z"));
-                    if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
-                        this.onXMLMinorError(currChild.getAttribute("id") + " has one or more invalid '" + currGrandchild.nodeName + "' xyz values, using default value x = y = z = " + DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("x", DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("y", DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("z", DEFAULT_SCALE_VALUE);
-                    }
-                    let vector1 = vec3.fromValues(parseFloat(currGrandchild.getAttribute("x")), parseFloat(currGrandchild.getAttribute("y")), parseFloat(currGrandchild.getAttribute("z")));
-                    mat4.scale(matrix, matrix, vector1);               
+                        let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
+                        let y = parseFloat(grandgrandChildren[j].getAttribute("y"));
+                        let z = parseFloat(grandgrandChildren[j].getAttribute("z"));
+
+                        if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                            this.onXMLMinorError("a transformation (" + children[i].componentID + ") has one or more invalid xyz values");
+                            continue;
+                        }
+
+                        let vector1 = vec3.fromValues(x,y,z);
+                        mat4.scale(matrix, matrix, vector1);      
+                        
+                        newComponent.transformations.push(transfMatrix);
                         
                         break;
                     case 'rotate':
-                        // angle
-                            let angle = parseFloat(currGrandchild.getAttribute("angle"));
-                            let axis = currGrandchild.getAttribute("axis");
+                            let angle = parseFloat(grandgrandChildren[j].getAttribute("angle"));
+                            let axis = grandgrandChildren[j].getAttribute("axis");
                             if (!this.isValidNumber(angle)) {
-                            let defAngle = 0;
-                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
-                            currGrandchild.setAttribute("angle", defAngle);
+                                this.onXMLMinorError("a transformation has an invalid angle value");
+                                continue;
                             }
                             if (axis != "x" && axis != "y" && axis != "z") {
                             let defAxis = "x";
-                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid axis value, using default value axis = " + defAxis);
-                            currGrandchild.setAttribute("angle", defAxis);
+                            this.onXMLMinorError("a rotation in " + children[i].componentID + " has an invalid axis value, using default value axis = " + defAxis);
+                            grandgrandChildren[j].setAttribute("angle", defAxis);
                             }
 
                         let vector2 = vec3.create();
-                        switch (currGrandchild.getAttribute("axis")) {
+                        switch (grandgrandChildren[j].getAttribute("axis")) {
                             case "x":
                             {
                                     vector2 = vec3.fromValues(1, 0, 0);
@@ -981,19 +994,138 @@ class MySceneGraph {
                                     break;
                             }
                         }
-                        angle = parseFloat(currGrandchild.getAttribute("angle")) * DEGREE_TO_RAD;
+                        angle = angle * DEGREE_TO_RAD;
                         mat4.rotate(matrix, matrix, angle, vector2);
+
+                        newComponent.transformations.push(transfMatrix);
                         break;
                 }
+            }
 
             // Materials
+            grandgrandChildren = grandChildren[materialsIndex].children;
 
+            for (var j = 0; j < grandgrandChildren.length; j++) {
+                if(grandgrandChildren[j].nodeName != "material"){
+                    this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
+                    continue;
+                }
+
+                //material id
+                var materialID = grandgrandChildren.getAttribute("id");
+                if(materialID == null){
+                    this.onXMLMinorError("a material in " + children[i].componentID + " wasn't properly identified (" + materialID + ")");
+                    continue;
+                }
+
+                if(materialID == "inherit"){
+                    newComponent.materials.push(null);
+                    continue;
+                }
+
+                //check for an existing material
+                var material = this.materials[materialID];
+                if(material == null){
+                    this.onXMLMinorError("a material in " + children[i].componentID + " wasn't properly identified (" + materialID + ")");
+                    continue;
+                }
+
+                newComponent.materials.push(material);
+            }
 
             // Texture
+            let textureChild = grandChildren[textureIndex];
 
+            //texture id
+            var textureID = grandgrandChildren.getAttribute("id");
+            if(textureID == null){
+                this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly defined (" + textureID + ")");
+            }
 
-            // Children
+            if(textureID == "inherit" || textureID == null){
+                newComponent.texture = null;
+            }
+
+            if(textureID == "none"){
+                var noTexture = new CGFtexture(this.scene, "");
+                noTexture.unbind(0);
+                newComponent.texture = noTexture;
+            }
+
+            //check for an existing texture
+            let texture = this.textures[textureID];
+            if(texture == null){
+                this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
+                continue;
+            }
+
+            let length_s = parseFloat(grandgrandChildren[j].getAttribute("length_s"));
+            let length_t = parseFloat(grandgrandChildren[j].getAttribute("length_t"));
+
+            if(length_t == null || length_s == null){
+                this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
+                continue;
+            }
+
+            texture.length_s = length_s;
+            texture.length_t = length_t;
+
+            newComponent.texture = texture;
+
+            childrenComponents = children[childrenIndex].children;
+
+            for (var j = 0; j < childrenComponents.length; j++) {
+                if(childrenComponents[j].nodeName != "componentref" || childrenComponents[j].nodeName != "primitiveref"){
+                    this.onXMLMinorError("unknown tag <" + childrenComponents[j].nodeName + ">");
+                    continue;
+                }
+
+                //material id
+                var refID = childrenComponents.getAttribute("id");
+                if(refID == null){
+                    this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly defined (" + refID + ")");
+                    continue;
+                }
+
+                if(childrenComponents[j].nodeName == "componentref"){
+                    if(this.components[refID] == null){
+                        this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
+                        continue;
+                    }
+                    newComponent.children.push(this.components[refID]);
+                }
+
+                if(childrenComponents[j].nodeName == "primitiveref"){
+                    if(this.primitives[refID] == null){
+                        this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
+                        continue;
+                    }
+                    newComponent.children.push(this.primitives[refID]);
+                }
+            }
         }
+
+        if(newComponent.transformations.length < 1){
+            this.onXMLMinorError("no component transformation found");
+            continue;
+        }
+        
+        if(newComponent.childrenComponents.length < 1){
+            this.onXMLMinorError("no component children found");
+            continue;
+        }
+        
+        if(newComponent.materials.length < 1){
+            this.onXMLMinorError("no component materials found");
+            continue;
+        }
+        
+        if(newComponent.texture == null){
+            this.onXMLMinorError("no component texture found");
+            continue;
+        }
+
+        this.components.push(newComponent);
     }
 
 
