@@ -862,7 +862,7 @@ class MySceneGraph {
             }
         }
 
-        //this.primitives["torus"] = new MyTorus(this.scene, "torus", 1, 3, 3);
+        this.primitives["torus"] = new MyTorus(this.scene, "torus", 0.5, 2, 100, 100);
 
 
         this.log("Parsed primitives");
@@ -1277,7 +1277,7 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         //this.primitives['demoRectangle'].display();
-        this.primitives['demoSphere'].display();
-        //this.primitives['torus'].display();
+        //this.primitives['demoSphere'].display();
+        this.primitives['torus'].display();
     }
 }
