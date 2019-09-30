@@ -49,11 +49,10 @@ class MySphere extends CGFobject {
                 this.indices.push(i == 1 ? 0 : (i - 2) * this.slices + j + 1,
                                     (i - 1) * this.slices + j + 1,
                                     (i - 1) * this.slices + (j + 1) % this.slices + 1);
-            
 
                 this.indices.push((i - 1) * this.slices + j + 1,
-                                    (i - 1) * this.slices + (j - 1) % this.slices + 1,
-                                    i == this.stacks * 2 - 1 ? this.stacks * 2 : this.i * this.slices + j + 1);
+                                    (i - 1) * this.slices + (j + this.slices - 1) % this.slices + 1,
+                                    i == this.stacks * 2 - 1 ? this.slices * (this.stacks * 2 - 1) + 1 : i * this.slices + j + 1);
             
 
                 alphaAng += alphaAngInc;
