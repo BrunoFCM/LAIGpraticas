@@ -53,7 +53,7 @@
         </primitive>
         
         <primitive id="demoSphere">
-            <sphere radius="1" slices="3" stacks="1" />
+            <sphere radius="1" slices="100" stacks="100" />
         </primitive>
     </primitives>
 
