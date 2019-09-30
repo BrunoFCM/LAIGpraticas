@@ -108,7 +108,7 @@ class XMLscene extends CGFscene {
         
         this.graph.views[0] = this.camera;
 
-        this.interface.updateGUI();
+        this.interface.updateGUI();          
     }
 
     onSelectedViewChanged(value){

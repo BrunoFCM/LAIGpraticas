@@ -194,6 +194,7 @@ class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
+
         this.log("all parsed");
     }
 
@@ -713,36 +714,36 @@ class MySceneGraph {
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
                     case 'scale':
-                    let x = parseFloat(currGrandchild.getAttribute("x"));
-                    let y = parseFloat(currGrandchild.getAttribute("y"));
-                    let z = parseFloat(currGrandchild.getAttribute("z"));
-                    if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                    let x = parseFloat(grandChildren[j].getAttribute("x"));
+                    let y = parseFloat(grandChildren[j].getAttribute("y"));
+                    let z = parseFloat(grandChildren[j].getAttribute("z"));
+                    if (x == null || y == null || z == null) {
                         this.onXMLMinorError(currChild.getAttribute("id") + " has one or more invalid '" + currGrandchild.nodeName + "' xyz values, using default value x = y = z = " + DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("x", DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("y", DEFAULT_SCALE_VALUE);
-                        currGrandchild.setAttribute("z", DEFAULT_SCALE_VALUE);
+                        grandChildren[j].setAttribute("x", DEFAULT_SCALE_VALUE);
+                        grandChildren[j].setAttribute("y", DEFAULT_SCALE_VALUE);
+                        grandChildren[j].setAttribute("z", DEFAULT_SCALE_VALUE);
                     }
-                    let vector1 = vec3.fromValues(parseFloat(currGrandchild.getAttribute("x")), parseFloat(currGrandchild.getAttribute("y")), parseFloat(currGrandchild.getAttribute("z")));
-                    mat4.scale(matrix, matrix, vector1);               
+                    let vector1 = vec3.fromValues(parseFloat(grandChildren[j].getAttribute("x")), parseFloat(grandChildren[j].getAttribute("y")), parseFloat(grandChildren[j].getAttribute("z")));
+                    mat4.scale(transfMatrix, transfMatrix, vector1);               
                         
                         break;
-                    case 'rotate':
+                    case 'rotate':{
                         // angle
-                         let angle = parseFloat(currGrandchild.getAttribute("angle"));
-                         let axis = currGrandchild.getAttribute("axis");
-                         if (!this.isValidNumber(angle)) {
+                         let angle = parseFloat(grandChildren[j].getAttribute("angle"));
+                         let axis = grandChildren[j].getAttribute("axis");
+                         if (angle != null) {
                             let defAngle = 0;
-                            this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
-                            currGrandchild.setAttribute("angle", defAngle);
+                            this.onXMLMinorError(children[i].getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
+                            grandChildren[j].setAttribute("angle", defAngle);
                          }
                          if (axis != "x" && axis != "y" && axis != "z") {
                            let defAxis = "x";
-                           this.onXMLMinorError(currChild.getAttribute("id") + " has an invalid axis value, using default value axis = " + defAxis);
-                           currGrandchild.setAttribute("angle", defAxis);
+                           this.onXMLMinorError(children[i].getAttribute("id") + " has an invalid axis value, using default value axis = " + defAxis);
+                           grandChildren[j].setAttribute("angle", defAxis);
                          }
 
                         let vector2 = vec3.create();
-                        switch (currGrandchild.getAttribute("axis")) {
+                        switch (grandChildren[j].getAttribute("axis")) {
                             case "x":
                             {
                                   vector2 = vec3.fromValues(1, 0, 0);
@@ -759,9 +760,10 @@ class MySceneGraph {
                                   break;
                             }
                         }
-                        angle = parseFloat(currGrandchild.getAttribute("angle")) * DEGREE_TO_RAD;
-                        mat4.rotate(matrix, matrix, angle, vector2);
+                        angle = parseFloat(grandChildren[j].getAttribute("angle")) * DEGREE_TO_RAD;
+                        mat4.rotate(transfMatrix, transfMatrix, angle, vector2);
                         break;
+                    }
                 }
             }
             this.transformations[transformationID] = transfMatrix;
@@ -838,8 +840,25 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
-            else {
-                console.warn("To do: Parse other primitives.");
+            else if (primitiveType == 'sphere'){
+                // radius
+                var radius = this.reader.getFloat(grandChildren[0], 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)) && slices > 2)
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks) && stacks > 1))
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
+
+                this.primitives[primitiveId] = sphere;
             }
         }
 
@@ -862,7 +881,6 @@ class MySceneGraph {
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
-            var newComponent;
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -894,13 +912,17 @@ class MySceneGraph {
                 this.onXMLMinorError("missing block(s) from " + componentID);
                 continue;
             }
-
-            this.onXMLMinorError("To do: Parse components.");
+            
+            var newComponent = {
+                "transformations": [],
+                "materials": [],
+                "children": []
+            };
             
             // Transformations
             grandgrandChildren = grandChildren[transformationIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (var j = 0; j < grandgrandChildren[j].length; j++) {
 
                 if (grandgrandChildren[j].nodeName != "transformationref" && 
                 grandgrandChildren[j].nodeName != "translate" &&
@@ -932,14 +954,14 @@ class MySceneGraph {
                 var transfMatrix = mat4.create();
                     
                 switch (grandgrandChildren[j].nodeName) {
-                    case 'translate':
+                    case 'translate':{
                         let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
                         let y = parseFloat(grandgrandChildren[j].getAttribute("y"));
                         let z = parseFloat(grandgrandChildren[j].getAttribute("z"));
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(x,y,z));
 
-                        if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                        if (x == null || y == null || z == null) {
                             this.onXMLMinorError("a transformation (" + children[i].componentID + ") has one or more invalid xyz values");
                             continue;
                         }
@@ -947,34 +969,36 @@ class MySceneGraph {
                         newComponent.transformations.push(transfMatrix);
 
                         break;
-                    case 'scale':
+                    }
+                    case 'scale':{
                         let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
                         let y = parseFloat(grandgrandChildren[j].getAttribute("y"));
                         let z = parseFloat(grandgrandChildren[j].getAttribute("z"));
 
-                        if (!this.isValidNumber(x) || !this.isValidNumber(y) || !this.isValidNumber(z)) {
+                        if (x == null || y == null || z == null) {
                             this.onXMLMinorError("a transformation (" + children[i].componentID + ") has one or more invalid xyz values");
                             continue;
                         }
 
                         let vector1 = vec3.fromValues(x,y,z);
-                        mat4.scale(matrix, matrix, vector1);      
+                        mat4.scale(transfMatrix, transfMatrix, vector1);      
                         
                         newComponent.transformations.push(transfMatrix);
                         
                         break;
-                    case 'rotate':
-                            let angle = parseFloat(grandgrandChildren[j].getAttribute("angle"));
-                            let axis = grandgrandChildren[j].getAttribute("axis");
-                            if (!this.isValidNumber(angle)) {
-                                this.onXMLMinorError("a transformation has an invalid angle value");
-                                continue;
-                            }
-                            if (axis != "x" && axis != "y" && axis != "z") {
-                            let defAxis = "x";
-                            this.onXMLMinorError("a rotation in " + children[i].componentID + " has an invalid axis value, using default value axis = " + defAxis);
-                            grandgrandChildren[j].setAttribute("angle", defAxis);
-                            }
+                    }
+                    case 'rotate':{
+                        let angle = parseFloat(grandgrandChildren[j].getAttribute("angle"));
+                        let axis = grandgrandChildren[j].getAttribute("axis");
+                        if (!this.isValidNumber(angle)) {
+                            this.onXMLMinorError("a transformation has an invalid angle value");
+                            continue;
+                        }
+                        if (axis != "x" && axis != "y" && axis != "z") {
+                        let defAxis = "x";
+                        this.onXMLMinorError("a rotation in " + children[i].componentID + " has an invalid axis value, using default value axis = " + defAxis);
+                        grandgrandChildren[j].setAttribute("angle", defAxis);
+                        }
 
                         let vector2 = vec3.create();
                         switch (grandgrandChildren[j].getAttribute("axis")) {
@@ -999,20 +1023,21 @@ class MySceneGraph {
 
                         newComponent.transformations.push(transfMatrix);
                         break;
+                    }
                 }
             }
 
             // Materials
             grandgrandChildren = grandChildren[materialsIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (var j = 0; j < grandgrandChildren[j].length; j++) {
                 if(grandgrandChildren[j].nodeName != "material"){
                     this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
                     continue;
                 }
 
                 //material id
-                var materialID = grandgrandChildren.getAttribute("id");
+                var materialID = grandgrandChildren[j].getAttribute("id");
                 if(materialID == null){
                     this.onXMLMinorError("a material in " + children[i].componentID + " wasn't properly identified (" + materialID + ")");
                     continue;
@@ -1037,7 +1062,7 @@ class MySceneGraph {
             let textureChild = grandChildren[textureIndex];
 
             //texture id
-            var textureID = grandgrandChildren.getAttribute("id");
+            var textureID = grandgrandChildren[j].getAttribute("id");
             if(textureID == null){
                 this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly defined (" + textureID + ")");
             }
@@ -1056,7 +1081,7 @@ class MySceneGraph {
             let texture = this.textures[textureID];
             if(texture == null){
                 this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
-                continue;
+                return;
             }
 
             let length_s = parseFloat(grandgrandChildren[j].getAttribute("length_s"));
@@ -1064,7 +1089,7 @@ class MySceneGraph {
 
             if(length_t == null || length_s == null){
                 this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
-                continue;
+                return;
             }
 
             texture.length_s = length_s;
@@ -1107,25 +1132,26 @@ class MySceneGraph {
 
         if(newComponent.transformations.length < 1){
             this.onXMLMinorError("no component transformation found");
-            continue;
+            return;
         }
         
         if(newComponent.childrenComponents.length < 1){
             this.onXMLMinorError("no component children found");
-            continue;
+            return;
         }
         
         if(newComponent.materials.length < 1){
             this.onXMLMinorError("no component materials found");
-            continue;
+            return;
         }
         
         if(newComponent.texture == null){
             this.onXMLMinorError("no component texture found");
-            continue;
+            return;
         }
 
         this.components.push(newComponent);
+        return null;
     }
 
 
