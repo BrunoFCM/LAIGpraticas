@@ -26,7 +26,7 @@ class MySphere extends CGFobject {
         var alphaAngInc = 2 * Math.PI / this.slices;
         var thetaAngInc = Math.PI / 2 / this.stacks;
 
-        for(var i = 0; i < this.stacks; ++i){
+        for(var i = 0; i <= this.stacks; ++i){
             for(var j = 0; j < this.slices; ++j){
                 let x = Math.sin(thetaAng) * Math.cos(alphaAng);
                 let y = Math.sin(thetaAng) * Math.sin(alphaAng);
@@ -46,10 +46,15 @@ class MySphere extends CGFobject {
                     break;
                 }
                 
-                this.indices.push(i == 1 ? 0 : (i - 2) * this.stacks + j,
-                                    (i - 1) * this.stacks + j,
-                                    (i - 1) * this.stacks + (j + 1) % this.slices);
-
+                this.indices.push(i == 1 ? 0 : (i - 2) * this.slices + j + 1,
+                                    (i - 1) * this.slices + j + 1,
+                                    (i - 1) * this.slices + (j + 2) % (this.slices + 1));
+                
+                if(i != 1){
+                    this.indices.push(i == 1 ? 0 : (i - 2) * this.slices + (j + 2) % (this.slices + 1),
+                                        (i - 2) * this.slices + j + 1,
+                                        (i - 1) * this.slices + (j + 2) % (this.slices + 1));
+                }
 
                 alphaAng += alphaAngInc;
             }
@@ -57,6 +62,11 @@ class MySphere extends CGFobject {
             alphaAng = 0;
             thetaAng += thetaAngInc;
         }
+
+        
+
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
     }
 
         /*
@@ -110,9 +120,6 @@ class MySphere extends CGFobject {
         this.vertices.push(0, -1, 0);
         this.normals.push(0 , -1 ,0);
         this.texCoords.push(0, 1);
-
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
     }
     */
 }

@@ -731,7 +731,7 @@ class MySceneGraph {
                         // angle
                          let angle = parseFloat(grandChildren[j].getAttribute("angle"));
                          let axis = grandChildren[j].getAttribute("axis");
-                         if (angle != null) {
+                         if (angle == null) {
                             let defAngle = 0;
                             this.onXMLMinorError(children[i].getAttribute("id") + " has an invalid angle value, using default value angle = " + defAngle);
                             grandChildren[j].setAttribute("angle", defAngle);
@@ -853,7 +853,7 @@ class MySceneGraph {
 
                 // stacks
                 var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
-                if (!(stacks != null && !isNaN(stacks) && stacks > 1))
+                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
                     return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
                 var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
@@ -922,7 +922,7 @@ class MySceneGraph {
             // Transformations
             grandgrandChildren = grandChildren[transformationIndex].children;
 
-            for (var j = 0; j < grandgrandChildren[j].length; j++) {
+            for (var j = 0; j < grandgrandChildren.length; j++) {
 
                 if (grandgrandChildren[j].nodeName != "transformationref" && 
                 grandgrandChildren[j].nodeName != "translate" &&
@@ -954,7 +954,7 @@ class MySceneGraph {
                 var transfMatrix = mat4.create();
                     
                 switch (grandgrandChildren[j].nodeName) {
-                    case 'translate':{
+                    case "translate":{
                         let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
                         let y = parseFloat(grandgrandChildren[j].getAttribute("y"));
                         let z = parseFloat(grandgrandChildren[j].getAttribute("z"));
@@ -1030,7 +1030,7 @@ class MySceneGraph {
             // Materials
             grandgrandChildren = grandChildren[materialsIndex].children;
 
-            for (var j = 0; j < grandgrandChildren[j].length; j++) {
+            for (var j = 0; j < grandgrandChildren.length; j++) {
                 if(grandgrandChildren[j].nodeName != "material"){
                     this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
                     continue;
@@ -1062,7 +1062,7 @@ class MySceneGraph {
             let textureChild = grandChildren[textureIndex];
 
             //texture id
-            var textureID = grandgrandChildren[j].getAttribute("id");
+            var textureID = textureChild.getAttribute("id");
             if(textureID == null){
                 this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly defined (" + textureID + ")");
             }
@@ -1084,8 +1084,8 @@ class MySceneGraph {
                 return;
             }
 
-            let length_s = parseFloat(grandgrandChildren[j].getAttribute("length_s"));
-            let length_t = parseFloat(grandgrandChildren[j].getAttribute("length_t"));
+            let length_s = parseFloat(textureChild.getAttribute("length_s"));
+            let length_t = parseFloat(textureChild.getAttribute("length_t"));
 
             if(length_t == null || length_s == null){
                 this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
@@ -1097,16 +1097,16 @@ class MySceneGraph {
 
             newComponent.texture = texture;
 
-            childrenComponents = children[childrenIndex].children;
+            var childrenComponents = grandChildren[childrenIndex].children;
 
             for (var j = 0; j < childrenComponents.length; j++) {
-                if(childrenComponents[j].nodeName != "componentref" || childrenComponents[j].nodeName != "primitiveref"){
+                if(childrenComponents[j].nodeName != "componentref" && childrenComponents[j].nodeName != "primitiveref"){
                     this.onXMLMinorError("unknown tag <" + childrenComponents[j].nodeName + ">");
                     continue;
                 }
 
                 //material id
-                var refID = childrenComponents.getAttribute("id");
+                var refID = childrenComponents[j].getAttribute("id");
                 if(refID == null){
                     this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly defined (" + refID + ")");
                     continue;
@@ -1135,7 +1135,7 @@ class MySceneGraph {
             return;
         }
         
-        if(newComponent.childrenComponents.length < 1){
+        if(newComponent.children.length < 1){
             this.onXMLMinorError("no component children found");
             return;
         }
@@ -1274,5 +1274,6 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
+        this.primitives['demoSphere'].display();
     }
 }
