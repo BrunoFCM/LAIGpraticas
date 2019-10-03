@@ -860,10 +860,32 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = sphere;
             }
+            else if (primitiveType == 'torus'){
+                // inner radius
+                var inner = this.reader.getFloat(grandChildren[0], 'inner');
+                if (!(inner != null && !isNaN(inner)))
+                    return "unable to parse inner of the primitive coordinates for ID = " + primitiveId;
+                    
+                // outer radius
+                var outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outer of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)) && slices > 2)
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                // loops
+                var loops = this.reader.getFloat(grandChildren[0], 'loops');
+                if (!(loops != null && !isNaN(loops) && loops > 0))
+                    return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
+
+                var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
+
+                this.primitives[primitiveId] = torus;
+            }
         }
-
-        this.primitives["torus"] = new MyTorus(this.scene, "torus", 0.5, 2, 100, 100);
-
 
         this.log("Parsed primitives");
         return null;
@@ -1070,35 +1092,40 @@ class MySceneGraph {
                 this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly defined (" + textureID + ")");
             }
 
+            var texture;
+
             if(textureID == "inherit" || textureID == null){
                 newComponent.texture = null;
             }
+            else{
+                if(textureID == "none"){
+                    var noTexture = new CGFtexture(this.scene, "");
+                    noTexture.unbind(0);
+                    texture = noTexture;
+                }
+                else {
+                    //check for an existing texture
+                    texture = this.textures[textureID];
+                    if(texture == null){
+                        this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
+                        return;
+                    }
+                }
 
-            if(textureID == "none"){
-                var noTexture = new CGFtexture(this.scene, "");
-                noTexture.unbind(0);
-                newComponent.texture = noTexture;
+                let length_s = parseFloat(textureChild.getAttribute("length_s"));
+                let length_t = parseFloat(textureChild.getAttribute("length_t"));
+    
+                if(length_t == null || length_s == null){
+                    this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
+                    return;
+                }
+    
+                texture.length_s = length_s;
+                texture.length_t = length_t;
+    
+                newComponent.texture = texture;
             }
 
-            //check for an existing texture
-            let texture = this.textures[textureID];
-            if(texture == null){
-                this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
-                return;
-            }
-
-            let length_s = parseFloat(textureChild.getAttribute("length_s"));
-            let length_t = parseFloat(textureChild.getAttribute("length_t"));
-
-            if(length_t == null || length_s == null){
-                this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
-                return;
-            }
-
-            texture.length_s = length_s;
-            texture.length_t = length_t;
-
-            newComponent.texture = texture;
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
@@ -1120,7 +1147,9 @@ class MySceneGraph {
                         this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
                         continue;
                     }
-                    newComponent.children.push(this.components[refID]);
+                    let childComponent = this.components[refID];
+                    childComponent.type = "component";
+                    newComponent.children.push(childComponent);
                 }
 
                 if(childrenComponents[j].nodeName == "primitiveref"){
@@ -1128,7 +1157,9 @@ class MySceneGraph {
                         this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
                         continue;
                     }
-                    newComponent.children.push(this.primitives[refID]);
+                    let childComponent = this.primitives[refID];
+                    childComponent.type = "primitive";
+                    newComponent.children.push(childComponent);
                 }
             }
         }
@@ -1273,11 +1304,47 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
+        for(let i = 0; i < this.components.length; ++i){
+            this.processNode(this.components[i]);
+        }        
+    }
 
-        //To test the parsing/creation of the primitives, call the display function directly
-        //this.primitives['demoRectangle'].display();
-        //this.primitives['demoSphere'].display();
-        this.primitives['torus'].display();
+    processNode(componentNode, parentMaterial, parentTexture){
+        this.scene.pushMatrix();
+
+        for(let i = 0; i < componentNode.transformations.length; ++i){
+            this.scene.multMatrix(componentNode.transformations[i]);
+        }
+
+        let currentMaterial = componentNode.materials[0];
+        let currentTexture = componentNode.texture;
+
+        if(currentMaterial == null){
+            currentMaterial = parentMaterial;
+        }
+
+        if(currentTexture == null){
+            currentMaterial.setTexture(parentTexture);
+            //set s and t
+        }
+        else{
+            currentMaterial.setTexture(currentTexture);
+            //set s and t
+        }
+
+        for(let i = 0; i < componentNode.children.length; ++i){
+            if(componentNode.children[i].type == "component"){
+                processNode(componentNode.children[i], currentMaterial, currentTexture);
+            }
+            else{
+                componentNode.children[i].display();
+            }
+        }
+
+        if(parentMaterial != null){
+            parentMaterial.apply();
+        }
+    
+        this.scene.popMatrix();
     }
 }
