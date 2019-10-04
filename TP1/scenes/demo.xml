@@ -77,7 +77,7 @@
         </component>
 
         
-        <component id="demoSph">
+        <!--<component id="demoSph">
             <transformation>
                 <translate x="0" y="0" z="1" />
                 <scale x="2" y="1" z="1" />
@@ -89,7 +89,7 @@
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component>
+        </component>-->
         
     </components>
 </lxs>

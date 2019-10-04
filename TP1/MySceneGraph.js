@@ -586,9 +586,9 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + textureId + ")";
             }
 
-            var filep = children[i].getAttribute("id");
+            var filep = children[i].getAttribute("file");
             //this.textures[textureId] = textureFile;
-            this.textures[textureId] = new CGFtexture(this.scene, "./scenes/images/" + filep);
+            this.textures[textureId] = new CGFtexture(this.scene, filep);
         }
             
 
@@ -1095,23 +1095,22 @@ class MySceneGraph {
             var texture;
 
             if(textureID == "inherit" || textureID == null){
-                newComponent.texture = null;
+                var noTexture = {};
+                noTexture.type = "inherit";
+                texture = noTexture;
             }
-            else{
-                if(textureID == "none"){
-                    var noTexture = new CGFtexture(this.scene, "");
-                    noTexture.unbind(0);
-                    texture = noTexture;
+            else
+            if(textureID == "none"){
+                texture = {};
+                texture.type = "none";
+            }
+            else {
+                //check for an existing texture
+                texture = this.textures[textureID];
+                if(texture == null){
+                    this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
+                    return;
                 }
-                else {
-                    //check for an existing texture
-                    texture = this.textures[textureID];
-                    if(texture == null){
-                        this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
-                        return;
-                    }
-                }
-
                 let length_s = parseFloat(textureChild.getAttribute("length_s"));
                 let length_t = parseFloat(textureChild.getAttribute("length_t"));
     
@@ -1119,13 +1118,19 @@ class MySceneGraph {
                     this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
                     return;
                 }
+
+                if(isNaN(length_s) || isNaN(length_t)){
+                    this.onXMLMinorError("a texture in " + children[i].componentID + " invalid s/t length paremeters");
+                    length_s = 1;
+                    length_t = 1;
+                }
     
                 texture.length_s = length_s;
                 texture.length_t = length_t;
-    
-                newComponent.texture = texture;
+                texture.type = "normal";
             }
-
+            
+            newComponent.texture = texture;
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
@@ -1323,14 +1328,22 @@ class MySceneGraph {
             currentMaterial = parentMaterial;
         }
 
-        if(currentTexture == null){
+        if(currentTexture.type == "inherit"){
             currentMaterial.setTexture(parentTexture);
             //set s and t
         }
         else{
-            currentMaterial.setTexture(currentTexture);
-            //set s and t
+            if(currentTexture.type == "none"){
+                currentTexture.unbind(0);
+                currentMaterial.setTexture(currentTexture);
+            }
+            else{
+                currentMaterial.setTexture(currentTexture);
+                //set s and t
+            }
         }
+
+        currentMaterial.apply();
 
         for(let i = 0; i < componentNode.children.length; ++i){
             if(componentNode.children[i].type == "component"){
