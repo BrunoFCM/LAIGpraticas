@@ -885,6 +885,22 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = torus;
             }
+            else if (primitiveType == 'triangle'){
+                let x1 = parseFloat(grandChildren[0].getAttribute("x1"));
+                let y1 = parseFloat(grandChildren[0].getAttribute("y1"));
+                let z1 = parseFloat(grandChildren[0].getAttribute("z1"));
+                let x2 = parseFloat(grandChildren[0].getAttribute("x2"));
+                let y2 = parseFloat(grandChildren[0].getAttribute("y2"));
+                let z2 = parseFloat(grandChildren[0].getAttribute("z2"));
+                let x3 = parseFloat(grandChildren[0].getAttribute("x3"));
+                let y3 = parseFloat(grandChildren[0].getAttribute("y3"));
+                let z3 = parseFloat(grandChildren[0].getAttribute("z3"));
+                if (x1 == null || y1 == null || z1 == null || x2 == null || y2 == null || z2 == null || x3 == null || y3 == null || z3 == null) {
+                    this.onXMLMinorError(currChild.getAttribute("id") + " has one or more invalid '" + currGrandchild.nodeName + "' xyz values");
+                    return;
+                }
+                this.primitives[primitiveId] = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+            }
         }
 
         this.log("Parsed primitives");
