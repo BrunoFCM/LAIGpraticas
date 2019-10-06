@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="StaffCyl" axis_length="5"/>
+    <scene root="root" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -36,8 +36,8 @@
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="1.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
         <material id="AureolaMat" shininess="10">
@@ -70,10 +70,8 @@
     </materials>
 
     <transformations>
-        <transformation id="demoTransform">
-            <scale x="5" y="1" z="5" />
-            <rotate axis="x" angle="-45" />
-            <rotate axis="z" angle="-45" />
+        <transformation id="GlyphTriangleTransform">
+            <rotate axis="z" angle="120" />
         </transformation>
     </transformations>
 
@@ -101,10 +99,82 @@
         <primitive id="bottom_crystal">
             <cylinder base="0.5" top="1" height="1" slices="4" stacks="3" />
         </primitive>
+
+        <primitive id="triangle">
+            <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
+        </primitive>
         
     </primitives>
 
-    <components>        
+    <components>       
+        <component id="triangle2">
+            <transformation>
+                <transformationref id="GlyphTriangleTransform"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="triangle" />
+            </children>
+        </component>
+        
+        <component id="triangle3">
+            <transformation>
+                <transformationref id="GlyphTriangleTransform"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="triangle2" />
+            </children>
+        </component>
+
+        <component id="SmallGlyph">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="triangle" />
+                <componentref id="triangle2" />
+                <componentref id="triangle3" />
+            </children>
+        </component>
+
+        <component id="MediumGlyph">
+            <transformation>
+                <scale x="2" y="2" z="2" />
+                <rotate axis="y" angle="60" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="SmallGlyph" />
+            </children>
+        </component>
+
+        <component id="LargeGlyph">
+            <transformation>
+                <scale x="3" y="3" z="3" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="SmallGlyph" />
+            </children>
+        </component>
+
         <component id="HiltSph">
             <transformation>
                 <translate x="0" y="0" z="0" />
@@ -113,8 +183,7 @@
             <materials>
                 <material id="HiltMat" />
             </materials>
-            <texture id="none" />-->
-            <texture id="bank"/>
+            <texture id="none" />
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -254,7 +323,6 @@
             </children>
         </component>
 
-
         <component id="StaffCyl">
             <transformation>
                 <rotate axis="x" angle="-90"/>
@@ -272,6 +340,22 @@
                 <componentref id="Aureolas"/>
                 <componentref id="Pole"/> 
             </children>
-        </component>        
+        </component>     
+
+        <component id="root">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="vidral" />
+            <children>
+                <componentref id="LargeGlyph" />
+                <componentref id="MediumGlyph" />
+                <componentref id="SmallGlyph" />
+                <componentref id="StaffCyl" />
+            </children>
+        </component>    
     </components>
 </lxs>

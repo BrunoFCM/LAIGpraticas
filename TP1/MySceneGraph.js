@@ -1379,12 +1379,14 @@ class MySceneGraph {
             currentMaterial = parentMaterial;
         }
 
-        if(currentTexture.type == "inherit"){
+        let currentType = currentTexture.type;
+
+        if(currentType == "inherit"){
             currentMaterial.setTexture(parentTexture);
             //set s and t
         }
         else{
-            if(currentTexture.type == "none"){
+            if(currentType == "none"){
                 if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
                     parentTexture.unbind(0);
                     currentMaterial.setTexture(parentTexture);
@@ -1405,6 +1407,13 @@ class MySceneGraph {
             }
             else{
                 componentNode.children[i].display();
+            }
+        }
+
+        if(currentType == "none"){
+            if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
+                parentTexture.bind(0);
+                currentMaterial.setTexture(parentTexture);
             }
         }
 

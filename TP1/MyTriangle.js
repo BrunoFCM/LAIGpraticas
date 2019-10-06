@@ -40,8 +40,11 @@ class MyTriangle extends CGFobject {
         let vector1 = vec3.fromValues(this.x1 - this.x2, this.y1 - this.y2, this.z1 - this.z2);
         let vector2 = vec3.fromValues(this.x2 - this.x3, this.y2 - this.y3, this.z2 - this.z3);
 
-        let normal = vec3.asCross(vector1, vector2);
-        normal /= normal.length();
+        let normal = vec3.create();
+
+        vec3.cross(normal, vector1, vector2);
+
+        normal /= vec3.length(normal);
 
 		this.normals = [
 			normal.x, normal.y, normal.z,
