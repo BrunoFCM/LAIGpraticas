@@ -122,7 +122,7 @@
             </children>
         </component>
 
-        <!-- <component id="Crystal">
+        <component id="Crystal">
             <transformation>
                 <translate x="0" y="0" z="0" />
                 <scale x="1" y="1" z="1" />
@@ -152,7 +152,7 @@
                 <componentref id="Aureola2" />
                 <componentref id="Aureola3" />
             </children>
-        </component> -->
+        </component>
 
         <component id="HiltSph">
             <transformation>
@@ -167,7 +167,7 @@
                 <primitiveref id="demoSphere" />
             </children>
         </component>
-<!-- 
+
         <component id="StaffCyl">
             <transformation>
                 <translate x="0" y="0" z="1" />
@@ -180,9 +180,9 @@
             <children>
                 <primitiveref id="cylinder" />
             </children>
-        </component> -->
+        </component>
 
-        <!-- <component id="CrystalRec">
+        <component id="CrystalRec">
             <transformation>
                 <translate x="0" y="0" z="11" />
                 <scale x="0.5" y="0.5" z="1" />
@@ -265,7 +265,7 @@
             <children>
                 <primitiveref id="torus" />
             </children>
-        </component> -->
+        </component>
         
     </components>
 </lxs>
