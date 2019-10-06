@@ -38,7 +38,7 @@ class MyTorus extends CGFobject {
 
                 this.normals.push(innerX,innerY,innerZ);
                 
-                //this.texCoords.push(thetaAng / Math.PI / 2 * Math.cos(alphaAng), thetaAng / Math.PI / 2 * Math.sin(alphaAng));
+                this.texCoords.push((outerAng / Math.PI > 1) ? 2 - outerAng / Math.PI : outerAng / Math.PI, (innerAng / Math.PI > 1) ? 2 - innerAng / Math.PI : innerAng / Math.PI);
 
                 let x = startX + this.inner * innerX;
                 let y = startY + this.inner * innerY;

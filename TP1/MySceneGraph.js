@@ -1031,7 +1031,7 @@ class MySceneGraph {
                     case 'rotate':{
                         let angle = parseFloat(grandgrandChildren[j].getAttribute("angle"));
                         let axis = grandgrandChildren[j].getAttribute("axis");
-                        if (!this.isValidNumber(angle)) {
+                        if (isNaN(angle)) {
                             this.onXMLMinorError("a transformation has an invalid angle value");
                             continue;
                         }
@@ -1060,7 +1060,7 @@ class MySceneGraph {
                             }
                         }
                         angle = angle * DEGREE_TO_RAD;
-                        mat4.rotate(matrix, matrix, angle, vector2);
+                        mat4.rotate(transfMatrix, transfMatrix, angle, vector2);
 
                         newComponent.transformations.push(transfMatrix);
                         break;
@@ -1080,7 +1080,7 @@ class MySceneGraph {
                 //material id
                 var materialID = grandgrandChildren[j].getAttribute("id");
                 if(materialID == null){
-                    this.onXMLMinorError("a material in " + children[i].componentID + " wasn't properly identified (" + materialID + ")");
+                    this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
                     continue;
                 }
 
@@ -1092,7 +1092,7 @@ class MySceneGraph {
                 //check for an existing material
                 var material = this.materials[materialID];
                 if(material == null){
-                    this.onXMLMinorError("a material in " + children[i].componentID + " wasn't properly identified (" + materialID + ")");
+                    this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
                     continue;
                 }
 
@@ -1105,7 +1105,7 @@ class MySceneGraph {
             //texture id
             var textureID = textureChild.getAttribute("id");
             if(textureID == null){
-                this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly defined (" + textureID + ")");
+                this.onXMLMinorError("a texture in " + componentID + " wasn't properly defined (" + textureID + ")");
             }
 
             var texture;
@@ -1124,19 +1124,19 @@ class MySceneGraph {
                 //check for an existing texture
                 texture = this.textures[textureID];
                 if(texture == null){
-                    this.onXMLMinorError("a texture in " + children[i].componentID + " wasn't properly identified (" + textureID + ")");
+                    this.onXMLMinorError("a texture in " + componentID + " wasn't properly identified (" + textureID + ")");
                     return;
                 }
                 let length_s = parseFloat(textureChild.getAttribute("length_s"));
                 let length_t = parseFloat(textureChild.getAttribute("length_t"));
     
                 if(length_t == null || length_s == null){
-                    this.onXMLMinorError("a texture in " + children[i].componentID + " doesn't have proper s/t length paremeters");
+                    this.onXMLMinorError("a texture in " + componentID + " doesn't have proper s/t length paremeters");
                     return;
                 }
 
                 if(isNaN(length_s) || isNaN(length_t)){
-                    this.onXMLMinorError("a texture in " + children[i].componentID + " invalid s/t length paremeters");
+                    this.onXMLMinorError("a texture in " + componentID + " has invalid s/t length paremeters");
                     length_s = 1;
                     length_t = 1;
                 }
@@ -1159,13 +1159,13 @@ class MySceneGraph {
                 //material id
                 var refID = childrenComponents[j].getAttribute("id");
                 if(refID == null){
-                    this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly defined (" + refID + ")");
+                    this.onXMLMinorError("a reference in " + componentID + " wasn't properly defined (" + refID + ")");
                     continue;
                 }
 
                 if(childrenComponents[j].nodeName == "componentref"){
                     if(this.components[refID] == null){
-                        this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
+                        this.onXMLMinorError("a component reference in " + componentID + " wasn't properly identified (" + refID + ")");
                         continue;
                     }
                     let childComponent = this.components[refID];
@@ -1175,7 +1175,7 @@ class MySceneGraph {
 
                 if(childrenComponents[j].nodeName == "primitiveref"){
                     if(this.primitives[refID] == null){
-                        this.onXMLMinorError("a reference in " + children[i].componentID + " wasn't properly identified (" + refID + ")");
+                        this.onXMLMinorError("a primitive reference in " + componentID + " wasn't properly identified (" + refID + ")");
                         continue;
                     }
                     let childComponent = this.primitives[refID];
@@ -1204,6 +1204,8 @@ class MySceneGraph {
             this.onXMLMinorError("no component texture found");
             return;
         }
+
+        this.log("Parsed primitives");
 
         this.components.push(newComponent);
         return null;

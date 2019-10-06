@@ -49,7 +49,7 @@
 
     <primitives>
         <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
         </primitive>
         
         <primitive id="demoSphere">
@@ -57,15 +57,72 @@
         </primitive>
         
         <primitive id="torus">
-            <torus inner="0.5" outer="2" slices="100" loops="100" />
+            <torus inner="0.05" outer="3" slices="100" loops="100" />
         </primitive>
+        
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1" slices="100" stacks="3" />
+        </primitive>
+
+        <primitive id="pyramid">
+            <cylinder base="1" top="0" height="1" slices="4" stacks="3" />
+        </primitive>
+
+        <primitive id="bottom_crystal">
+            <cylinder base="0.5" top="1" height="1" slices="4" stacks="3" />
+        </primitive>
+        
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="HiltSph">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="StaffCyl">
             <transformation>
                 <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <scale x="0.3" y="0.3" z="10" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <component id="demoRoot">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <componentref id="HiltSph"/>
+                <componentref id="StaffCyl"/>
+            </children>
+        </component>
+        
+        <component id="CrystalRec">
+            <transformation>
+                <translate x="0" y="0" z="11" />
+                <scale x="0.5" y="0.5" z="1" />
+                <rotate axis="x" angle="180" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -76,20 +133,75 @@
             </children>
         </component>
 
-        
-        <!--<component id="demoSph">
+        <component id="BotCrystalCyl">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <translate x="0" y="0" z="11" />
+                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <primitiveref id="demoSphere" />
+                <primitiveref id="bottom_crystal" />
             </children>
-        </component>-->
+        </component>
+
+        <component id="TopCrystalCyl">
+            <transformation>
+                <translate x="0" y="0" z="12" />
+                <scale x="1" y="1" z="2" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="pyramid" />
+            </children>
+        </component>
+
+        <component id="Aureola1">
+            <transformation>
+                <translate x="0" y="0" z="12" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="torus" />
+            </children>
+        </component>
+
+        <component id="Aureola2">
+            <transformation>
+                <translate x="0" y="0" z="14" />
+                <scale x="0.5" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="torus" />
+            </children>
+        </component>
+
+        <component id="Aureola3">
+            <transformation>
+                <translate x="0" y="0" z="10" />
+                <scale x="0.5" y="0.5" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="torus" />
+            </children>
+        </component>
         
     </components>
 </lxs>
