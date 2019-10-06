@@ -560,20 +560,20 @@ class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
-        var children = texturesNode.children;
+        let children = texturesNode.children;
 
         this.textures = [];
-        var numTextures = 0;
+        let numTextures = 0;
 
         if(children.length == 0){
             this.onXMLMinorError("No Textures.");
         }
 
-        for (var i = 0; i < children.length; i++){
-            var textureId = this.reader.getString(children[i], 'id');
-            var textureFile = this.reader.getString(children[i], 'file');
-            var png = textureFile.search(".png");
-            var jpg = textureFile.search(".jpg");
+        for (let i = 0; i < children.length; i++){
+            let textureId = this.reader.getString(children[i], 'id');
+            let textureFile = this.reader.getString(children[i], 'file');
+            let png = textureFile.search(".png");
+            let jpg = textureFile.search(".jpg");
             if (png == -1 && jpg == -1){
                 return "Texture must be either a PNG or a JPG";
             }
@@ -586,9 +586,10 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + textureId + ")";
             }
 
-            var filep = children[i].getAttribute("file");
+            let filep = children[i].getAttribute("file");
             //this.textures[textureId] = textureFile;
             this.textures[textureId] = new CGFtexture(this.scene, filep);
+            console.log(this.textures[textureId]);
         }
             
 
@@ -615,8 +616,8 @@ class MySceneGraph {
         }
 
         // Any number of materials.
-        for (var i = 0; i < children.length; i++) {
-            var global = [];
+        for (let i = 0; i < children.length; i++) {
+            let global = [];
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -624,7 +625,7 @@ class MySceneGraph {
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], 'id');
+            let materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
 
@@ -634,33 +635,33 @@ class MySceneGraph {
 
             //Continue here
             this.materials[materialID] = new CGFappearance(this.scene);
-            var materialShininess = this.reader.getFloat(children[i], 'shininess');
+            let materialShininess = this.reader.getFloat(children[i], 'shininess');
             this.materials[materialID].setShininess(materialShininess);
 
             grandChildren = children[i].children;
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (let j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            for (var i = 0; i < grandChildren.length; i++) {
-                if (grandChildren[i].nodeName != "emission" && grandChildren[i].nodeName != "diffuse" && grandChildren[i].nodeName != "specular" && grandChildren[i].nodeName != "ambient") {
+            for (let v = 0; v < grandChildren.length; v++) {
+                if (grandChildren[v].nodeName != "emission" && grandChildren[v].nodeName != "diffuse" && grandChildren[v].nodeName != "specular" && grandChildren[v].nodeName != "ambient") {
                 this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">");
                 continue;
                 }
-                switch(grandChildren[i].nodeName){
+                switch(grandChildren[v].nodeName){
                     case "emission":
-                        this.materials[materialID].setEmission(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        this.materials[materialID].setEmission(parseFloat(grandChildren[v].getAttribute("r")), parseFloat(grandChildren[v].getAttribute("g")), parseFloat(grandChildren[v].getAttribute("b")), parseFloat(grandChildren[v].getAttribute("a")));
                         break;
                     case "ambient":
-                        this.materials[materialID].setAmbient(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        this.materials[materialID].setAmbient(parseFloat(grandChildren[v].getAttribute("r")), parseFloat(grandChildren[v].getAttribute("g")), parseFloat(grandChildren[v].getAttribute("b")), parseFloat(grandChildren[v].getAttribute("a")));
                         break;
                     case "diffuse":
-                        this.materials[materialID].setDiffuse(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        this.materials[materialID].setDiffuse(parseFloat(grandChildren[v].getAttribute("r")), parseFloat(grandChildren[v].getAttribute("g")), parseFloat(grandChildren[v].getAttribute("b")), parseFloat(grandChildren[v].getAttribute("a")));
                         break;
                     case "specular":
-                        this.materials[materialID].setSpecular(parseFloat(grandChildren[i].getAttribute("r")), parseFloat(grandChildren[i].getAttribute("g")), parseFloat(grandChildren[i].getAttribute("b")), parseFloat(grandChildren[i].getAttribute("a")));
+                        this.materials[materialID].setSpecular(parseFloat(grandChildren[v].getAttribute("r")), parseFloat(grandChildren[v].getAttribute("g")), parseFloat(grandChildren[v].getAttribute("b")), parseFloat(grandChildren[v].getAttribute("a")));
                         break;
                 
                 }
@@ -935,7 +936,7 @@ class MySceneGraph {
         var nodeNames = [];
 
         // Any number of components.
-        for (var i = 0; i < children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -954,7 +955,7 @@ class MySceneGraph {
             grandChildren = children[i].children;
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (let j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
@@ -977,7 +978,7 @@ class MySceneGraph {
             // Transformations
             grandgrandChildren = grandChildren[transformationIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (let j = 0; j < grandgrandChildren.length; j++) {
 
                 if (grandgrandChildren[j].nodeName != "transformationref" && 
                 grandgrandChildren[j].nodeName != "translate" &&
@@ -1082,7 +1083,7 @@ class MySceneGraph {
             // Materials
             grandgrandChildren = grandChildren[materialsIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (let j = 0; j < grandgrandChildren.length; j++) {
                 if(grandgrandChildren[j].nodeName != "material"){
                     this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
                     continue;
@@ -1161,7 +1162,7 @@ class MySceneGraph {
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
-            for (var j = 0; j < childrenComponents.length; j++) {
+            for (let j = 0; j < childrenComponents.length; j++) {
                 if(childrenComponents[j].nodeName != "componentref" && childrenComponents[j].nodeName != "primitiveref"){
                     this.onXMLMinorError("unknown tag <" + childrenComponents[j].nodeName + ">");
                     continue;
