@@ -560,20 +560,20 @@ class MySceneGraph {
      */
     parseTextures(texturesNode) {
 
-        var children = texturesNode.children;
+        let children = texturesNode.children;
 
         this.textures = [];
-        var numTextures = 0;
+        let numTextures = 0;
 
         if(children.length == 0){
             this.onXMLMinorError("No Textures.");
         }
 
-        for (var i = 0; i < children.length; i++){
-            var textureId = this.reader.getString(children[i], 'id');
-            var textureFile = this.reader.getString(children[i], 'file');
-            var png = textureFile.search(".png");
-            var jpg = textureFile.search(".jpg");
+        for (let i = 0; i < children.length; i++){
+            let textureId = this.reader.getString(children[i], 'id');
+            let textureFile = this.reader.getString(children[i], 'file');
+            let png = textureFile.search(".png");
+            let jpg = textureFile.search(".jpg");
             if (png == -1 && jpg == -1){
                 return "Texture must be either a PNG or a JPG";
             }
@@ -586,9 +586,10 @@ class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + textureId + ")";
             }
 
-            var filep = children[i].getAttribute("file");
+            let filep = children[i].getAttribute("file");
             //this.textures[textureId] = textureFile;
             this.textures[textureId] = new CGFtexture(this.scene, filep);
+            console.log(this.textures[textureId]);
         }
             
 
@@ -615,8 +616,8 @@ class MySceneGraph {
         }
 
         // Any number of materials.
-        for (var i = 0; i < children.length; i++) {
-            var global = [];
+        for (let i = 0; i < children.length; i++) {
+            let global = [];
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -624,7 +625,7 @@ class MySceneGraph {
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], 'id');
+            let materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
 
@@ -634,13 +635,13 @@ class MySceneGraph {
 
             //Continue here
             this.materials[materialID] = new CGFappearance(this.scene);
-            var materialShininess = this.reader.getFloat(children[i], 'shininess');
+            let materialShininess = this.reader.getFloat(children[i], 'shininess');
             this.materials[materialID].setShininess(materialShininess);
 
             grandChildren = children[i].children;
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (let j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
@@ -951,7 +952,7 @@ class MySceneGraph {
         var nodeNames = [];
 
         // Any number of components.
-        for (var i = 0; i < children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -970,7 +971,7 @@ class MySceneGraph {
             grandChildren = children[i].children;
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (let j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
@@ -993,7 +994,7 @@ class MySceneGraph {
             // Transformations
             grandgrandChildren = grandChildren[transformationIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (let j = 0; j < grandgrandChildren.length; j++) {
 
                 if (grandgrandChildren[j].nodeName != "transformationref" && 
                 grandgrandChildren[j].nodeName != "translate" &&
@@ -1101,7 +1102,7 @@ class MySceneGraph {
             // Materials
             grandgrandChildren = grandChildren[materialsIndex].children;
 
-            for (var j = 0; j < grandgrandChildren.length; j++) {
+            for (let j = 0; j < grandgrandChildren.length; j++) {
                 if(grandgrandChildren[j].nodeName != "material"){
                     this.onXMLMinorError("unknown tag <" + grandgrandChildren[j].nodeName + ">");
                     continue;
@@ -1180,7 +1181,7 @@ class MySceneGraph {
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
-            for (var j = 0; j < childrenComponents.length; j++) {
+            for (let j = 0; j < childrenComponents.length; j++) {
                 if(childrenComponents[j].nodeName != "componentref" && childrenComponents[j].nodeName != "primitiveref"){
                     this.onXMLMinorError("unknown tag <" + childrenComponents[j].nodeName + ">");
                     continue;
@@ -1238,8 +1239,6 @@ class MySceneGraph {
         }
 
         this.log("Parsed components");
-
-        var test = this.components[this.idRoot];
         
         if(this.components[this.idRoot] == null || this.components[this.idRoot] == undefined){
             return "root component not found";
@@ -1382,16 +1381,16 @@ class MySceneGraph {
         }
 
         if(currentTexture.type == "inherit"){
-            currentMaterial.setTexture(parentTexture);
+            //currentMaterial.setTexture(parentTexture);
             //set s and t
         }
         else{
             if(currentTexture.type == "none"){
-                currentTexture.unbind(0);
-                currentMaterial.setTexture(currentTexture);
+                //currentTexture.unbind(0);
+                //currentMaterial.setTexture(currentTexture);
             }
             else{
-                currentMaterial.setTexture(currentTexture);
+                //currentMaterial.setTexture(currentTexture);
                 //set s and t
             }
         }
@@ -1400,7 +1399,7 @@ class MySceneGraph {
 
         for(let i = 0; i < componentNode.children.length; ++i){
             if(componentNode.children[i].type == "component"){
-                processNode(componentNode.children[i], currentMaterial, currentTexture);
+                this.processNode(componentNode.children[i], currentMaterial, currentTexture);
             }
             else{
                 componentNode.children[i].display();

@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="StaffCy1" axis_length="5"/>
+    <scene root="StaffCyl" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -27,7 +27,9 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="vidral" file="scenes/images/vidral.jpg" />
+        <texture id="bank" file="scenes/images/bank.jpg" />
+        <texture id="trunk" file="scenes/images/trunk-image.jpg" />
     </textures>
 
     <materials>
@@ -39,31 +41,31 @@
         </material>
 
         <material id="AureolaMat" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <emission r="1.0" g="1.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="1.0" b="0.0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="0.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="0.0" a="1.0" />
         </material>
 
         <material id="CrystalMat" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="1.0" b="1.0" a="1.0" />
-            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <emission r="0.0" g="0.288" b="0.241" a="0.1" />
+            <ambient r="0.0" g="0.988" b="0.941" a="1.0" />
+            <diffuse r="0.0" g="0.588" b="0.541" a="1.0" />
             <specular r="0.01" g="0.988" b="0.941" a="1.0" />
         </material>
 
         <material id="StaffMat" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.529" g="0.266" b="0.0" a="1.0" />
+            <diffuse r="0.529" g="0.266" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
         <material id="HiltMat" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.929" g="0.792" b="0.172" a="1.0" />
+            <specular r="0.929" g="0.792" b="0.172" a="1.0" />
         </material>
     </materials>
 
@@ -106,12 +108,13 @@
         <component id="HiltSph">
             <transformation>
                 <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
+                <scale x="1" y="1" z="0.03" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="HiltMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none" />
+            <!--<texture id="bank"/>-->
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -119,8 +122,8 @@
 
         <component id="TopCrystalCyl">
             <transformation>
-                <translate x="0" y="0" z="12" />
-                <scale x="1" y="1" z="2" />
+                <translate x="0" y="0" z="2" />
+                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -133,7 +136,7 @@
 
         <component id="BotCrystalCyl">
             <transformation>
-                <translate x="0" y="0" z="11" />
+                <translate x="0" y="0" z="1" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
@@ -147,14 +150,15 @@
         
         <component id="CrystalRec">
             <transformation>
-                <translate x="0" y="0" z="11" />
+                <translate x="0" y="0" z="1" />
                 <scale x="0.5" y="0.5" z="1" />
                 <rotate axis="x" angle="180" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="none" />
+            <!--<texture id="bank"/>-->
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -162,13 +166,14 @@
 
         <component id="Crystal">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
+                <translate x="0" y="0" z="0.9" />
+                <scale x="1" y="1" z="0.1" />
             </transformation>
             <materials>
                 <material id="CrystalMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none" />
+            <!--<texture id="demoTexture"/>-->
             <children>
                 <componentref id="TopCrystalCyl" />
                 <componentref id="BotCrystalCyl" />
@@ -178,7 +183,7 @@
 
         <component id="Aureola1">
             <transformation>
-                <translate x="0" y="0" z="12" />
+                <translate x="0" y="0" z="1" />
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
@@ -192,7 +197,7 @@
 
         <component id="Aureola2">
             <transformation>
-                <translate x="0" y="0" z="14" />
+                <translate x="0" y="0" z="2" />
                 <scale x="0.5" y="0.5" z="1" />
             </transformation>
             <materials>
@@ -206,7 +211,7 @@
 
         <component id="Aureola3">
             <transformation>
-                <translate x="0" y="0" z="10" />
+                <translate x="0" y="0" z="0" />
                 <scale x="0.5" y="0.5" z="1" />
             </transformation>
             <materials>
@@ -220,13 +225,14 @@
 
         <component id="Aureolas">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
+                <translate x="0" y="0" z="1" />
+                <scale x="1" y="1" z="0.1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="AureolaMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none" />
+            <!--<texture id="bank"/>-->
             <children>
                 <componentref id="Aureola1" />
                 <componentref id="Aureola2" />
@@ -234,19 +240,35 @@
             </children>
         </component>
 
-        <component id="StaffCyl">
+        <component id="Pole">
             <transformation>
-                <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="1" />
+                <scale x="0.5" y="0.5" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none" />
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+
+        <component id="StaffCyl">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+                <scale x="0.3" y="0.3" z="10" />
+            </transformation>
+            <materials>
+                <material id="StaffMat" />
+            </materials>
+            <texture id="none" />
+            <!--<texture id="trunk"/>-->
             <children>
                 <componentref id="HiltSph"/>
                 <componentref id="Crystal"/>
                 <componentref id="Aureolas"/>
+                <componentref id="Pole"/> 
             </children>
         </component>        
     </components>
