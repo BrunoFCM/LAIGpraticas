@@ -130,7 +130,7 @@
             <materials>
                 <material id="CrystalMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="bank"/>
             <children>
                 <componentref id="TopCrystalCyl" />
                 <componentref id="BotCrystalCyl" />
@@ -144,9 +144,9 @@
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="AureolaMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="bank"/>
             <children>
                 <componentref id="Aureola1" />
                 <componentref id="Aureola2" />
@@ -174,9 +174,9 @@
                 <scale x="0.3" y="0.3" z="10" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="StaffMat" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="trunk"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
