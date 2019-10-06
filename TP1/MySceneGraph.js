@@ -1380,16 +1380,19 @@ class MySceneGraph {
         }
 
         if(currentTexture.type == "inherit"){
-            //currentMaterial.setTexture(parentTexture);
+            currentMaterial.setTexture(parentTexture);
             //set s and t
         }
         else{
             if(currentTexture.type == "none"){
-                //currentTexture.unbind(0);
-                //currentMaterial.setTexture(currentTexture);
+                if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
+                    parentTexture.unbind(0);
+                    currentMaterial.setTexture(parentTexture);
+                    currentTexture = parentTexture;
+                }
             }
             else{
-                //currentMaterial.setTexture(currentTexture);
+                currentMaterial.setTexture(currentTexture);
                 //set s and t
             }
         }
