@@ -3,7 +3,7 @@ var DEGREE_TO_RAD = Math.PI / 180;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
@@ -112,15 +112,15 @@ class MySceneGraph {
                 return error;
         }
 
-        // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        // <globals>
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+            if (index != GLOBALS_INDEX)
+                this.onXMLMinorError("tag <globals> out of order");
 
-            //Parse ambient block
-            if ((error = this.parseAmbient(nodes[index])) != null)
+            //Parse globals block
+            if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
 
@@ -401,14 +401,14 @@ class MySceneGraph {
     }
 
     /**
-     * Parses the <ambient> node.
-     * @param {ambient block element} ambientsNode
+     * Parses the <globals> node.
+     * @param {globals block element} globalsNode
      */
-    parseAmbient(ambientsNode) {
+    parseGlobals(globalsNode) {
 
-        var children = ambientsNode.children;
+        var children = globalsNode.children;
 
-        this.ambient = [];
+        this.globals = [];
         this.background = [];
 
         var nodeNames = [];
@@ -423,7 +423,7 @@ class MySceneGraph {
         if (!Array.isArray(color))
             return color;
         else
-            this.ambient = color;
+            this.globals = color;
 
         color = this.parseColor(children[backgroundIndex], "background");
         if (!Array.isArray(color))
@@ -431,7 +431,7 @@ class MySceneGraph {
         else
             this.background = color;
 
-        this.log("Parsed ambient");
+        this.log("Parsed globals");
 
         return null;
     }
@@ -589,7 +589,6 @@ class MySceneGraph {
             let filep = children[i].getAttribute("file");
             //this.textures[textureId] = textureFile;
             this.textures[textureId] = new CGFtexture(this.scene, filep);
-            console.log(this.textures[textureId]);
         }
             
 
@@ -600,7 +599,7 @@ class MySceneGraph {
 
     /**
      * Parses the <materials> node.
-     * Material = [shininess, emission values, ambient values, difuse values, specular values]
+     * Material = [shininess, emission values, globals values, difuse values, specular values]
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {

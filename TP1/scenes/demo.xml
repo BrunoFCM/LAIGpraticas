@@ -12,10 +12,10 @@
         </perspective>
     </views>
 
-    <ambient>
+    <globals>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
         <background r="0.0" g="0.0" b="0.0" a="1.0" />
-    </ambient>
+    </globals>
 
     <lights>
         <omni id="demoLight" enabled="1">
@@ -108,13 +108,13 @@
         <component id="HiltSph">
             <transformation>
                 <translate x="0" y="0" z="0" />
-                <scale x="1" y="1" z="0.03" />
+                <scale x="0.6" y="0.6" z="0.02" />
             </transformation>
             <materials>
                 <material id="HiltMat" />
             </materials>
-            <texture id="none" />
-            <!--<texture id="bank"/>-->
+            <texture id="none" />-->
+            <texture id="bank"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -151,14 +151,15 @@
         <component id="CrystalRec">
             <transformation>
                 <translate x="0" y="0" z="1" />
-                <scale x="0.5" y="0.5" z="1" />
+                <scale x="0.355" y="0.355" z="1" />
+                <rotate axis="z" angle="45" />
                 <rotate axis="x" angle="180" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
-            <!--<texture id="bank"/>-->
+            <!--<texture id="none" />-->
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -172,8 +173,8 @@
             <materials>
                 <material id="CrystalMat" />
             </materials>
-            <texture id="none" />
-            <!--<texture id="demoTexture"/>-->
+            <!--<texture id="none" />-->
+            <texture id="bank" length_s="1" length_t="1"/>
             <children>
                 <componentref id="TopCrystalCyl" />
                 <componentref id="BotCrystalCyl" />
@@ -231,8 +232,8 @@
             <materials>
                 <material id="AureolaMat" />
             </materials>
-            <texture id="none" />
-            <!--<texture id="bank"/>-->
+            <!--<texture id="none" />-->
+            <texture id="bank" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Aureola1" />
                 <componentref id="Aureola2" />
@@ -242,7 +243,7 @@
 
         <component id="Pole">
             <transformation>
-                <scale x="0.5" y="0.5" z="1" />
+                <scale x="0.36" y="0.36" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -256,14 +257,15 @@
 
         <component id="StaffCyl">
             <transformation>
-                <translate x="0" y="0" z="1" />
+                <rotate axis="x" angle="-90"/>
+                <translate x="0" y="0" z="0" />
                 <scale x="0.3" y="0.3" z="10" />
             </transformation>
             <materials>
                 <material id="StaffMat" />
             </materials>
-            <texture id="none" />
-            <!--<texture id="trunk"/>-->
+            <!--<texture id="none" />-->
+            <texture id="trunk" length_s="1" length_t="1"/>
             <children>
                 <componentref id="HiltSph"/>
                 <componentref id="Crystal"/>
