@@ -860,6 +860,36 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = sphere;
             }
+            else if (primitiveType == 'cylinder'){
+                // base
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
+                
+                // top
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
+
+                // height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)) && slices > 2)
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+
+                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
+
+                this.primitives[primitiveId] = cylinder;
+            }
             else if (primitiveType == 'torus'){
                 // inner radius
                 var inner = this.reader.getFloat(grandChildren[0], 'inner');
@@ -1015,10 +1045,7 @@ class MySceneGraph {
                     case 'rotate':{
                         let angle = parseFloat(grandgrandChildren[j].getAttribute("angle"));
                         let axis = grandgrandChildren[j].getAttribute("axis");
-                        if (!this.isValidNumber(angle)) {
-                            this.onXMLMinorError("a transformation has an invalid angle value");
-                            continue;
-                        }
+                        
                         if (axis != "x" && axis != "y" && axis != "z") {
                         let defAxis = "x";
                         this.onXMLMinorError("a rotation in " + children[i].componentID + " has an invalid axis value, using default value axis = " + defAxis);
@@ -1044,7 +1071,7 @@ class MySceneGraph {
                             }
                         }
                         angle = angle * DEGREE_TO_RAD;
-                        mat4.rotate(matrix, matrix, angle, vector2);
+                        mat4.rotate(transfMatrix, transfMatrix, angle, vector2);
 
                         newComponent.transformations.push(transfMatrix);
                         break;
