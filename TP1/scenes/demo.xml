@@ -398,6 +398,10 @@
             </transformation>
             <materials>
                 <material id="HiltMat" />
+                
+                <material id="StaffMat" />
+                
+                <material id="AureolaMat" />
             </materials>
             <texture id="bank" />
             <children>

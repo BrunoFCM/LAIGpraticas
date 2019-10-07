@@ -1099,6 +1099,8 @@ class MySceneGraph {
             }
 
             // Materials
+            newComponent.activeMaterial = 0;
+
             grandgrandChildren = grandChildren[materialsIndex].children;
 
             for (let j = 0; j < grandgrandChildren.length; j++) {
@@ -1372,7 +1374,7 @@ class MySceneGraph {
             this.scene.multMatrix(componentNode.transformations[i]);
         }
 
-        let currentMaterial = componentNode.materials[0];
+        let currentMaterial = componentNode.materials[componentNode.activeMaterial];
         let currentTexture = componentNode.texture;
 
         if(currentMaterial == null){
@@ -1419,5 +1421,13 @@ class MySceneGraph {
         }
     
         this.scene.popMatrix();
+    }
+
+    changeMaterialIndex(){
+        for(let key in this.components){
+            this.components[key].activeMaterial++;
+            this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;
+        }
+        console.log("changd");
     }
 }
