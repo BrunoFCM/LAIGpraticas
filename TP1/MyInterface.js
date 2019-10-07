@@ -20,9 +20,7 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
-        // add a group of controls (and open/expand by defult)
-        
-		this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
+        // add a group of controls (and open/expand by default)
 
         this.initKeys();
 
@@ -51,7 +49,13 @@ class MyInterface extends CGFinterface {
     }
 
     updateGUI() {
-        this.gui.__controllers[0].remove();
-        this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View');
+        //adding controls dependent on contents read from the xml scene 
+        this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
+
+        let lightIndex = 0;
+        for(let key in this.scene.graph.lights){
+            this.gui.add(this.scene.graph.lights[key], '0').onChange(this.scene.updateLights.bind(this.scene)).name(key); //controller for a light
+            ++lightIndex;
+        }
     }
 }

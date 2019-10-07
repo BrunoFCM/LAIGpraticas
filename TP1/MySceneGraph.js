@@ -541,7 +541,9 @@ class MySceneGraph {
                 global.push(...[angle, exponent, targetLight])
             }
 
+            global.active = true;
             this.lights[lightId] = global;
+            this.lights[lightId].lightIndex = numLights;
             numLights++;
         }
 
@@ -549,6 +551,8 @@ class MySceneGraph {
             return "at least one light must be defined";
         else if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
+
+        this.numLights = numLights;
 
         this.log("Parsed lights");
         return null;
@@ -1428,6 +1432,5 @@ class MySceneGraph {
             this.components[key].activeMaterial++;
             this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;
         }
-        console.log("changd");
     }
 }
