@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="5"/>
+    <scene root="roottest" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -104,6 +104,13 @@
             <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
         </primitive>
         
+        <primitive id="testSphere">
+            <sphere radius="1" slices="30" stacks="30" />
+        </primitive>
+        
+        <primitive id="testtorus">
+            <torus inner="1" outer="5" slices="4" loops="4" />
+        </primitive>
     </primitives>
 
     <components>       
@@ -183,7 +190,7 @@
             <materials>
                 <material id="HiltMat" />
             </materials>
-            <texture id="none" />
+            <texture id="bank" />
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -355,6 +362,19 @@
                 <componentref id="MediumGlyph" />
                 <componentref id="SmallGlyph" />
                 <componentref id="StaffCyl" />
+            </children>
+        </component>    
+
+        <component id="roottest">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="HiltMat" />
+            </materials>
+            <texture id="bank" />
+            <children>
+                <primitiveref id="testtorus" />
             </children>
         </component>    
     </components>

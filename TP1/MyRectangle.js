@@ -70,5 +70,17 @@ class MyRectangle extends CGFobject {
 		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
 	}
+
+    updTexCoords(length_s, length_t){
+		let length = Math.abs(this.x2 - this.x1);
+		let height = Math.abs(this.y2 - this.y1);
+		
+		this.texCoords = [
+			0,0,
+			length / length_s, 0,
+			0, height / length_t,
+			length / length_s, height / length_t	
+        ]
+    }
 }
 
