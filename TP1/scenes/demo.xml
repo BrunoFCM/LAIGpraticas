@@ -30,6 +30,7 @@
         <texture id="vidral" file="scenes/images/vidral.jpg" />
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="crystal" file="scenes/images/crystal.jpg" />
     </textures>
 
     <materials>
@@ -42,13 +43,13 @@
 
         <material id="AureolaMat" shininess="10">
             <emission r="1.0" g="1.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="1.0" b="0.0" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="0.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
         <material id="CrystalMat" shininess="10">
-            <emission r="0.0" g="0.288" b="0.241" a="0.1" />
+            <emission r="0.0" g="0.288" b="0.241" a="1.0" />
             <ambient r="0.0" g="0.988" b="0.941" a="1.0" />
             <diffuse r="0.0" g="0.588" b="0.541" a="1.0" />
             <specular r="0.01" g="0.988" b="0.941" a="1.0" />
@@ -250,7 +251,7 @@
                 <material id="CrystalMat" />
             </materials>
             <!--<texture id="none" />-->
-            <texture id="bank" length_s="1" length_t="1"/>
+            <texture id="crystal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="TopCrystalCyl" />
                 <componentref id="BotCrystalCyl" />
