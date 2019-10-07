@@ -365,6 +365,33 @@
             </children>
         </component>    
 
+        <component id="roottest3">
+            <transformation>
+                <scale x="0.6" y="0.6" z="0.6" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="testtorus" />
+            </children>
+        </component> 
+
+        <component id="roottest2">
+            <transformation>
+                <scale x="0.5" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="testtorus" />
+                <componentref id="roottest3" />
+            </children>
+        </component> 
+
         <component id="roottest">
             <transformation>
                 <scale x="1" y="1" z="1" />
@@ -375,6 +402,7 @@
             <texture id="bank" />
             <children>
                 <primitiveref id="testtorus" />
+                <componentref id="roottest2" />
             </children>
         </component>    
     </components>
