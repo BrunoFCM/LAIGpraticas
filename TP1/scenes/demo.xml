@@ -107,7 +107,21 @@
         
     </primitives>
 
-    <components>       
+    <components>
+        <component id="PotionBase">
+            <transformation>
+                <translate x="4" y="2" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <material>
+                <material id="demoMaterial" />
+            </material>
+            <texture id="bank" />
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
         <component id="triangle2">
             <transformation>
                 <transformationref id="GlyphTriangleTransform"/>
@@ -341,7 +355,22 @@
                 <componentref id="Aureolas"/>
                 <componentref id="Pole"/> 
             </children>
-        </component>     
+        </component>
+
+        <component id="Potion">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <material>
+                <material id="demoMaterial" />
+            </material>
+            <texture id="bank" />
+            <children>
+                <componentref id="PotBase" />
+                <componentref id="PotNeck" />
+                <componentref id="PotBorder" />
+            </children>
+        </component>
 
         <component id="root">
             <transformation>
@@ -356,6 +385,7 @@
                 <componentref id="MediumGlyph" />
                 <componentref id="SmallGlyph" />
                 <componentref id="StaffCyl" />
+                <componentref id="Potion" />
             </children>
         </component>    
     </components>

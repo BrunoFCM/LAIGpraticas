@@ -1,4 +1,4 @@
-var DEGREE_TO_RAD = Math.PI / 180;
+DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
