@@ -641,6 +641,10 @@ class MySceneGraph {
             let materialShininess = this.reader.getFloat(children[i], 'shininess');
             this.materials[materialID].setShininess(materialShininess);
 
+            if(this.materialID = "FloorMat"){
+                this.materials[materialID].setTextureWrap('REPEAT','REPEAT');
+            }
+
             grandChildren = children[i].children;
 
             nodeNames = [];
@@ -1410,6 +1414,7 @@ class MySceneGraph {
                 this.processNode(componentNode.children[i], currentMaterial, currentTexture);
             }
             else{
+                componentNode.children[i].updTexCoords(currentTexture.length_s,currentTexture.length_t);
                 componentNode.children[i].display();
             }
         }

@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="roottest" axis_length="5"/>
+    <scene root="Sanctest" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -31,6 +31,8 @@
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
         <texture id="crystal" file="scenes/images/crystal.jpg" />
+        <texture id="church_floor" file="scenes/images/church_floor.jpg"/>
+        <texture id="church_wall" file="scenes/images/church_wall.jpg"/>
     </textures>
 
     <materials>
@@ -48,6 +50,13 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
 
+        <material id="FloorMat" shininess="3">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
+            <specular r="0.05" g="0.0" b="0.1" a="1.0" />
+        </material>
+
         <material id="CrystalMat" shininess="10">
             <emission r="0.0" g="0.288" b="0.241" a="1.0" />
             <ambient r="0.0" g="0.988" b="0.941" a="1.0" />
@@ -55,7 +64,7 @@
             <specular r="0.01" g="0.988" b="0.941" a="1.0" />
         </material>
 
-        <material id="StaffMat" shininess="10">
+        <material id="StaffMat" shininess="3">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.529" g="0.266" b="0.0" a="1.0" />
             <diffuse r="0.529" g="0.266" b="0.0" a="1.0" />
@@ -79,6 +88,14 @@
     <primitives>
         <primitive id="demoRectangle">
             <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+
+        <primitive id="floor">
+            <rectangle x1="-10" y1="-10" x2="10" y2="10" />
+        </primitive>
+
+        <primitive id="wall">
+            <rectangle x1="-2.5" y1="-2.5" x2="2.5" y2="2.5" />
         </primitive>
         
         <primitive id="demoSphere">
@@ -104,6 +121,10 @@
         <primitive id="triangle">
             <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
         </primitive>
+
+        <primitive id="ceilingIsos">
+            <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="1" z3="0" />
+        </primitive>
         
         <primitive id="testSphere">
             <sphere radius="1" slices="30" stacks="30" />
@@ -115,7 +136,223 @@
     </primitives>
 
     <components>
-        <component id="PotionBase">
+
+        <component id="Floor">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="church_floor" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="floor"/>
+            </children>
+        </component>
+
+        <component id="Wall1">
+            <transformation>
+                <translate x="10" y="0" z="2.5" />
+                <scale x="1" y="1.5" z="1" />
+                <rotate axis="z" angle="180"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall2">
+            <transformation>
+                <translate x="7.5" y="3.75" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="-90"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall3">
+            <transformation>
+                <translate x="7.5" y="-3.75" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="90"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall4">
+            <transformation>
+                <translate x="5" y="6.25" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall5">
+            <transformation>
+                <translate x="5" y="-6.25" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall6">
+            <transformation>
+                <translate x="-2.5" y="8.75" z="2.5" />
+                <scale x="3" y="1" z="1" />
+                <rotate axis="z" angle="90"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall7">
+            <transformation>
+                <translate x="-2.5" y="-8.75" z="2.5" />
+                <scale x="3" y="1" z="1" />
+                <rotate axis="z" angle="-90"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Wall8">
+            <transformation>
+                <translate x="-10" y="0" z="2.5" />
+                <scale x="1" y="3.5" z="1" />
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="Walls">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="church_wall" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Wall1"/>
+                <componentref id="Wall2"/>
+                <componentref id="Wall3"/>
+                <componentref id="Wall4"/>
+                <componentref id="Wall5"/>
+                <componentref id="Wall6"/>
+                <componentref id="Wall7"/>
+                <componentref id="Wall8"/>
+            </children>
+        </component>
+
+        <component id="Ceiling1">
+            <transformation>
+                <translate x="10" y="0" z="7.5" />
+                <scale x="3" y="7.5" z="3" />
+                <rotate axis="x" angle="180"/>
+                <rotate axis="y" angle="-45"/>
+                <rotate axis="z" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="ceilingIsos"/>
+            </children>
+        </component>
+
+        <component id="Ceiling">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="church_wall" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Ceiling1"/>
+                <componentref id="Ceiling2"/>
+                <componentref id="Ceiling3"/>
+                <componentref id="Ceiling4"/>
+                <componentref id="Ceiling5"/>
+                <componentref id="Ceiling6"/>
+                <componentref id="Ceiling7"/>
+                <componentref id="Ceiling8"/>
+            </children>
+        </component>
+
+        <component id="Sanctuary">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="Pillars"/>
+                <componentref id="Ceiling"/>
+                <componentref id="Floor"/>
+                <componentref id="Walls"/>
+            </children>
+        </component>
+
+        <!-- <component id="PotionBase">
             <transformation>
                 <translate x="4" y="2" z="0" />
                 <scale x="1" y="1" z="1" />
@@ -127,7 +364,7 @@
             <children>
                 <primitiveref id="demoSphere" />
             </children>
-        </component>
+        </component> -->
 
         <component id="triangle2">
             <transformation>
@@ -339,7 +576,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -363,7 +600,7 @@
                 <componentref id="Pole"/> 
             </children>
         </component>
-
+<!-- 
         <component id="Potion">
             <transformation>
                 <scale x="1" y="1" z="1" />
@@ -377,7 +614,7 @@
                 <componentref id="PotNeck" />
                 <componentref id="PotBorder" />
             </children>
-        </component>
+        </component> -->
 
         <component id="root">
             <transformation>
@@ -392,7 +629,7 @@
                 <componentref id="MediumGlyph" />
                 <componentref id="SmallGlyph" />
                 <componentref id="StaffCyl" />
-                <componentref id="Potion" />
+                <!-- <componentref id="Potion" /> -->
             </children>
         </component>    
 
@@ -439,6 +676,19 @@
                 <primitiveref id="testtorus" />
                 <componentref id="roottest2" />
             </children>
-        </component>    
+        </component>
+
+        <component id="Sanctest">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="church_floor" length_s="1" length_t="1" />
+            <children>
+                <componentref id="Sanctuary" />
+            </children>
+        </component>
     </components>
 </lxs>
