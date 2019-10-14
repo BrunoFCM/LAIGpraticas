@@ -541,7 +541,9 @@ class MySceneGraph {
                 global.push(...[angle, exponent, targetLight])
             }
 
+            global.active = true;
             this.lights[lightId] = global;
+            this.lights[lightId].lightIndex = numLights;
             numLights++;
         }
 
@@ -549,6 +551,8 @@ class MySceneGraph {
             return "at least one light must be defined";
         else if (numLights > 8)
             this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
+
+        this.numLights = numLights;
 
         this.log("Parsed lights");
         return null;
@@ -1099,6 +1103,8 @@ class MySceneGraph {
             }
 
             // Materials
+            newComponent.activeMaterial = 0;
+
             grandgrandChildren = grandChildren[materialsIndex].children;
 
             for (let j = 0; j < grandgrandChildren.length; j++) {
@@ -1372,7 +1378,7 @@ class MySceneGraph {
             this.scene.multMatrix(componentNode.transformations[i]);
         }
 
-        let currentMaterial = componentNode.materials[0];
+        let currentMaterial = componentNode.materials[componentNode.activeMaterial];
         let currentTexture = componentNode.texture;
 
         if(currentMaterial == null){
@@ -1381,20 +1387,18 @@ class MySceneGraph {
 
         let currentType = currentTexture.type;
 
-        if(currentType == "inherit"){
-            currentMaterial.setTexture(parentTexture);
+        if(currentType == "normal"){
+            currentMaterial.setTexture(currentTexture);
             //set s and t
         }
         else{
             if(currentType == "none"){
                 if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
-                    parentTexture.unbind(0);
-                    currentMaterial.setTexture(parentTexture);
-                    currentTexture = parentTexture;
+                    currentMaterial.setTexture(null);
                 }
             }
-            else{
-                currentMaterial.setTexture(currentTexture);
+            else{ //inherit
+                currentTexture = parentTexture;
                 //set s and t
             }
         }
@@ -1410,17 +1414,23 @@ class MySceneGraph {
             }
         }
 
-        if(currentType == "none"){
-            if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
-                parentTexture.bind(0);
-                currentMaterial.setTexture(parentTexture);
-            }
-        }
-
         if(parentMaterial != null){
+            if(parentTexture.type == "none"){
+                parentMaterial.setTexture(null);
+            }
+            else{
+                parentMaterial.setTexture(parentTexture);
+            }
             parentMaterial.apply();
         }
     
         this.scene.popMatrix();
+    }
+
+    changeMaterialIndex(){
+        for(let key in this.components){
+            this.components[key].activeMaterial++;
+            this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;
+        }
     }
 }

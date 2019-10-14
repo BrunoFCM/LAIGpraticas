@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="root" axis_length="5"/>
+    <scene root="roottest" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -105,6 +105,13 @@
             <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
         </primitive>
         
+        <primitive id="testSphere">
+            <sphere radius="1" slices="30" stacks="30" />
+        </primitive>
+        
+        <primitive id="testtorus">
+            <torus inner="1" outer="5" slices="4" loops="4" />
+        </primitive>
     </primitives>
 
     <components>
@@ -386,6 +393,51 @@
                 <componentref id="SmallGlyph" />
                 <componentref id="StaffCyl" />
                 <componentref id="Potion" />
+            </children>
+        </component>    
+
+        <component id="roottest3">
+            <transformation>
+                <scale x="0.6" y="0.6" z="0.6" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <primitiveref id="testtorus" />
+            </children>
+        </component> 
+
+        <component id="roottest2">
+            <transformation>
+                <scale x="0.5" y="0.5" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="testtorus" />
+                <componentref id="roottest3" />
+            </children>
+        </component> 
+
+        <component id="roottest">
+            <transformation>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="HiltMat" />
+                
+                <material id="StaffMat" />
+                
+                <material id="AureolaMat" />
+            </materials>
+            <texture id="bank" />
+            <children>
+                <primitiveref id="testtorus" />
+                <componentref id="roottest2" />
             </children>
         </component>    
     </components>

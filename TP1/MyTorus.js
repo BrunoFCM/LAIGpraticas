@@ -27,11 +27,11 @@ class MyTorus extends CGFobject {
         var innerAngInc = 2 * Math.PI / this.slices;
         var outerAngInc = 2 * Math.PI / this.loops;
 
-        for(var i = 0; i < this.loops; ++i){
+        for(var i = 0; i <= this.loops; ++i){
             var startX = this.outer * Math.cos(outerAng);
             var startY = this.outer * Math.sin(outerAng);
 
-            for(var j = 0; j < this.slices; ++j){
+            for(var j = 0; j <= this.slices; ++j){
                 let innerX = Math.cos(outerAng) * Math.cos(innerAng);
                 let innerY = Math.sin(outerAng) * Math.cos(innerAng);
                 let innerZ = Math.sin(innerAng);
@@ -46,15 +46,20 @@ class MyTorus extends CGFobject {
 
                 this.vertices.push(x,y,z);
                 
-                this.indices.push(this.slices * i + j,
-                                    (this.slices * (i - 1) + j + this.slices * this.loops) % (this.slices * this.loops),
-                                    this.slices * i + (j - 1 + this.slices) % this.slices);
-            
-                this.indices.push(this.slices * i + j,
-                    (this.slices * (i + 1) + j) % (this.slices * this.loops),
-                    this.slices * i + (j + 1) % this.slices);
-                    
                 innerAng += innerAngInc;
+
+                if(j == this.slices || i == this.loops){
+                    continue;
+                }
+                
+                this.indices.push((this.slices + 1) * i + j,
+                    (this.slices + 1) * (i + 1) + j,
+                    (this.slices + 1) * i + j + 1);
+            
+                this.indices.push((this.slices + 1) * i + j + 1,
+                    (this.slices + 1) * (i + 1) + j,
+                    (this.slices + 1) * (i + 1) + j + 1);
+                    
             }
 
             innerAng = 0;
@@ -65,6 +70,13 @@ class MyTorus extends CGFobject {
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
+    }
+    
+    updTexCoords(length_s, length_t){
+        for(let i = 0; i < this.texCoords.length; i += 2){
+            this.texCoords[i] /= length_s;
+            this.texCoords[i + 1] /= length_t;
+        }
     }
 }
 

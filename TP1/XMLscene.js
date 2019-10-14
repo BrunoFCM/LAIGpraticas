@@ -81,6 +81,8 @@ class XMLscene extends CGFscene {
 
                 this.lights[i].update();
 
+                this.lights[i].id = key;
+
                 i++;
             }
         }
@@ -113,6 +115,37 @@ class XMLscene extends CGFscene {
 
     onSelectedViewChanged(value){
         this.camera = this.graph.views[value];
+        this.interface.setActiveCamera(this.camera);
+    }
+
+    checkKeys() {
+        // Check for key codes e.g. in https://keycode.info/
+        if (this.gui.isKeyPressed("KeyM")) {
+            this.graph.changeMaterialIndex();
+        }
+    }
+
+    updateLights(){
+        for (var i = 0; i < this.lights.length; i++) {
+            let newValue = this.graph.lights[this.lights[i].id];
+
+            if(newValue != undefined){
+                if(newValue[0]){
+                    this.lights[i].enable();
+                }
+                else{
+                    this.lights[i].disable();
+                }
+
+                this.lights[i].update();
+            }
+        }
+
+        console.log("hello");
+    }
+
+    update(t){
+        this.checkKeys();
     }
 
     /**
@@ -134,11 +167,6 @@ class XMLscene extends CGFscene {
 
         this.pushMatrix();
         this.axis.display();
-
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
-        }
 
         if (this.sceneInited) {
             // Draw axis

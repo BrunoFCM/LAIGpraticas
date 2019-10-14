@@ -42,14 +42,14 @@ class MyTriangle extends CGFobject {
 
         let normal = vec3.create();
 
-        vec3.cross(normal, vector1, vector2);
+        vec3.cross(normal, vector2, vector1);
 
-        normal /= vec3.length(normal);
+        vec3.normalize(normal, normal);
 
 		this.normals = [
-			normal.x, normal.y, normal.z,
-			normal.x, normal.y, normal.z,
-			normal.x, normal.y, normal.z
+			normal[0], normal[1], normal[2],
+			normal[0], normal[1], normal[2],
+			normal[0], normal[1], normal[2]
 		];
 		
 		/*
@@ -79,6 +79,31 @@ class MyTriangle extends CGFobject {
 	updateTexCoords(coords) {
 		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
-	}
+    }
+    
+    updTexCoords(length_s, length_t){
+        let aVec = vec3.fromValues(this.x1 - this.x2, this.y1 - this.y2, this.z1 - this.z2);
+        let bVec = vec3.fromValues(this.x2 - this.x3, this.y2 - this.y3, this.z2 - this.z3);
+        let cVec = vec3.fromValues(this.x3 - this.x1, this.y3 - this.y1, this.z3 - this.z1);
+
+        let a = vec3.length(aVec);
+        let b = vec3.length(bVec);
+        let c = vec3.length(cVec);
+
+        let alphaCos = (a*a - b*b + c*c) / (2*a*c);
+        //let betaCos = (a*a + b*b - c*c) / (2*a*b);
+        //let gammaCos = (-a*a + b*b + c*c) / (2*b*c);
+        
+        let s1 = a / length_s;
+
+        let s2 = c * alphaCos / length_s;
+        let t2 = c * Math.sqrt(1 - alphaCos * alphaCos) / length_t;
+
+        this.texCoords = [
+            0,0,
+            s1,0,
+            s2,t2
+        ]
+    }
 }
 
