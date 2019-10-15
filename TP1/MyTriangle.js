@@ -28,7 +28,7 @@ class MyTriangle extends CGFobject {
 		this.vertices = [
 			this.x1, this.y1, this.z1,	//0
 			this.x2, this.y2, this.z2,	//1
-			this.x3, this.y3, this.z3
+			this.x3, this.y3, this.z3   //2
 		];
 
 		//Counter-clockwise reference of vertices
@@ -42,7 +42,7 @@ class MyTriangle extends CGFobject {
 
         let normal = vec3.create();
 
-        vec3.cross(normal, vector2, vector1);
+        vec3.cross(normal, vector1, vector2);
 
         vec3.normalize(normal, normal);
 
@@ -91,19 +91,19 @@ class MyTriangle extends CGFobject {
         let c = vec3.length(cVec);
 
         let alphaCos = (a*a - b*b + c*c) / (2*a*c);
-        //let betaCos = (a*a + b*b - c*c) / (2*a*b);
-        //let gammaCos = (-a*a + b*b + c*c) / (2*b*c);
         
         let s1 = a / length_s;
 
         let s2 = c * alphaCos / length_s;
         let t2 = c * Math.sqrt(1 - alphaCos * alphaCos) / length_t;
 
-        this.texCoords = [
+        let newTexCoords = [
             0,0,
             s1,0,
             s2,t2
-        ]
+		];
+		
+		this.updateTexCoords(newTexCoords);
     }
 }
 

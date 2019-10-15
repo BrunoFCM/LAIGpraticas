@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="roottest" axis_length="5"/>
+    <scene root="mage" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -18,7 +18,7 @@
     </globals>
 
     <lights>
-        <omni id="demoLight" enabled="1">
+        <omni id="demoLight" enabled="0">
             <location x="9.8" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -31,14 +31,93 @@
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
         <texture id="crystal" file="scenes/images/crystal.jpg" />
+        <texture id="satin" file="scenes/images/satin.jpg" />
+        <texture id="runes" file="scenes/images/runes.jpg" />
     </textures>
 
     <materials>
+        <material id="circleMat1" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.2" b="0.1" a="1.0" />
+            <diffuse r="0.25" g="0.5" b="0.25" a="1.0" />
+            <specular r="0.5" g="1" b="0.5" a="1.0" />
+        </material>
+
+        <material id="circleMat2" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.0" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.0" g="1" b="1" a="1.0" />
+        </material>
+
+        <material id="circleMat3" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.075" g="0.1" b="0.2" a="1.0" />
+            <diffuse r="0.2" g="0.25" b="0.5" a="1.0" />
+            <specular r="0.4" g="0.6" b="1" a="1.0" />
+        </material>
+
+        <material id="circleMat4" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.075" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.2" b="0.5" a="1.0" />
+            <specular r="1" g="0.4" b="1" a="1.0" />
+        </material>
+
+        <material id="circleMat5" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.5" g="0.2" b="0.2" a="1.0" />
+            <specular r="1" g="0.4" b="0.4" a="1.0" />
+        </material>
+
+        <material id="circleMat6" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.1" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.2" a="1.0" />
+            <specular r="1" g="1" b="0.4" a="1.0" />
+        </material>
+
+        <material id="clothMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.01" g="0.01" b="0.1" a="1.0" />
+            <diffuse r="0.1" g="0.1" b="0.6" a="1.0" />
+            <specular r="0.01" g="0.01" b="0.2" a="1.0" />
+        </material>
+        
+        <material id="eyeMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.01" a="1.0" />
+            <diffuse r="0.9" g="0.9" b="0.1" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.1" a="1.0" />
+        </material>
+        
+        <material id="hatMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.02" a="1.0" />
+            <diffuse r="0.6" g="0.6" b="0.1" a="1.0" />
+            <specular r="0.1" g="0.1" b="0.02" a="1.0" />
+        </material>
+        
+        <material id="headMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0." a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0." a="1.0" />
+        </material>
+        
+        <material id="handMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.04" b="0.0" a="1.0" />
+            <diffuse r="0.5" g="0.2" b="0.0" a="1.0" />
+            <specular r="0.1" g="0.04" b="0.0" a="1.0" />
+        </material>
+
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="1.0" g="0.0" b="0.0" a="1.0" />
-            <specular r="1.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.5" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.3" g="0.0" b="0.0" a="1.0" />
         </material>
 
         <material id="AureolaMat" shininess="10">
@@ -64,7 +143,7 @@
 
         <material id="HiltMat" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
             <diffuse r="0.929" g="0.792" b="0.172" a="1.0" />
             <specular r="0.929" g="0.792" b="0.172" a="1.0" />
         </material>
@@ -73,6 +152,10 @@
     <transformations>
         <transformation id="GlyphTriangleTransform">
             <rotate axis="z" angle="120" />
+        </transformation>
+        <transformation id="Mage_part_base_transformation">
+            <rotate axis="x" angle="-90" />
+                <scale x="0.5" y="0.5" z="1" />
         </transformation>
     </transformations>
 
@@ -103,14 +186,26 @@
 
         <primitive id="triangle">
             <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
+        </primitive> 
+
+        <primitive id="cone">
+            <cylinder base="1" top="0" height="1" slices="100" stacks="10" />
+        </primitive>
+
+        <primitive id="skewed_cylinder">
+            <cylinder base="1.5" top="0.25" height="1" slices="100" stacks="10" /> 
+        </primitive>
+
+        <primitive id="skewed_cylinder2">
+            <cylinder base="1.5" top="1" height="1" slices="100" stacks="10" /> 
+        </primitive>
+
+        <primitive id="sliced_pyramid">
+            <cylinder base="1" top="0.5" height="1" slices="3" stacks="3" />
         </primitive>
         
-        <primitive id="testSphere">
-            <sphere radius="1" slices="30" stacks="30" />
-        </primitive>
-        
-        <primitive id="testtorus">
-            <torus inner="1" outer="5" slices="4" loops="4" />
+        <primitive id="torus2">
+            <torus inner="0.15" outer="2" slices="100" loops="100" />
         </primitive>
     </primitives>
 
@@ -122,7 +217,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="triangle" />
             </children>
@@ -135,7 +230,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="triangle2" />
             </children>
@@ -148,7 +243,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="triangle" />
                 <componentref id="triangle2" />
@@ -164,7 +259,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="SmallGlyph" />
             </children>
@@ -177,7 +272,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1" />
             <children>
                 <componentref id="SmallGlyph" />
             </children>
@@ -191,7 +286,7 @@
             <materials>
                 <material id="HiltMat" />
             </materials>
-            <texture id="bank" />
+            <texture id="bank" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="demoSphere" />
             </children>
@@ -205,7 +300,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="pyramid" />
             </children>
@@ -219,7 +314,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="bottom_crystal" />
             </children>
@@ -235,8 +330,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <!--<texture id="none" />-->
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
@@ -250,7 +344,6 @@
             <materials>
                 <material id="CrystalMat" />
             </materials>
-            <!--<texture id="none" />-->
             <texture id="crystal" length_s="1" length_t="1"/>
             <children>
                 <componentref id="TopCrystalCyl" />
@@ -267,7 +360,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -281,7 +374,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -295,7 +388,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -309,7 +402,6 @@
             <materials>
                 <material id="AureolaMat" />
             </materials>
-            <!--<texture id="none" />-->
             <texture id="bank" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Aureola1" />
@@ -325,7 +417,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -340,7 +432,6 @@
             <materials>
                 <material id="StaffMat" />
             </materials>
-            <!--<texture id="none" />-->
             <texture id="trunk" length_s="1" length_t="1"/>
             <children>
                 <componentref id="HiltSph"/>
@@ -357,58 +448,453 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="vidral" />
+            <texture id="vidral" length_s="1" length_t="1"/>
             <children>
                 <componentref id="LargeGlyph" />
                 <componentref id="MediumGlyph" />
                 <componentref id="SmallGlyph" />
                 <componentref id="StaffCyl" />
             </children>
-        </component>    
+        </component> 
 
-        <component id="roottest3">
+        <component id="mage">
             <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="clothMat" />
+            </materials>
+            <texture id="satin" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_top" />
+                <componentref id="mage_body" />
+                <componentref id="great_magic_circle" />
+            </children>
+        </component>
+
+        <component id="mage_body">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_neck" />
+                <componentref id="mage_torso" />
+                <componentref id="mage_bottom" />
+                <componentref id="mage_arm_left" />
+                <componentref id="mage_arm_right" />
+            </children>
+        </component>  
+        
+        <component id="mage_arm_right">
+            <transformation>
+                <rotate axis="y" angle="-60"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_sleeve" />
+                <componentref id="mage_arm" />
+                <componentref id="mage_hand" />
+            </children>
+        </component>
+
+        <component id="mage_arm_left">
+            <transformation>
+                <rotate axis="y" angle="60"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_sleeve" />
+                <componentref id="mage_arm" />
+                <componentref id="mage_hand" />
+            </children>
+        </component>
+        
+        <component id="mage_sleeve_reverse">
+            <transformation>
+                <rotate axis="y" angle="180"/>
+                <scale x="-1" y="-1" z="-1"/> 
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="sliced_pyramid" />
+            </children>
+        </component>
+
+        <component id="mage_sleeve">
+            <transformation>
+                <translate x="0" y="3.5" z="1"/>
+                <rotate axis="x" angle="-30"/>
+                <scale x="0.3" y="1.5" z="3"/> 
+                <rotate axis="z" angle="90"/>
+                <rotate axis="y" angle="180"/>
+                <translate x="0" y="0" z="-1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="sliced_pyramid" />
+                <componentref id="mage_sleeve_reverse" />
+            </children>
+        </component>
+
+        <component id="mage_arm">
+            <transformation>
+                <translate x="0" y="3.2" z="1"/>
+                <rotate axis="x" angle="-35"/>
+                <translate x="0" y="0.5" z="0.3"/>
+                <scale x="0.14" y="0.14" z="3"/> 
+            </transformation>
+            <materials>
+                <material id="handMat" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>
+
+        <component id="mage_hand">
+            <transformation>
+                <translate x="0" y="3.2" z="1"/>
+                <rotate axis="x" angle="-35"/>
+                <translate x="0" y="0.5" z="3.3"/>
+                <scale x="0.25" y="0.25" z="0.25"/> 
+            </transformation>
+            <materials>
+                <material id="handMat" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="mage_bottom">
+            <transformation>
+                <scale x="3" y="4" z="3" />
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skewed_cylinder2" />
+            </children>
+        </component>  
+
+        <component id="mage_torso">
+            <transformation>
+                <translate x="0" y="4" z="0" />
+                <scale x="2" y="1.3" z="2" />
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skewed_cylinder" />
+            </children>
+        </component>  
+
+        <component id="mage_neck">
+            <transformation>
+                <translate x="0" y="4.3" z="0" />
+                <scale x="1.3" y="1" z="1.3" />
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cylinder" />
+            </children>
+        </component>  
+
+        <component id="mage_top">
+            <transformation>
+                <translate x="0" y="5.3" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_head" />
+                <componentref id="mage_hat" />
+            </children>
+        </component>      
+
+        <component id="mage_head">
+            <transformation>
+                <translate x="0" y="0" z="0" />
                 <scale x="0.6" y="0.6" z="0.6" />
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="headMat" />
             </materials>
-            <texture id="inherit" />
+            <texture id="none" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="testtorus" />
+                <componentref id="mage_eye_left" />
+                <componentref id="mage_eye_right" />
+                <primitiveref id="demoSphere" />
             </children>
-        </component> 
-
-        <component id="roottest2">
+        </component>
+        
+        <component id="mage_eye_right">
             <transformation>
-                <scale x="0.5" y="0.5" z="0.5" />
+                <rotate axis="y" angle="-15"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="none" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="testtorus" />
-                <componentref id="roottest3" />
+                <componentref id="mage_eye" />
             </children>
-        </component> 
+        </component>
 
-        <component id="roottest">
+        <component id="mage_eye_left">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <rotate axis="y" angle="15"/>
             </transformation>
             <materials>
-                <material id="HiltMat" />
-                
-                <material id="StaffMat" />
-                
-                <material id="AureolaMat" />
+                <material id="inherit" />
             </materials>
-            <texture id="bank" />
+            <texture id="none" length_s="1" length_t="1" />
             <children>
-                <primitiveref id="testtorus" />
-                <componentref id="roottest2" />
+                <componentref id="mage_eye" />
             </children>
-        </component>    
+        </component>
+
+        <component id="mage_eye">
+            <transformation>
+                <rotate axis="x" angle="-30" />
+                <translate x="0" y="0" z="1"/>
+                <scale x="0.2" y="0.2" z="0.01" />
+            </transformation>
+            <materials>
+                <material id="eyeMat" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="mage_hat">
+            <transformation>
+                <rotate axis="x" angle="-45" />
+            </transformation>
+            <materials>
+                <material id="hatMat" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="mage_hat_bottom" />
+                <componentref id="mage_hat_bottom_reversed" />
+                <componentref id="mage_hat_top" />
+            </children>
+        </component>
+
+        <component id="mage_hat_top">
+            <transformation>
+                <translate x="0" y="0.3" z="0" />
+                <scale x="1.2" y="2.5" z="1.2" />
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cone" />
+            </children>
+        </component>
+
+        <component id="mage_hat_bottom">
+            <transformation>
+                <scale x="2" y="0.5" z="2"/>
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skewed_cylinder" />
+            </children>
+        </component>
+
+        <component id="mage_hat_bottom_reversed">
+            <transformation>
+                <rotate axis="x" angle="180"/>
+                <scale x="2" y="-0.5" z="2"/>
+                <transformationref id="Mage_part_base_transformation" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="skewed_cylinder" />
+            </children>
+        </component>
+
+        <component id="magic_circle">
+            <transformation>
+                <scale x="1" y="1" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="torus2" />
+            </children>
+        </component>
+        
+        <component id="magic_circle1">
+            <transformation>
+                <scale x="1.8" y="1.8" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat1" />
+                <material id="circleMat2" />
+                <material id="circleMat3" />
+                <material id="circleMat4" />
+                <material id="circleMat5" />
+                <material id="circleMat6" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="magic_circle2">
+            <transformation>
+                <scale x="1.5" y="1.5" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat2" />
+                <material id="circleMat3" />
+                <material id="circleMat4" />
+                <material id="circleMat5" />
+                <material id="circleMat6" />
+                <material id="circleMat1" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="magic_circle3">
+            <transformation>
+                <scale x="1.2" y="1.2" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat3" />
+                <material id="circleMat4" />
+                <material id="circleMat5" />
+                <material id="circleMat6" />
+                <material id="circleMat1" />
+                <material id="circleMat2" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="magic_circle4">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat4" />
+                <material id="circleMat5" />
+                <material id="circleMat6" />
+                <material id="circleMat1" />
+                <material id="circleMat2" />
+                <material id="circleMat3" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="magic_circle5">
+            <transformation>
+                <scale x="0.75" y="0.75" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat5" />
+                <material id="circleMat6" />
+                <material id="circleMat1" />
+                <material id="circleMat2" />
+                <material id="circleMat3" />
+                <material id="circleMat4" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="magic_circle6">
+            <transformation>
+                <scale x="0.5" y="0.5" z="1"/>
+            </transformation>
+            <materials>
+                <material id="circleMat6" />
+                <material id="circleMat1" />
+                <material id="circleMat2" />
+                <material id="circleMat3" />
+                <material id="circleMat4" />
+                <material id="circleMat5" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle"/>
+            </children>
+        </component>
+        
+        <component id="great_magic_circle">
+            <transformation>
+                <translate x="0" y="0" z="5"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="runes" length_s="1" length_t="1" />
+            <children>
+                <componentref id="magic_circle1"/>
+                <componentref id="magic_circle2"/>
+                <componentref id="magic_circle3"/>
+                <componentref id="magic_circle4"/>
+                <componentref id="magic_circle5"/>
+                <componentref id="magic_circle6"/>
+            </children>
+        </component>
     </components>
 </lxs>
