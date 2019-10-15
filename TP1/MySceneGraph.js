@@ -1,4 +1,4 @@
-var DEGREE_TO_RAD = Math.PI / 180;
+DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -644,6 +644,10 @@ class MySceneGraph {
             this.materials[materialID] = new CGFappearance(this.scene);
             let materialShininess = this.reader.getFloat(children[i], 'shininess');
             this.materials[materialID].setShininess(materialShininess);
+
+            if(this.materialID = "FloorMat"){
+                this.materials[materialID].setTextureWrap('REPEAT','REPEAT');
+            }
 
             grandChildren = children[i].children;
 
