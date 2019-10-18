@@ -1165,6 +1165,9 @@
                 <componentref id="magic_circle4"/>
                 <componentref id="magic_circle5"/>
                 <componentref id="magic_circle6"/>
+            </children>
+        </component>
+        
         <component id="Sanctest">
             <transformation>
                 <scale x="1" y="1" z="1" />

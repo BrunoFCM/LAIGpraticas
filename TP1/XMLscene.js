@@ -14,7 +14,7 @@ class XMLscene extends CGFscene {
         this.interface = myinterface;
 
         this.selectedView = 0;
-        this.viewList = {'ActiveCamera' : 0};
+        this.viewList = {};
     }
 
     /**

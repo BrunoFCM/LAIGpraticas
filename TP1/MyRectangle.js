@@ -72,8 +72,8 @@ class MyRectangle extends CGFobject {
 	}
 
     updTexCoords(length_s, length_t){
-		let length = Math.abs(this.x2 - this.x1);
-		let height = Math.abs(this.y2 - this.y1);
+		let length = -Math.abs(this.x2 - this.x1);
+		let height = -Math.abs(this.y2 - this.y1);
 		
 		let newTexCoords = [
 			0,0,

@@ -340,7 +340,7 @@ class MySceneGraph {
 
                 var persp = new CGFcamera(angle, near, far, fromVec, toVec);
     
-                this.views[this.views.length < 1 ? 1 : this.views.length] = persp;
+                this.views.push(persp);
             }
             else {
                 // left
@@ -388,15 +388,18 @@ class MySceneGraph {
                     up = new vec3.fromValues(0,1,0);
                 }
 
-                var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, from, to, up );
+                var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, fromVec, toVec, up );
 
-                this.views[this.views.length < 1 ? 1 : this.views.length].push(orth);
+                this.views.push(orth);
             }
 
             this.scene.viewList[viewId] = this.views.length - 1;
         }
 
         this.log("Parsed views");
+
+        //this.views.splice(0);
+
         return null;
     }
 
@@ -1148,32 +1151,33 @@ class MySceneGraph {
             if(textureID == null){
                 this.onXMLMinorError("a texture in " + componentID + " wasn't properly read");
             }
+            
+            var texture = {};
 
             if(textureID != "inherit" && textureID != "none"){
                 if(this.textures[textureID] == null || this.textures[textureID] == undefined){
                     this.onXMLMinorError("a texture reference in " + componentID + " wasn't properly defined (" + textureID + ")");
                     continue;
                 }
+                
+                let length_s = parseFloat(textureChild.getAttribute("length_s"));
+                let length_t = parseFloat(textureChild.getAttribute("length_t"));
+    
+                if(length_t == null || length_s == null){
+                    this.onXMLMinorError("a texture in " + componentID + " doesn't have proper s/t length paremeters");
+                    return;
+                }
+
+                if(isNaN(length_s) || isNaN(length_t)){
+                    this.onXMLMinorError("a texture in " + componentID + " has invalid s/t length paremeters");
+                    length_s = 1;
+                    length_t = 1;
+                }
+
+                texture.length_s = length_s;
+                texture.length_t = length_t;
             }
 
-            var texture = {};
-
-            let length_s = parseFloat(textureChild.getAttribute("length_s"));
-            let length_t = parseFloat(textureChild.getAttribute("length_t"));
-
-            if(length_t == null || length_s == null){
-                this.onXMLMinorError("a texture in " + componentID + " doesn't have proper s/t length paremeters");
-                return;
-            }
-
-            if(isNaN(length_s) || isNaN(length_t)){
-                this.onXMLMinorError("a texture in " + componentID + " has invalid s/t length paremeters");
-                length_s = 1;
-                length_t = 1;
-            }
-
-            texture.length_s = length_s;
-            texture.length_t = length_t;
             texture.id = textureID;
             
             newComponent.texture= texture;
@@ -1211,11 +1215,6 @@ class MySceneGraph {
                 }
 
                 newComponent.children.push(childComponent);
-            }
-
-            if(newComponent.transformations.length < 1){
-                this.onXMLMinorError("no component transformation successfuly read in " + componentID);
-                continue;
             }
             
             if(newComponent.children.length < 1){
@@ -1391,6 +1390,10 @@ class MySceneGraph {
         else{
             if(currentTexture.id == "inherit"){
                 currentTexture.id = parentTexture.id;
+                if(currentTexture.id != "none"){
+                    currentTexture.length_s = parentTexture.length_s;
+                    currentTexture.length_t = parentTexture.length_t;
+                }
             }
 
             this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
