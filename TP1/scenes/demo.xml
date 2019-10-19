@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="mage" axis_length="5"/>
+    <scene root="Sanctest" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -161,6 +161,13 @@
             <diffuse r="0.929" g="0.792" b="0.172" a="1.0" />
             <specular r="0.929" g="0.792" b="0.172" a="1.0" />
         </material>
+
+        <material id="FireMat" shininess="10">
+            <emission r="0.9" g="0.5" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -204,10 +211,6 @@
         
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="1" slices="100" stacks="3" />
-        </primitive>
-
-        <primitive id="cone">
-            <cylinder base="1" top="0" height="1" slices="100" stacks="3" />
         </primitive>
 
         <primitive id="pyramid">
@@ -1061,9 +1064,9 @@
                 <scale x="0.15" y="0.15" z="0.4" />
             </transformation>
             <materials>
-                <material id="CrystalMat" />
+                <material id="inherit" />
             </materials>
-            <texture id="fire" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cone"/>
             </children>
@@ -1076,9 +1079,9 @@
                 <scale x="0.1" y="0.1" z="0.4" />
             </transformation>
             <materials>
-                <material id="CrystalMat" />
+                <material id="inherit" />
             </materials>
-            <texture id="fire" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cone"/>
             </children>
@@ -1092,9 +1095,9 @@
                 <scale x="0.1" y="0.1" z="0.4" />
             </transformation>
             <materials>
-                <material id="CrystalMat" />
+                <material id="inherit" />
             </materials>
-            <texture id="fire" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cone"/>
             </children>
@@ -1108,9 +1111,9 @@
                 <scale x="0.1" y="0.1" z="0.4" />
             </transformation>
             <materials>
-                <material id="CrystalMat" />
+                <material id="inherit" />
             </materials>
-            <texture id="fire" length_s="1" length_t="1"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cone"/>
             </children>
@@ -1123,6 +1126,7 @@
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
+                <material id="FireMat" />
                 <material id="CrystalMat" />
             </materials>
             <texture id="fire" length_s="1" length_t="1"/>
@@ -1473,6 +1477,7 @@
             </transformation>
             <materials>
                 <material id="CrystalMat" />
+                <material id="FireMat" />
             </materials>
             <texture id="crystal" length_s="1" length_t="1"/>
             <children>
@@ -1555,9 +1560,9 @@
 
         <component id="StaffCyl">
             <transformation>
-                <rotate axis="x" angle="-90"/>
-                <translate x="0" y="0" z="0" />
-                <scale x="0.3" y="0.3" z="10" />
+                <rotate axis="y" angle="-15"/>
+                <translate x="0" y="0" z="2.5" />
+                <scale x="0.1" y="0.1" z="3" />
             </transformation>
             <materials>
                 <material id="StaffMat" />
@@ -1606,6 +1611,9 @@
         <component id="mage">
             <transformation>
                 <translate x="0" y="0" z="0" />
+                <rotate axis="z" angle="-90"/>
+                <rotate axis="x" angle="90"/>
+                <scale x="0.25" y="0.3" z="0.25" />
             </transformation>
             <materials>
                 <material id="clothMat" />
@@ -1614,7 +1622,6 @@
             <children>
                 <componentref id="mage_top" />
                 <componentref id="mage_body" />
-                <componentref id="great_magic_circle" />
             </children>
         </component>
 
@@ -2027,10 +2034,10 @@
         
         <component id="great_magic_circle">
             <transformation>
-                <translate x="0" y="0" z="5"/>
+                <translate x="0" y="0" z="0.01"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="clothMat" />
             </materials>
             <texture id="runes" length_s="1" length_t="1" />
             <children>
@@ -2053,6 +2060,9 @@
             <texture id="church_floor" length_s="1" length_t="1" />
             <children>
                 <componentref id="Sanctuary" />
+                <componentref id="mage"/>
+                <componentref id="great_magic_circle"/>
+                <componentref id="StaffCyl" />
             </children>
         </component>
     </components>
