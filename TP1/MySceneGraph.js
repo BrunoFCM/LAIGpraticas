@@ -1381,11 +1381,10 @@ class MySceneGraph {
         currentTexture.length_s = currentComponent.texture.length_s
         currentTexture.length_t= currentComponent.texture.length_t;
 
-        if(componentNode.id == "Table"){
-            console.log("" + currentMaterial + currentTexture.id);
-        }
-
         if(currentMaterial == "inherit"){
+            if(parentMaterial == null){
+                this.log("No base material found");
+            }
             currentMaterial = parentMaterial;
         }
 
@@ -1394,6 +1393,9 @@ class MySceneGraph {
         }
         else{
             if(currentTexture.id == "inherit"){
+                if(parentTexture == null){
+                    this.log("No base texture found");
+                }
                 currentTexture.id = parentTexture.id;
                 if(currentTexture.id != "none"){
                     currentTexture.length_s = parentTexture.length_s;
@@ -1403,18 +1405,9 @@ class MySceneGraph {
 
             this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
         }
-        
-        if(componentNode.id == "TableTop"){
-            console.log("" + currentMaterial + currentTexture.id);
-        }
-
-     //console.log(componentNode.id);
 
         this.materials[currentMaterial].apply();
 
-        if(componentNode.id == "Sanctuary"){
-            console.log("Hello");
-        }
         for(let i = 0; i < currentComponent.children.length; ++i){
             let newChild = currentComponent.children[i];
             if(newChild.type == "component"){
