@@ -2,13 +2,13 @@
     <scene root="Sanctest" axis_length="5"/>
 
     <views default="defaultCamera">
-        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+        <perspective id="defaultCamera" near="0.01" far="500" angle="45">
+            <from x="-15" y="5" z="0" />
+            <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="testPerspectiveCamera" near="0.2" far="250" angle="65">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+        <perspective id="perspective2" near="0.2" far="250" angle="45">
+            <from x="-10" y="3" z="-5" />
+            <to x="0" y="3" z="0" />
         </perspective>
     </views>
 
@@ -19,7 +19,7 @@
 
     <lights>
         <omni id="demoLight" enabled="0">
-            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <location x="-16" y="11.9" z="10" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -1295,7 +1295,7 @@
                 <translate x="9.99" y="0" z="4" />
                 <scale x="1" y="1.5" z="2.5" />
                 <rotate axis="y" angle="-90"/>
-                <rotate axis="z" angle="90"/>
+                <rotate axis="z" angle="-90"/>
             </transformation>
             <materials>
                 <material id="FloorMat" />
@@ -2052,7 +2052,7 @@
         
         <component id="Sanctest">
             <transformation>
-                <scale x="1" y="1" z="1" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="FloorMat" />

@@ -398,8 +398,6 @@ class MySceneGraph {
 
         this.log("Parsed views");
 
-        //this.views.splice(0);
-
         return null;
     }
 
@@ -1378,7 +1376,14 @@ class MySceneGraph {
         }
 
         let currentMaterial = currentComponent.materials[currentComponent.activeMaterial];
-        let currentTexture = currentComponent.texture;
+        let currentTexture = {};
+        currentTexture.id = currentComponent.texture.id;
+        currentTexture.length_s = currentComponent.texture.length_s
+        currentTexture.length_t= currentComponent.texture.length_t;
+
+        if(componentNode.id == "Table"){
+            console.log("" + currentMaterial + currentTexture.id);
+        }
 
         if(currentMaterial == "inherit"){
             currentMaterial = parentMaterial;
@@ -1398,14 +1403,28 @@ class MySceneGraph {
 
             this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
         }
+        
+        if(componentNode.id == "TableTop"){
+            console.log("" + currentMaterial + currentTexture.id);
+        }
+
+     //console.log(componentNode.id);
 
         this.materials[currentMaterial].apply();
 
+        if(componentNode.id == "Sanctuary"){
+            console.log("Hello");
+        }
         for(let i = 0; i < currentComponent.children.length; ++i){
             let newChild = currentComponent.children[i];
             if(newChild.type == "component"){
                 this.processNode(newChild, currentMaterial, currentTexture);
-                this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
+                if(currentTexture.id == "none"){
+                    this.materials[currentMaterial].setTexture(null);
+                }
+                else{
+                    this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
+                }
                 this.materials[currentMaterial].apply();
             }
             else{
