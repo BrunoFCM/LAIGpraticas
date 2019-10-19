@@ -33,6 +33,11 @@
         <texture id="crystal" file="scenes/images/crystal.jpg" />
         <texture id="church_floor" file="scenes/images/church_floor.jpg"/>
         <texture id="church_wall" file="scenes/images/church_wall.jpg"/>
+        <texture id="granite" file="scenes/images/granite.jpg"/>
+        <texture id="wood" file="scenes/images/wood.jpg"/>
+        <texture id="fire" file="scenes/images/fire.jpg"/>
+        <texture id="pepe_painting" file="scenes/images/pepe_painting.jpg"/>
+        <texture id="dead_grass" file="scenes/images/dead_grass.jpg"/>
     </textures>
 
     <materials>
@@ -90,8 +95,16 @@
             <rectangle x1="-1" y1="-1" x2="1" y2="1" />
         </primitive>
 
+        <primitive id="ceiling1">
+            <rectangle x1="-7.5" y1="-8.75" x2="7.5" y2="8.75" />
+        </primitive>
+
+        <primitive id="ceiling2">
+            <rectangle x1="-2.5" y1="-3.75" x2="2.5" y2="3.75" />
+        </primitive>
+
         <primitive id="floor">
-            <rectangle x1="-10" y1="-10" x2="10" y2="10" />
+            <rectangle x1="-10" y1="-13" x2="13" y2="13" />
         </primitive>
 
         <primitive id="wall">
@@ -110,6 +123,10 @@
             <cylinder base="1" top="1" height="1" slices="100" stacks="3" />
         </primitive>
 
+        <primitive id="cone">
+            <cylinder base="1" top="0" height="1" slices="100" stacks="3" />
+        </primitive>
+
         <primitive id="pyramid">
             <cylinder base="1" top="0" height="1" slices="4" stacks="3" />
         </primitive>
@@ -125,6 +142,10 @@
         <primitive id="ceilingIsos">
             <triangle x1="-0.5" y1="0" z1="0" x2="0.5" y2="0" z2="0" x3="0" y3="1" z3="0" />
         </primitive>
+
+        <primitive id="ceilingRec">
+            <triangle x1="-0.5" y1="0" z1="0" x2="0" y2="0" z2="0" x3="0" y3="1" z3="0" />
+        </primitive>
         
         <primitive id="testSphere">
             <sphere radius="1" slices="30" stacks="30" />
@@ -137,18 +158,285 @@
 
     <components>
 
-        <component id="Floor">
+        <component id="CubeF">
+            <transformation>
+                <translate x="1" y="0" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="CubeB">
+            <transformation>
+                <translate x="-1" y="0" z="0" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="CubeR">
+            <transformation>
+                <translate x="0" y="1" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="CubeL">
+            <transformation>
+                <translate x="0" y="-1" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="CubeU">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="CubeD">
+            <transformation>
+                <translate x="0" y="0" z="-1" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
+            </children>
+        </component>
+
+        <component id="Cube">
             <transformation>
                 <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="CubeF"/>
+                <componentref id="CubeB"/>
+                <componentref id="CubeR"/>
+                <componentref id="CubeL"/>
+                <componentref id="CubeU"/>
+                <componentref id="CubeD"/>
+            </children>
+        </component>
+
+        <component id="OutFloor">
+            <transformation>
+                <translate x="0" y="0" z="-0.01" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="dead_grass" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="floor"/>
+            </children>
+        </component>
+
+        <component id="OutterFloor">
+            <transformation>
+                <translate x="0" y="0" z="-0.01" />
+                <rotate axis="x" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="dead_grass" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="floor"/>
+            </children>
+        </component>
+
+        <component id="Floor">
+            <transformation>
+                <translate x="-2.5" y="0" z="0" />
             </transformation>
             <materials>
                 <material id="FloorMat" />
             </materials>
             <texture id="church_floor" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="floor"/>
+                <primitiveref id="ceiling1"/>
             </children>
         </component>
+
+
+
+        <component id="OWall1">
+            <transformation>
+                <translate x="10" y="0" z="2.5" />
+                <scale x="1" y="1.5" z="1" />
+                <rotate axis="z" angle="0"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall2">
+            <transformation>
+                <translate x="7.5" y="3.75" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="90"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall3">
+            <transformation>
+                <translate x="7.5" y="-3.75" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="-90"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall4">
+            <transformation>
+                <translate x="5" y="6.25" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="0"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall5">
+            <transformation>
+                <translate x="5" y="-6.25" z="2.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="0"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall6">
+            <transformation>
+                <translate x="-2.5" y="8.75" z="2.5" />
+                <scale x="3" y="1" z="1" />
+                <rotate axis="z" angle="-90"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+        <component id="OWall7">
+            <transformation>
+                <translate x="-2.5" y="-8.75" z="2.5" />
+                <scale x="3" y="1" z="1" />
+                <rotate axis="z" angle="90"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="wall"/>
+            </children>
+        </component>
+
+
+        <component id="OutterWalls">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="church_wall" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="OWall1"/>
+                <componentref id="OWall2"/>
+                <componentref id="OWall3"/>
+                <componentref id="OWall4"/>
+                <componentref id="OWall5"/>
+                <componentref id="OWall6"/>
+                <componentref id="OWall7"/>
+            </children>
+        </component>
+
+
+        
 
         <component id="Wall1">
             <transformation>
@@ -283,7 +571,7 @@
                 <scale x="1" y="1" z="1.5" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="FloorMat" />
             </materials>
             <texture id="church_wall" length_s="1" length_t="1"/>
             <children>
@@ -300,18 +588,29 @@
 
         <component id="Ceiling1">
             <transformation>
-                <translate x="10" y="0" z="7.5" />
-                <scale x="3" y="7.5" z="3" />
-                <rotate axis="x" angle="180"/>
-                <rotate axis="y" angle="-45"/>
-                <rotate axis="z" angle="90"/>
+                <translate x="-2.5" y="0" z="7.5" />
+                <rotate axis="x" angle="180" />
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="ceilingIsos"/>
+                <primitiveref id="ceiling1"/>
+            </children>
+        </component>
+
+        <component id="Ceiling2">
+            <transformation>
+                <translate x="7.5" y="0" z="7.5" />
+                <rotate axis="x" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="ceiling2"/>
             </children>
         </component>
 
@@ -321,18 +620,586 @@
                 <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="FloorMat" />
             </materials>
-            <texture id="church_wall" length_s="1" length_t="1"/>
+            <texture id="wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Ceiling1"/>
                 <componentref id="Ceiling2"/>
-                <componentref id="Ceiling3"/>
-                <componentref id="Ceiling4"/>
-                <componentref id="Ceiling5"/>
-                <componentref id="Ceiling6"/>
-                <componentref id="Ceiling7"/>
-                <componentref id="Ceiling8"/>
+            </children>
+        </component>
+
+        <component id="OCeiling1">
+            <transformation>
+                <translate x="-2.5" y="0" z="7.501" />
+                <rotate axis="x" angle="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="ceiling1"/>
+            </children>
+        </component>
+
+        <component id="OCeiling2">
+            <transformation>
+                <translate x="7.5" y="0" z="7.501" />
+                <rotate axis="x" angle="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="ceiling2"/>
+            </children>
+        </component>
+
+        <component id="OutterCeiling">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="wood" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="OCeiling1"/>
+                <componentref id="OCeiling2"/>
+            </children>
+        </component>
+
+        <component id="AltairFloor">
+            <transformation>
+                <translate x="7.5" y="0" z="0.5" />
+                <scale x="2.5" y="3.75" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="AltairStep">
+            <transformation>
+                <translate x="4.5" y="0" z="0.25" />
+                <scale x="0.5" y="5" z="0.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="Altair">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="0.999" y="0.999" z="0.999" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="granite" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="AltairFloor"/>
+                <componentref id="AltairStep"/>
+            </children>
+        </component>
+        
+
+
+        <component id="PillarBot1">
+            <transformation>
+                <translate x="0" y="0" z="0.3" />
+                <scale x="0.6" y="0.6" z="0.3" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="PillarBot2">
+            <transformation>
+                <translate x="0" y="0" z="0.15" />
+                <scale x="0.8" y="0.8" z="0.15" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="PillarBot">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="PillarBot1"/>
+                <componentref id="PillarBot2"/>
+            </children>
+        </component>
+
+        <component id="PillarTop">
+            <transformation>
+                <translate x="0" y="0" z="7.5" />
+                <rotate axis="x" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="PillarBot"/>"
+            </children>
+        </component>
+
+        <component id="PillarBody">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="0.5" y="0.5" z="7.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+
+        <component id="Pillar">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="0.8" y="0.8" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="PillarTop"/>
+                <componentref id="PillarBody"/>
+                <componentref id="PillarBot"/>
+            </children>
+        </component>
+
+
+
+        <component id="Pillar1">
+            <transformation>
+                <translate x="2" y="5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+        
+        <component id="Pillar2">
+            <transformation>
+                <translate x="2" y="-5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+
+        <component id="Pillar3">
+            <transformation>
+                <translate x="-2.5" y="5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+
+        <component id="Pillar4">
+            <transformation>
+                <translate x="-2.5" y="-5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+
+        <component id="Pillar5">
+            <transformation>
+                <translate x="-7" y="5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+
+        <component id="Pillar6">
+            <transformation>
+                <translate x="-7" y="-5.5" z="0" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Pillar"/>
+            </children>
+        </component>
+
+
+
+        <component id="Pillars">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="0.999" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="church_wall" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Pillar1"/>
+                <componentref id="Pillar2"/>
+                <componentref id="Pillar3"/>
+                <componentref id="Pillar4"/>
+                <componentref id="Pillar5"/>
+                <componentref id="Pillar6"/>
+            </children>
+        </component>
+
+
+        <component id="TableBody">
+            <transformation>
+                <translate x="6.5" y="0" z="1.5" />
+                <scale x="0.6" y="1.15" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="TableTop">
+            <transformation>
+                <translate x="6.5" y="0" z="2.5" />
+                <scale x="0.75" y="1.5" z="0.1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="Table">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="wood" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="TableTop"/>
+                <componentref id="TableBody"/>
+            </children>
+        </component>
+
+
+
+        <component id="TorchFlame1">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="0"/>
+                <scale x="0.15" y="0.15" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="CrystalMat" />
+            </materials>
+            <texture id="fire" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="cone"/>
+            </children>
+        </component>
+
+        <component id="TorchFlame2">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="35"/>
+                <scale x="0.1" y="0.1" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="CrystalMat" />
+            </materials>
+            <texture id="fire" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="cone"/>
+            </children>
+        </component>
+
+        <component id="TorchFlame3">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="-35"/>
+                <rotate axis="y" angle="35"/>
+                <scale x="0.1" y="0.1" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="CrystalMat" />
+            </materials>
+            <texture id="fire" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="cone"/>
+            </children>
+        </component>
+
+        <component id="TorchFlame4">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="-35"/>
+                <rotate axis="y" angle="-35"/>
+                <scale x="0.1" y="0.1" z="0.4" />
+            </transformation>
+            <materials>
+                <material id="CrystalMat" />
+            </materials>
+            <texture id="fire" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="cone"/>
+            </children>
+        </component>
+
+        <component id="TorchFlame">
+            <transformation>
+                <translate x="-1" y="0" z="1" />
+                <rotate axis="x" angle="0"/>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="CrystalMat" />
+            </materials>
+            <texture id="fire" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="TorchFlame1"/>
+                <componentref id="TorchFlame2"/>
+                <componentref id="TorchFlame3"/>
+                <componentref id="TorchFlame4"/>
+            </children>
+        </component>
+
+        <component id="TorchShaft">
+            <transformation>
+                <translate x="-1" y="0" z="1" />
+                <rotate axis="x" angle="180"/>
+                <scale x="0.15" y="0.15" z="1" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="wood" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="cone"/>
+            </children>
+        </component>
+
+        <component id="TorchHolder">
+            <transformation>
+                <translate x="-1" y="0" z="0.6" />
+                <rotate axis="x" angle="25"/>
+                <scale x="0.2" y="0.2" z="0.05" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="granite" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Cube"/>
+            </children>
+        </component>
+
+        <component id="Torch">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+                <rotate axis="x" angle="-25"/>
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="TorchShaft"/>
+                <componentref id="TorchFlame"/>
+                <componentref id="TorchHolder"/>
+            </children>
+        </component>
+
+        <component id="Torch1">
+            <transformation>
+                <translate x="1" y="5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torch2">
+            <transformation>
+                <translate x="3" y="-5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torch3">
+            <transformation>
+                <translate x="-3.5" y="5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torch4">
+            <transformation>
+                <translate x="-1.5" y="-5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torch5">
+            <transformation>
+                <translate x="-8" y="5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+                <rotate axis="z" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torch6">
+            <transformation>
+                <translate x="-6" y="-5.25" z="3.5" />
+                <scale x="1" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="Torch"/>
+            </children>
+        </component>
+
+        <component id="Torches">
+            <transformation>
+                <translate x="0" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="church_wall" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="Torch1"/>
+                <componentref id="Torch2"/>
+                <componentref id="Torch3"/>
+                <componentref id="Torch4"/>
+                <componentref id="Torch5"/>
+                <componentref id="Torch6"/>
+            </children>
+        </component>
+
+        <component id="PepePainting">
+            <transformation>
+                <translate x="9.99" y="0" z="4" />
+                <scale x="1" y="1.5" z="2.5" />
+                <rotate axis="y" angle="-90"/>
+                <rotate axis="z" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="pepe_painting" length_s="2" length_t="2"/>
+            <children>
+                <primitiveref id="demoRectangle"/>
             </children>
         </component>
 
@@ -347,8 +1214,16 @@
             <children>
                 <componentref id="Pillars"/>
                 <componentref id="Ceiling"/>
+                <componentref id="OutterCeiling"/>
                 <componentref id="Floor"/>
+                <componentref id="OutFloor"/>
+                <componentref id="OutterFloor"/>
                 <componentref id="Walls"/>
+                <componentref id="OutterWalls"/>
+                <componentref id="Altair"/>
+                <componentref id="Table"/>
+                <componentref id="Torches"/>
+                <componentref id="PepePainting"/>
             </children>
         </component>
 
