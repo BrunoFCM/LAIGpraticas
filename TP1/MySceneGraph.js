@@ -340,7 +340,7 @@ class MySceneGraph {
 
                 var persp = new CGFcamera(angle, near, far, fromVec, toVec);
     
-                this.views[this.views.length < 1 ? 1 : this.views.length] = persp;
+                this.views.push(persp);
             }
             else {
                 // left
@@ -388,15 +388,18 @@ class MySceneGraph {
                     up = new vec3.fromValues(0,1,0);
                 }
 
-                var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, from, to, up );
+                var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, fromVec, toVec, up );
 
-                this.views[this.views.length < 1 ? 1 : this.views.length].push(orth);
+                this.views.push(orth);
             }
 
             this.scene.viewList[viewId] = this.views.length - 1;
         }
 
         this.log("Parsed views");
+
+        //this.views.splice(0);
+
         return null;
     }
 
@@ -479,10 +482,14 @@ class MySceneGraph {
             // Light enable/disable
             var enableLight = true;
             var aux = this.reader.getBoolean(children[i], 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))){
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+                enableLight = aux || 1;
+            }
+            else{
+                enableLight = aux;
+            }
 
-            enableLight = aux || 1;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -693,6 +700,8 @@ class MySceneGraph {
         // Any number of transformations.
         for (var i = 0; i < children.length; i++) {
 
+            let newTransformation = [];
+
             if (children[i].nodeName != "transformation") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
@@ -710,9 +719,8 @@ class MySceneGraph {
             grandChildren = children[i].children;
             // Specifications for the current transformation.
 
-            var transfMatrix = mat4.create();
-
             for (var j = 0; j < grandChildren.length; j++) {
+                var transfMatrix = mat4.create();
                 switch (grandChildren[j].nodeName) {
                     case 'translate':
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
@@ -773,8 +781,9 @@ class MySceneGraph {
                         break;
                     }
                 }
+                newTransformation.push(transfMatrix);
             }
-            this.transformations[transformationID] = transfMatrix;
+            this.transformations[transformationID] = newTransformation;
         }
 
         this.log("Parsed transformations");
@@ -1026,7 +1035,7 @@ class MySceneGraph {
                         continue;
                     }
 
-                    newComponent.transformations.push(this.transformations[referencedTransformation]);
+                    newComponent.transformations.push.apply(newComponent.transformations, this.transformations[referencedTransformation]);
                 }
 
                 // Specifications for the current transformation.
@@ -1119,24 +1128,19 @@ class MySceneGraph {
 
                 //material id
                 var materialID = grandgrandChildren[j].getAttribute("id");
-                if(materialID == null){
-                    this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
+                if(materialID == null || materialID == undefined){
+                    this.onXMLMinorError("a material in " + componentID + " wasn't properly read");
                     continue;
                 }
 
-                if(materialID == "inherit"){
-                    newComponent.materials.push(null);
-                    continue;
+                if(materialID != "inherit"){
+                    if(this.materials[materialID] == null || this.materials[materialID] == undefined){
+                        this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
+                        continue;
+                    }
                 }
 
-                //check for an existing material
-                var material = this.materials[materialID];
-                if(material == null){
-                    this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
-                    continue;
-                }
-
-                newComponent.materials.push(material);
+                newComponent.materials.push(materialID);
             }
 
             // Texture
@@ -1145,28 +1149,17 @@ class MySceneGraph {
             //texture id
             var textureID = textureChild.getAttribute("id");
             if(textureID == null){
-                this.onXMLMinorError("a texture in " + componentID + " wasn't properly defined (" + textureID + ")");
+                this.onXMLMinorError("a texture in " + componentID + " wasn't properly read");
             }
+            
+            var texture = {};
 
-            var texture;
-
-            if(textureID == "inherit" || textureID == null){
-                var noTexture = {};
-                noTexture.type = "inherit";
-                texture = noTexture;
-            }
-            else
-            if(textureID == "none"){
-                texture = {};
-                texture.type = "none";
-            }
-            else {
-                //check for an existing texture
-                texture = this.textures[textureID];
-                if(texture == null){
-                    this.onXMLMinorError("a texture in " + componentID + " wasn't properly identified (" + textureID + ")");
-                    return;
+            if(textureID != "inherit" && textureID != "none"){
+                if(this.textures[textureID] == null || this.textures[textureID] == undefined){
+                    this.onXMLMinorError("a texture reference in " + componentID + " wasn't properly defined (" + textureID + ")");
+                    continue;
                 }
+                
                 let length_s = parseFloat(textureChild.getAttribute("length_s"));
                 let length_t = parseFloat(textureChild.getAttribute("length_t"));
     
@@ -1180,78 +1173,73 @@ class MySceneGraph {
                     length_s = 1;
                     length_t = 1;
                 }
-    
+
                 texture.length_s = length_s;
                 texture.length_t = length_t;
-                texture.type = "normal";
             }
+
+            texture.id = textureID;
             
-            newComponent.texture = texture;
+            newComponent.texture= texture;
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
             for (let j = 0; j < childrenComponents.length; j++) {
                 if(childrenComponents[j].nodeName != "componentref" && childrenComponents[j].nodeName != "primitiveref"){
-                    this.onXMLMinorError("unknown tag <" + childrenComponents[j].nodeName + ">");
+                    this.onXMLMinorError("unknown tag in the component " + componentID + " <" + childrenComponents[j].nodeName + ">");
                     continue;
                 }
 
-                //material id
+                let childComponent = {};
+
                 var refID = childrenComponents[j].getAttribute("id");
                 if(refID == null){
-                    this.onXMLMinorError("a reference in " + componentID + " wasn't properly defined (" + refID + ")");
+                    this.onXMLMinorError("a reference in " + componentID + " wasn't properly read");
                     continue;
                 }
+                
+                childComponent.id = refID;
 
+                //Component reference
                 if(childrenComponents[j].nodeName == "componentref"){
-                    if(this.components[refID] == null || this.components[refID] == undefined){
-                        this.onXMLMinorError("a component reference in " + componentID + " wasn't properly identified (" + refID + ")");
-                        continue;
-                    }
-                    let childComponent = this.components[refID];
                     childComponent.type = "component";
-                    newComponent.children.push(childComponent);
                 }
 
+                //Primitive reference
                 if(childrenComponents[j].nodeName == "primitiveref"){
                     if(this.primitives[refID] == null){
                         this.onXMLMinorError("a primitive reference in " + componentID + " wasn't properly identified (" + refID + ")");
                         continue;
                     }
-                    let childComponent = this.primitives[refID];
                     childComponent.type = "primitive";
-                    newComponent.children.push(childComponent);
                 }
-            }
 
-            if(newComponent.transformations.length < 1){
-                this.onXMLMinorError("no component transformation found in " + componentID);
-                continue;
+                newComponent.children.push(childComponent);
             }
             
             if(newComponent.children.length < 1){
-                this.onXMLMinorError("no component children found in " + componentID);
+                this.onXMLMinorError("no component children successfuly read in " + componentID);
                 continue;
             }
             
             if(newComponent.materials.length < 1){
-                this.onXMLMinorError("no component materials found in " + componentID);
+                this.onXMLMinorError("no component materials successfuly read in " + componentID);
                 continue;
             }
             
             if(newComponent.texture == null){
-                this.onXMLMinorError("no component texture found in " + componentID);
+                this.onXMLMinorError("no component texture successfuly read in " + componentID);
                 continue;
             }
 
             this.components[componentID] = newComponent;
         }
-
-        this.log("Parsed components");
         
         if(this.components[this.idRoot] == null || this.components[this.idRoot] == undefined){
             return "root component not found";
         }
+
+        this.log("Parsed components");
 
         return null;
     }
@@ -1372,61 +1360,63 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.processNode(this.components[this.idRoot], null, null);   
+        let rootComponent = {};
+        rootComponent.id = this.idRoot;
+        this.processNode(rootComponent, null, null);   
     }
 
     processNode(componentNode, parentMaterial, parentTexture){
         this.scene.pushMatrix();
-
-        for(let i = 0; i < componentNode.transformations.length; ++i){
-            this.scene.multMatrix(componentNode.transformations[i]);
+        let currentComponent = this.components[componentNode.id];
+        if(currentComponent == undefined){
+            this.onXMLMinorError("component reference (" + componentNode.id + ") could not be read");
+            return;
         }
 
-        let currentMaterial = componentNode.materials[componentNode.activeMaterial];
-        let currentTexture = componentNode.texture;
+        for(let i = 0; i < currentComponent.transformations.length; ++i){
+            this.scene.multMatrix(currentComponent.transformations[i]);
+        }
 
-        if(currentMaterial == null){
+        let currentMaterial = currentComponent.materials[currentComponent.activeMaterial];
+        let currentTexture = currentComponent.texture;
+
+        if(currentMaterial == "inherit"){
             currentMaterial = parentMaterial;
         }
 
-        let currentType = currentTexture.type;
-
-        if(currentType == "normal"){
-            currentMaterial.setTexture(currentTexture);
-            //set s and t
+        if(currentTexture.id == "none"){
+            this.materials[currentMaterial].setTexture(null);
         }
         else{
-            if(currentType == "none"){
-                if(parentTexture.type == "normal" || parentTexture.type == "inherit"){
-                    currentMaterial.setTexture(null);
+            if(currentTexture.id == "inherit"){
+                currentTexture.id = parentTexture.id;
+                if(currentTexture.id != "none"){
+                    currentTexture.length_s = parentTexture.length_s;
+                    currentTexture.length_t = parentTexture.length_t;
                 }
             }
-            else{ //inherit
-                currentTexture = parentTexture;
-                //set s and t
-            }
+
+            this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
         }
 
-        currentMaterial.apply();
+        this.materials[currentMaterial].apply();
 
-        for(let i = 0; i < componentNode.children.length; ++i){
-            if(componentNode.children[i].type == "component"){
-                this.processNode(componentNode.children[i], currentMaterial, currentTexture);
+        for(let i = 0; i < currentComponent.children.length; ++i){
+            let newChild = currentComponent.children[i];
+            if(newChild.type == "component"){
+                this.processNode(newChild, currentMaterial, currentTexture);
+                this.materials[currentMaterial].setTexture(this.textures[currentTexture.id]);
+                this.materials[currentMaterial].apply();
             }
             else{
-                componentNode.children[i].updTexCoords(currentTexture.length_s,currentTexture.length_t);
-                componentNode.children[i].display();
-            }
-        }
+                if(typeof this.primitives[newChild.id].updTexCoords === "function"){
+                  this.primitives[newChild.id].updTexCoords(currentTexture.length_s, currentTexture.length_t);  
+                }
 
-        if(parentMaterial != null){
-            if(parentTexture.type == "none"){
-                parentMaterial.setTexture(null);
+                this.materials[currentMaterial].setTextureWrap('REPEAT','REPEAT');
+                
+                this.primitives[newChild.id].display();
             }
-            else{
-                parentMaterial.setTexture(parentTexture);
-            }
-            parentMaterial.apply();
         }
     
         this.scene.popMatrix();

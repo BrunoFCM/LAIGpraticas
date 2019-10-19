@@ -13,10 +13,8 @@ class XMLscene extends CGFscene {
 
         this.interface = myinterface;
 
-        
-
         this.selectedView = 0;
-        this.viewList = {'ActiveCamera' : 0};
+        this.viewList = {};
     }
 
     /**
@@ -81,7 +79,7 @@ class XMLscene extends CGFscene {
 
                 this.lights[i].update();
 
-                this.lights[i].id = key;
+                //this.lights[i].id = key;
 
                 i++;
             }
@@ -126,20 +124,7 @@ class XMLscene extends CGFscene {
     }
 
     updateLights(){
-        for (var i = 0; i < this.lights.length; i++) {
-            let newValue = this.graph.lights[this.lights[i].id];
-
-            if(newValue != undefined){
-                if(newValue[0]){
-                    this.lights[i].enable();
-                }
-                else{
-                    this.lights[i].disable();
-                }
-
-                this.lights[i].update();
-            }
-        }
+        
 
         console.log("hello");
     }
@@ -164,6 +149,24 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+
+        let i = 0;
+        for (var key in this.graph.lights) {
+            if (i >= 8)
+                break;              // Only eight lights allowed by WebGL.
+
+            if (this.graph.lights.hasOwnProperty(key)) {
+                let light = this.graph.lights[key];
+                if (light[0])
+                    this.lights[i].enable();
+                else
+                    this.lights[i].disable();
+
+                this.lights[i].update();
+
+                i++;
+            }
+        }
 
         this.pushMatrix();
         this.axis.display();
