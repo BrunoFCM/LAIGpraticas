@@ -71,6 +71,7 @@ class XMLscene extends CGFscene {
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
                 }
 
+                //Apply light attenuation
                 if(light[9] == "constant"){
                     this.lights[i].setConstantAttenuation(1);
                     this.lights[i].setLinearAttenuation(0);
@@ -136,12 +137,6 @@ class XMLscene extends CGFscene {
         if (this.gui.isKeyPressed("KeyM")) {
             this.graph.changeMaterialIndex();
         }
-    }
-
-    updateLights(){
-        
-
-        console.log("hello");
     }
 
     update(t){

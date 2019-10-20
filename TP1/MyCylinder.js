@@ -45,53 +45,6 @@ class MyCylinder extends CGFobject {
 			currRadius += radiusInc;
 		}
 
-		//------------------LIDS-----------------------------------------------------
-
-		// if (true) { //Z++
-		// 	this.vertices.push(0, 0, this.height);
-		// 	this.normals.push(0, 0, 1);
-		// 	this.texCoords.push(0.5, 0.5);
-
-		// 	let centerVertIdx = this.vertices.length / 3 - 1;
-
-
-		// 	for (let i = 0; i < this.slices; i++) {
-		// 		this.vertices.push(this.tradius * Math.cos(i * ang), this.tradius * Math.sin(i * ang), this.height);
-		// 		this.normals.push(0, 0, 1);
-		// 		this.texCoords.push(Math.cos(i * ang) / 2 + 0.5, 1 - (Math.sin(i * ang) / 2 + 0.5));
-
-		// 		this.indices.push(centerVertIdx + 0, centerVertIdx + i + 1, centerVertIdx + i + 2);
-		// 	}
-
-
-		// 	this.vertices.push(this.tradius * 1, 0, this.height);
-		// 	this.normals.push(0, 0, 1);
-		// 	this.texCoords.push(1, 0.5);
-
-		// }
-
-		// if (true) { //Z--
-		// 	this.vertices.push(0, 0, 0);
-		// 	this.normals.push(0, 0, -1);
-		// 	this.texCoords.push(0.5, 0.5);
-
-		// 	let centerVertIdx = this.vertices.length / 3 - 1;
-
-
-		// 	for (let i = 0; i < this.slices; i++) {
-		// 		this.vertices.push(this.bradius * Math.cos(i * ang), this.bradius * Math.sin(i * ang), 0);
-		// 		this.normals.push(0, 0, -1);
-		// 		this.texCoords.push(Math.cos(i * ang) / 2 + 0.5, 1 - (Math.sin(i * ang) / 2 + 0.5));
-
-		// 		this.indices.push(centerVertIdx + 0, centerVertIdx + i + 2, centerVertIdx + i + 1);
-		// 	}
-
-		// 	this.vertices.push(this.bradius * 1, 0, 0);
-		// 	this.normals.push(0, 0, -1);
-		// 	this.texCoords.push(1, 0.5);
-
-		// }
-
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};

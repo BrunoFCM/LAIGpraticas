@@ -53,8 +53,9 @@ class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
 
         let lightIndex = 0;
+        //Add a controler for every light
         for(let key in this.scene.graph.lights){
-            this.gui.add(this.scene.graph.lights[key], '0').name(key); //controller for a light
+            this.gui.add(this.scene.graph.lights[key], '0').name(key); 
             ++lightIndex;
         }
     }

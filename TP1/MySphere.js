@@ -28,6 +28,7 @@ class MySphere extends CGFobject {
 
         for(var i = 0; i <= this.stacks * 2; ++i){
             for(var j = 0; j <= this.slices; ++j){
+                //Normalized distances in the different axis (used in the normals and texCoords)
                 let x = Math.sin(thetaAng) * Math.cos(alphaAng);
                 let y = Math.sin(thetaAng) * Math.sin(alphaAng);
                 let z = Math.cos(thetaAng);
@@ -36,16 +37,19 @@ class MySphere extends CGFobject {
                 
                 this.texCoords.push(1 - thetaAng / Math.PI, alphaAng / (Math.PI * 2));
 
+                //Actual distances in the different axis (for the vertices)
                 x *= this.radius;
                 y *= this.radius;
                 z *= this.radius;
 
                 this.vertices.push(x,y,z);
 
+                //Avoiding the first and last vertexes
                 if(i == 0 || i == this.stacks * 2){
                     break;
                 }
 
+                //Skip the last vertex of each stack
                 if(j == this.slices){
                     continue;
                 }
