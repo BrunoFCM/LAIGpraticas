@@ -26,10 +26,10 @@ class MyCylinder extends CGFobject {
 		this.normals = new Array();
 		this.texCoords = new Array();
 
-		var deltaS = 1 / this.slices;
-		var deltaT = 1 / this.stacks;
+		var deltaS = 1 / this.slices; //percentage for each slice
+		var deltaT = 1 / this.stacks; //percentage for each stack
 
-		var depth = this.height / this.stacks;
+		var depth = this.height / this.stacks; //height of each stack
 
 		for (let i = 0; i <= this.stacks; i++) {
 			for (let j = 0; j <= this.slices; j++) {
