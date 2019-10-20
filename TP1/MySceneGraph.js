@@ -678,10 +678,6 @@ class MySceneGraph {
             let materialShininess = this.reader.getFloat(children[i], 'shininess');
             this.materials[materialID].setShininess(materialShininess);
 
-            if(this.materialID = "FloorMat"){
-                this.materials[materialID].setTextureWrap('REPEAT','REPEAT');
-            }
-
             grandChildren = children[i].children;
 
             nodeNames = [];
@@ -1071,6 +1067,7 @@ class MySceneGraph {
                 // Specifications for the current transformation.
                 var transfMatrix = mat4.create();
                     
+                //Parse explicit transformations
                 switch (grandgrandChildren[j].nodeName) {
                     case "translate":{
                         let x = parseFloat(grandgrandChildren[j].getAttribute("x"));
@@ -1164,6 +1161,7 @@ class MySceneGraph {
                 }
 
                 if(materialID != "inherit"){
+                    //Check if the material exists
                     if(this.materials[materialID] == null || this.materials[materialID] == undefined){
                         this.onXMLMinorError("a material in " + componentID + " wasn't properly identified (" + materialID + ")");
                         continue;
@@ -1176,7 +1174,7 @@ class MySceneGraph {
             // Texture
             let textureChild = grandChildren[textureIndex];
 
-            //texture id
+            //Texture id
             var textureID = textureChild.getAttribute("id");
             if(textureID == null){
                 this.onXMLMinorError("a texture in " + componentID + " wasn't properly read");
@@ -1185,6 +1183,7 @@ class MySceneGraph {
             var texture = {};
 
             if(textureID != "inherit" && textureID != "none"){
+                //Check if the texture exists
                 if(this.textures[textureID] == null || this.textures[textureID] == undefined){
                     this.onXMLMinorError("a texture reference in " + componentID + " wasn't properly defined (" + textureID + ")");
                     continue;
@@ -1214,6 +1213,7 @@ class MySceneGraph {
 
             var childrenComponents = grandChildren[childrenIndex].children;
 
+            //Parse children components/primitives
             for (let j = 0; j < childrenComponents.length; j++) {
                 if(childrenComponents[j].nodeName != "componentref" && childrenComponents[j].nodeName != "primitiveref"){
                     this.onXMLMinorError("unknown tag in the component " + componentID + " <" + childrenComponents[j].nodeName + ">");
@@ -1247,6 +1247,7 @@ class MySceneGraph {
                 newComponent.children.push(childComponent);
             }
             
+            //Check for obligatory attributes
             if(newComponent.children.length < 1){
                 this.onXMLMinorError("no component children successfuly read in " + componentID);
                 continue;
@@ -1395,14 +1396,23 @@ class MySceneGraph {
         this.processNode(rootComponent, null, null);   
     }
 
+    /**
+     * Callback to be executed on any minor error, showing a warning on the console.
+     * @param componentNode - component object to be processed
+     * @param parentMaterial - material from the parent component node
+     * @param parentTexture - texture from the parent component node
+     */
     processNode(componentNode, parentMaterial, parentTexture){
         this.scene.pushMatrix();
         let currentComponent = this.components[componentNode.id];
+
+        //check for nonexisting components 
         if(currentComponent == undefined){
             this.onXMLMinorError("component reference (" + componentNode.id + ") could not be read");
             return;
         }
 
+        //Apply transformations
         for(let i = 0; i < currentComponent.transformations.length; ++i){
             this.scene.multMatrix(currentComponent.transformations[i]);
         }
@@ -1414,9 +1424,6 @@ class MySceneGraph {
         currentTexture.length_t= currentComponent.texture.length_t;
 
         if(currentMaterial == "inherit"){
-            if(parentMaterial == null){
-                this.log("No base material found");
-            }
             currentMaterial = parentMaterial;
         }
 
@@ -1425,11 +1432,10 @@ class MySceneGraph {
         }
         else{
             if(currentTexture.id == "inherit"){
-                if(parentTexture == null){
-                    this.log("No base texture found");
-                }
+                //inherit the parent texture attributes
                 currentTexture.id = parentTexture.id;
-                if(currentTexture.id != "none"){
+
+                if(currentTexture.id != "none"){ 
                     currentTexture.length_s = parentTexture.length_s;
                     currentTexture.length_t = parentTexture.length_t;
                 }
@@ -1440,10 +1446,13 @@ class MySceneGraph {
 
         this.materials[currentMaterial].apply();
 
+        //handle children components/primitives
         for(let i = 0; i < currentComponent.children.length; ++i){
             let newChild = currentComponent.children[i];
             if(newChild.type == "component"){
                 this.processNode(newChild, currentMaterial, currentTexture);
+                
+                //Reset current texture and material so the children don't interfere with each other
                 if(currentTexture.id == "none"){
                     this.materials[currentMaterial].setTexture(null);
                 }
@@ -1453,6 +1462,7 @@ class MySceneGraph {
                 this.materials[currentMaterial].apply();
             }
             else{
+                //update the texture coordinates for the triangles/rectangles (primitives that have updTexCoords as a function)
                 if(typeof this.primitives[newChild.id].updTexCoords === "function"){
                   this.primitives[newChild.id].updTexCoords(currentTexture.length_s, currentTexture.length_t);  
                 }
@@ -1467,6 +1477,7 @@ class MySceneGraph {
     }
 
     changeMaterialIndex(){
+        //iterates through the components list and changes the active material index
         for(let key in this.components){
             this.components[key].activeMaterial++;
             this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;

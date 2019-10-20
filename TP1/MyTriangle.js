@@ -80,7 +80,13 @@ class MyTriangle extends CGFobject {
 		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
     }
-    
+	
+	/**
+	 * @method updateTexCoords
+	 * Updates texCoords according to the length_s/length_t parameters
+	 * @param length_s - horizontal length of the texture
+	 * @param length_t - vertical length of the texture
+	 */
     updTexCoords(length_s, length_t){
         let aVec = vec3.fromValues(this.x1 - this.x2, this.y1 - this.y2, this.z1 - this.z2);
         let bVec = vec3.fromValues(this.x2 - this.x3, this.y2 - this.y3, this.z2 - this.z3);

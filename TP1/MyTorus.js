@@ -32,6 +32,7 @@ class MyTorus extends CGFobject {
             var startY = this.outer * Math.sin(outerAng);
 
             for(var j = 0; j <= this.slices; ++j){
+                //Normalized distances in each axis of the inner circle (for the normals and texCoords)
                 let innerX = Math.cos(outerAng) * Math.cos(innerAng);
                 let innerY = Math.sin(outerAng) * Math.cos(innerAng);
                 let innerZ = Math.sin(innerAng);
@@ -40,6 +41,7 @@ class MyTorus extends CGFobject {
                 
                 this.texCoords.push((outerAng / Math.PI > 1) ? 2 - outerAng / Math.PI : outerAng / Math.PI, (innerAng / Math.PI > 1) ? 2 - innerAng / Math.PI : innerAng / Math.PI);
 
+                //Actual distances of the vertexes
                 let x = startX + this.inner * innerX;
                 let y = startY + this.inner * innerY;
                 let z = this.inner * innerZ;
@@ -48,6 +50,7 @@ class MyTorus extends CGFobject {
                 
                 innerAng += innerAngInc;
 
+                //Skip the the last loop and last vertex of every other loop 
                 if(j == this.slices || i == this.loops){
                     continue;
                 }
