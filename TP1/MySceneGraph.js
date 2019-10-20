@@ -544,9 +544,41 @@ class MySceneGraph {
                     return "light target undefined for ID = " + lightId;
 
                 global.push(...[angle, exponent, targetLight])
+            }          
+            
+            let attIndex = nodeNames.indexOf("attenuation");
+
+            if(attIndex == -1){
+                this.onXMLMinorError("No attenuation attribute found in <" + lightId + ">")
+                continue;
+            }
+            
+            //Parse attenuation
+            let constantAtt = this.reader.getFloat(grandChildren[attIndex], 'constant');
+            let linearAtt = this.reader.getFloat(grandChildren[attIndex], 'linear');
+            let quadraticAtt = this.reader.getFloat(grandChildren[attIndex], 'quadratic');
+
+            if (!(constantAtt != null && !isNaN(constantAtt))
+                || !(linearAtt != null && !isNaN(linearAtt))
+                || !(quadraticAtt != null && !isNaN(quadraticAtt))){
+                return("A value for one (or more) types of attenuation at <" + lightId + "> is not declared properly");
             }
 
-            global.active = true;
+            if(constantAtt == 1){
+                global[9] = "constant";
+            }
+            else
+            if(linearAtt == 1){
+                global[9] = "linear";
+            }
+            else
+            if(quadraticAtt == 1){
+                global[9] = "quadratic";
+            }
+            else{
+                return("No type of attenuation in <" + lightId + "> was selected properly");
+            }
+
             this.lights[lightId] = global;
             this.lights[lightId].lightIndex = numLights;
             numLights++;
