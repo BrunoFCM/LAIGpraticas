@@ -244,7 +244,7 @@
     <animations>
         <animation id="test" >
             <keyframe instant="10">
-                <translate x="1" y="1" z="1" />
+                <translate x="-10" y="-1" z="-15 " />
                 <rotate angle_x="45" angle_y="45" angle_z="45" />
                 <scale x="2" y="2" z="2" />
             </keyframe>
@@ -1682,6 +1682,7 @@
                 <rotate axis="x" angle="90"/>
                 <scale x="0.25" y="0.3" z="0.25" />
             </transformation>
+            <animationref id="test" />
             <materials>
                 <material id="clothMat" />
             </materials>

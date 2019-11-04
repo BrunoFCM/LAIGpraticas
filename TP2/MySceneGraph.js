@@ -903,7 +903,7 @@ class MySceneGraph {
                 if (!(z != null && !isNaN(z)))
                     return "unable to parse angle_z of the instant " + instant + " of the <" + animationId + "> animation.";
 
-                let rotationVec = vec3.fromValues(x,y,z);
+                let rotationVec = vec3.fromValues(x * DEGREE_TO_RAD,y * DEGREE_TO_RAD,z * DEGREE_TO_RAD);
 
                 //Parse scale 
                 let scaling = this.parseCoordinates3D(grandChildren[j].children[2], "scale for the instant " + instant + "of <" + animationId + ">");
@@ -1131,6 +1131,7 @@ class MySceneGraph {
             }
 
             var transformationIndex = nodeNames.indexOf("transformation");
+            var animationIndex = nodeNames.indexOf("animationref");
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
@@ -1356,8 +1357,13 @@ class MySceneGraph {
                     }
                     childComponent.type = "primitive";
                 }
-
+                
                 newComponent.children.push(childComponent);
+            }
+            
+            if(animationIndex != -1){
+                let animationId = this.reader.getString(grandChildren[animationIndex], 'id');
+                newComponent.animation = new KeyframeAnimation(this.scene, this.animations.get(animationId));
             }
             
             //Check for obligatory attributes
@@ -1530,6 +1536,10 @@ class MySceneGraph {
             this.scene.multMatrix(currentComponent.transformations[i]);
         }
 
+        if(currentComponent.animation != undefined){
+            currentComponent.animation.apply();
+        }
+
         let currentMaterial = currentComponent.materials[currentComponent.activeMaterial];
         let currentTexture = {};
         currentTexture.id = currentComponent.texture.id;
@@ -1594,6 +1604,16 @@ class MySceneGraph {
         for(let key in this.components){
             this.components[key].activeMaterial++;
             this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;
+        }
+    }
+
+    updateAnimations(t){
+        let time = t / 1000;
+        //iterates through the components list and updates the animation matrixes for each animation
+        for(let key in this.components){
+            if(this.components[key].animation != undefined){
+                this.components[key].animation.update(time);
+            }
         }
     }
 }

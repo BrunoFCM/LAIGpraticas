@@ -15,6 +15,8 @@ class XMLscene extends CGFscene {
 
         this.selectedView = 0;
         this.viewList = {};
+
+        this.startingInstant = 0;
     }
 
     /**
@@ -141,6 +143,11 @@ class XMLscene extends CGFscene {
 
     update(t){
         this.checkKeys();
+
+        if(this.startingInstant == 0){
+            this.startingInstant = t;
+        }
+        this.graph.updateAnimations(t - this.startingInstant);
     }
 
     /**
