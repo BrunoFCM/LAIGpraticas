@@ -963,8 +963,9 @@ class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' && 
+                    grandChildren[0].nodeName != 'patch')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane or patch)";
             }
 
             // Specifications for the current primitive.
@@ -1086,6 +1087,80 @@ class MySceneGraph {
                     return;
                 }
                 this.primitives[primitiveId] = new MyTriangle(this.scene, primitiveId, x1, x2, x3, y1, y2, y3, z1, z2, z3);
+            }
+            else if (primitiveType == 'plane'){
+                let uDivs = parseFloat(grandChildren[0].getAttribute("npartsU"));
+                let vDivs = parseFloat(grandChildren[0].getAttribute("npartsV"));
+                
+                if (!(uDivs != null && !isNaN(uDivs) && uDivs > 0))
+                    return "unable to parse npartsU of the primitive parameters for ID = " + primitiveId;
+                    
+                if (!(vDivs != null && !isNaN(vDivs) && vDivs > 0))
+                    return "unable to parse npartsV of the primitive parameters for ID = " + primitiveId;
+
+                this.primitives[primitiveId] = new Plane(this.scene, uDivs, vDivs);
+            }
+            else if (primitiveType == 'patch'){
+                let uDivs = parseFloat(grandChildren[0].getAttribute("npartsU"));
+                let vDivs = parseFloat(grandChildren[0].getAttribute("npartsV"));
+                let uPoints = parseFloat(grandChildren[0].getAttribute("npointsU"));
+                let vPoints = parseFloat(grandChildren[0].getAttribute("npointsV"));
+                
+                if (!(uDivs != null && !isNaN(uDivs) && uDivs > 0))
+                    return "unable to parse npartsU of the primitive parameters for ID = " + primitiveId;
+                    
+                if (!(vDivs != null && !isNaN(vDivs) && vDivs > 0))
+                    return "unable to parse npointsV of the primitive parameters for ID = " + primitiveId;
+                
+                if (!(uPoints != null && !isNaN(uPoints) && uPoints > 0))
+                    return "unable to parse npartsU of the primitive parameters for ID = " + primitiveId;
+                    
+                if (!(vPoints != null && !isNaN(vPoints) && vPoints > 0))
+                    return "unable to parse npointsV of the primitive parameters for ID = " + primitiveId;
+
+                let controlPoints = [];
+                let grandgrandChildren = grandChildren[0].children;
+                
+                if(grandgrandChildren.length != uPoints * vPoints || uPoints < 2 || vPoints < 2){
+                    return "Unexpected number of control points in " + primitiveId;
+                }
+
+                for(let i = 0; i < uPoints; ++i){
+                    let vControlPoints = [];
+                    for(let j = 0; j < vPoints; ++j){
+                        let point = grandgrandChildren[i * vPoints + j];
+                        if(point.nodeName != "controlpoint"){
+                            this.onXMLMinorError("Unexpected node name for a child in the primitive <" + primitiveId + ">");
+                            continue;
+                        }
+
+                        let xx = parseFloat(point.getAttribute("xx"));
+                        let yy = parseFloat(point.getAttribute("yy"));
+                        let zz = parseFloat(point.getAttribute("zz"));
+                    
+                        if (!(xx != null && !isNaN(xx))){
+                            this.onXMLMinorError("Unexpected xx value for a child in the primitive <" + primitiveId + ">");
+                            continue;
+                        }
+                        
+                        if (!(yy != null && !isNaN(yy))){
+                            this.onXMLMinorError("Unexpected yy value for a child in the primitive <" + primitiveId + ">");
+                            continue;
+                        }
+                            
+                        if (!(zz != null && !isNaN(zz))){
+                            this.onXMLMinorError("Unexpected zz value for a child in the primitive <" + primitiveId + ">");
+                            continue;
+                        }
+
+                        vControlPoints.push([xx,yy,zz,1]);
+                    }
+
+                    controlPoints.push(vControlPoints);
+                }
+
+
+                this.primitives[primitiveId] = new Patch(this.scene, uPoints, vPoints, uDivs, vDivs, controlPoints);
             }
         }
 

@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="Sanctest" axis_length="5"/>
+    <scene root="nurbtest" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
@@ -243,7 +243,7 @@
 
     <animations>
         <animation id="test" >
-            <keyframe instant="10">
+            <keyframe instant="5">
                 <translate x="-10" y="-1" z="-15 " />
                 <rotate angle_x="45" angle_y="45" angle_z="45" />
                 <scale x="2" y="2" z="2" />
@@ -326,6 +326,26 @@
         
         <primitive id="torus2">
             <torus inner="0.15" outer="2" slices="100" loops="100" />
+        </primitive>
+        
+        <primitive id="plane">
+            <plane npartsU="10" npartsV="10" />
+        </primitive>
+
+        <primitive id="patch">
+            <patch npointsU="4" npointsV="2" npartsU="5" npartsV="5" >
+
+                <controlpoint xx="-4" yy="-4" zz="0" />
+                <controlpoint xx="-2" yy="4" zz="0" />
+                <controlpoint xx="2" yy="-4" zz="0" />
+                <controlpoint xx="4" yy="4" zz="0" />
+
+                <controlpoint xx="-4" yy="-4" zz="1" />
+                <controlpoint xx="-2" yy="4" zz="1" />
+                <controlpoint xx="2" yy="-4" zz="1" />
+                <controlpoint xx="4" yy="4" zz="1" />
+
+            </patch>
         </primitive>
     </primitives>
 
@@ -2144,6 +2164,19 @@
                 <componentref id="great_magic_circle"/>
                 <componentref id="StaffCyl" />
                 <componentref id="Great_Glyph" />
+            </children>
+        </component>
+
+        <component id="nurbtest">
+            <transformation>
+                <rotate axis="x" angle="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <primitiveref id="patch" />
             </children>
         </component>
     </components>

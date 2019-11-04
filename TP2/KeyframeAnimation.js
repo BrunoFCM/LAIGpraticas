@@ -45,8 +45,6 @@ class KeyframeAnimation extends Animation{
         
         newFrame = this.interpolateKeyframes(leftFrame, rightFrame, elapsed_time);
         this.animationMatrix = newFrame.toMat4();
-        
-        console.log(this.animationMatrix);
     }
 
     interpolateKeyframes(keyframe1, keyframe2, elapsed_time){
