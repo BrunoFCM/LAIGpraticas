@@ -347,6 +347,11 @@
 
             </patch>
         </primitive>
+        
+        <primitive id="cylinder2">
+            <cylinder2 base="1" top="1" height="1" slices="10" stacks="10" />
+        </primitive>
+
     </primitives>
 
     <components>
@@ -2176,7 +2181,7 @@
             </materials>
             <texture id="none" />
             <children>
-                <primitiveref id="patch" />
+                <primitiveref id="cylinder2" />
             </children>
         </component>
     </components>

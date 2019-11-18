@@ -38,7 +38,9 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(1000/60);
+        this.setUpdatePeriod(1000/30);
+
+        this.initRTTCamera();
     }
 
     /**
@@ -46,6 +48,7 @@ class XMLscene extends CGFscene {
      */
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.rttCamera = this.camera;
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -124,14 +127,12 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
 
         this.camera = this.graph.views[0];
-        this.interface.setActiveCamera(this.graph.views[0]);
 
         this.interface.updateGUI();          
     }
 
     onSelectedViewChanged(value){
         this.camera = this.graph.views[value];
-        this.interface.setActiveCamera(this.camera);
     }
 
     checkKeys() {
@@ -148,12 +149,41 @@ class XMLscene extends CGFscene {
             this.startingInstant = t;
         }
         this.graph.updateAnimations(t - this.startingInstant);
+        this.securityCamera.update(t - this.startingInstant);
+    }
+
+    initRTTCamera(){
+        this.rttTexture = new CGFtextureRTT(this, window.innerWidth, window.innerHeight);
+
+        this.RTTShader = new CGFshader(this.gl, "shaders/vertexShader.vert", "shaders/cameraFilter.frag");
+        this.RTTShader.setUniformsValues({ uSampler: 0 });
+
+        this.securityCamera = new MySecurityCamera(this, this.RTTShader);
+    }
+
+    display(){
+        let tempCamera = this.camera;
+
+        this.camera = this.rttCamera;
+        this.rttTexture.attachToFrameBuffer();
+        this.render(this.rttCamera);
+     
+        this.camera = tempCamera;
+        this.interface.setActiveCamera(this.camera);
+        this.rttTexture.detachFromFrameBuffer();
+        this.render(this.camera);
+
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.rttTexture.bind(0);
+        this.securityCamera.display();
+        this.rttTexture.unbind(0);
+        this.gl.enable(this.gl.DEPTH_TEST);
     }
 
     /**
-     * Displays the scene.
+     * Renders the scene.
      */
-    display() {
+    render(camera) {
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -195,6 +225,8 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
+
+
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
