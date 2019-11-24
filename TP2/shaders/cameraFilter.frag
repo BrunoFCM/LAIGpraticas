@@ -20,7 +20,7 @@ void main() {
 
 	vec4 radial_offset = vec4(vec3(1,1,1) * radial_factor, 1); 
 
-	float whiteBarTime = mod(timeFactor, 2000.0) / 2000.0;
+	float whiteBarTime = mod(timeFactor, 4000.0) / 4000.0;
 
 	float whiteBarFactor = mod(abs(whiteBarTime - vTextureCoord.y), 0.2);
 
