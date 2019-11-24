@@ -351,9 +351,32 @@
         </animation>
 
         <animation id="Staff" >
-            <keyframe instant="4">
+            <keyframe instant="1">
                 <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="90" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0.5" y="-7.1" z="-0.3" />
+                <rotate angle_x="0" angle_y="0" angle_z="180" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="4">
+                <translate x="0" y="-7.5" z="-0.8" />
                 <rotate angle_x="0" angle_y="0" angle_z="360" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
+        <animation id="Arm" >
+            <keyframe instant="1">
+                <translate x="-0.7" y="-3" z="1" />
+                <rotate angle_x="0" angle_y="-80" angle_z="0" />
+                <scale x="1" y="2" z="0.5" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </animation>
@@ -2053,6 +2076,7 @@
             <transformation>
                 <rotate axis="y" angle="60"/>
             </transformation>
+            <animationref id="Arm"/>
             <materials>
                 <material id="inherit" />
             </materials>
