@@ -250,13 +250,6 @@
     </transformations>
 
     <animations>
-        <!-- <animation id="test" >
-            <keyframe instant="5">
-                <translate x="-10" y="-1" z="-15 " />
-                <rotate angle_x="45" angle_y="45" angle_z="45" />
-                <scale x="2" y="2" z="2" />
-            </keyframe>
-        </animation> -->
 
         <animation id="particle1" >
             <keyframe instant="1">
@@ -347,6 +340,84 @@
                 <translate x="0" y="0" z="4" />
                 <rotate angle_x="0" angle_y="0" angle_z="0" />
                 <scale x="0" y="0" z="0" />
+            </keyframe>
+        </animation>
+        
+        <animation id="Circle1" >
+            <keyframe instant="4">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="360" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="420" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+        </animation>
+
+        <animation id="Circle2" >
+            <keyframe instant="5">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-420" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-480" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+        </animation>
+        
+        <animation id="Circle3" >
+            <keyframe instant="6">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="480" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="7">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="540" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+        </animation>
+
+        <animation id="Circle4" >
+            <keyframe instant="7">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-540" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-600" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+        </animation>
+        
+        <animation id="Circle5" >
+            <keyframe instant="8">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="600" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="9">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="660" />
+                <scale x="0.1" y="0.1" z="0.1" />
+            </keyframe>
+        </animation>
+
+        <animation id="Circle6" >
+            <keyframe instant="9">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-660" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="10">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="-720" />
+                <scale x="0.1" y="0.1" z="0.1" />
             </keyframe>
         </animation>
 
@@ -2329,6 +2400,7 @@
             <transformation>
                 <scale x="1.8" y="1.8" z="1"/>
             </transformation>
+            <animationref id="Circle1" />
             <materials>
                 <material id="circleMat1" />
                 <material id="circleMat2" />
@@ -2347,6 +2419,7 @@
             <transformation>
                 <scale x="1.5" y="1.5" z="1"/>
             </transformation>
+            <animationref id="Circle2" />
             <materials>
                 <material id="circleMat2" />
                 <material id="circleMat3" />
@@ -2365,6 +2438,7 @@
             <transformation>
                 <scale x="1.2" y="1.2" z="1"/>
             </transformation>
+            <animationref id="Circle3" />
             <materials>
                 <material id="circleMat3" />
                 <material id="circleMat4" />
@@ -2383,6 +2457,7 @@
             <transformation>
                 <scale x="1" y="1" z="1"/>
             </transformation>
+            <animationref id="Circle4" />
             <materials>
                 <material id="circleMat4" />
                 <material id="circleMat5" />
@@ -2401,6 +2476,7 @@
             <transformation>
                 <scale x="0.75" y="0.75" z="1"/>
             </transformation>
+            <animationref id="Circle5" />
             <materials>
                 <material id="circleMat5" />
                 <material id="circleMat6" />
@@ -2419,6 +2495,7 @@
             <transformation>
                 <scale x="0.5" y="0.5" z="1"/>
             </transformation>
+            <animationref id="Circle6" />
             <materials>
                 <material id="circleMat6" />
                 <material id="circleMat1" />
