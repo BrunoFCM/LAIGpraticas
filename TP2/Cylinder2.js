@@ -31,30 +31,30 @@ class Cylinder2 extends CGFobject {
 
         this.controlPoints1 = [
 			[
-                [-this.base, 0, 0, 1],	    //0
-                [-this.base, extendedBase, 0, 1],	//1
-                [this.base, extendedBase, 0, 1],	//2
-                [this.base, 0, 0, 1]	    //3
+                [0, -this.base, 0, 1],	    //0
+                [-extendedBase, -this.base, 0, 1],	//1
+                [-extendedBase, this.base, 0, 1],	//2
+                [0, this.base, 0, 1]	    //3
             ],
             [
-                [-this.base, 0, this.height, 1],	    //0
-                [-this.base, extendedBase, this.height, 1],	//1
-                [this.base, extendedBase, this.height, 1],	//2
-                [this.base, 0, this.height, 1]	    //3
+                [0, -this.top, this.height, 1],	    //0
+                [-extendedTop, -this.top, this.height, 1],	//1
+                [-extendedTop, this.top, this.height, 1],	//2
+                [0, this.top, this.height, 1]	    //3
             ]
 		];
         this.controlPoints2 = [
 			[
-                [this.top, 0, 0, 1],	    //3
-                [this.top, -extendedTop, 0, 1],	//2
-                [-this.top, -extendedTop, 0, 1],	//1
-                [-this.top, 0, 0, 1]	    //0
+                [0, this.base, 0, 1],	    //0
+                [extendedBase, this.base, 0, 1],	//1
+                [extendedBase, -this.base, 0, 1],	//2
+                [0, -this.base, 0, 1]	    //3
             ],
             [
-                [this.top, 0, this.height, 1],	    //3
-                [this.top, -extendedTop, this.height, 1],	//2
-                [-this.top, -extendedTop, this.height, 1],	//1
-                [-this.top, 0, this.height, 1]	    //0
+                [0, this.top, this.height, 1],	    //0
+                [extendedTop, this.top, this.height, 1],	//1
+                [extendedTop, -this.top, this.height, 1],	//2
+                [0, -this.top, this.height, 1]	    //3
             ]
 		];
 
