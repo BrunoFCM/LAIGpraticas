@@ -353,6 +353,7 @@ class MySceneGraph {
                 var persp = new CGFcamera(angle, near, far, fromVec, toVec);
 
                 if(i == 0){
+                    //Setting the rtt camera    
                     this.scene.rttCamera = new CGFcamera(angle, near, far, fromVec, toVec);
                 }
     
@@ -407,6 +408,7 @@ class MySceneGraph {
                 var orth = new CGFcameraOrtho( left, right, bottom, top, near, far, fromVec, toVec, up );
 
                 if(i == 0){
+                    //Setting the rtt camera
                     this.scene.rttCamera = new CGFcameraOrtho( left, right, bottom, top, near, far, fromVec, toVec, up );
                 }
 
@@ -1712,17 +1714,24 @@ class MySceneGraph {
         this.scene.popMatrix();
     }
 
+    /**
+     * @method changeMaterialIndex
+     * Iterates through the components list and changes the active material index
+     */
     changeMaterialIndex(){
-        //iterates through the components list and changes the active material index
         for(let key in this.components){
             this.components[key].activeMaterial++;
             this.components[key].activeMaterial = this.components[key].activeMaterial % this.components[key].materials.length;
         }
     }
 
+    /**
+     * @method updateAnimations
+     * Iterates through the components list and updates the animation matrixes for each animation
+     * @param t - Time value
+     */
     updateAnimations(t){
         let time = t / 1000;
-        //iterates through the components list and updates the animation matrixes for each animation
         for(let key in this.components){
             if(this.components[key].animation != undefined){
                 this.components[key].animation.update(time);

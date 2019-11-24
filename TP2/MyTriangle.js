@@ -23,7 +23,11 @@ class MyTriangle extends CGFobject {
 
 		this.initBuffers();
 	}
-	
+
+	/**
+	 * @method initBuffers
+	 * Sets values for vertices, normals and texCoords
+	 */
 	initBuffers() {
 		this.vertices = [
 			this.x1, this.y1, this.z1,	//0

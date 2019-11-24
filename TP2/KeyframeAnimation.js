@@ -1,7 +1,9 @@
 /**
-* Animation
-* @constructor
-*/
+ * KeyFrameAnimation
+ * @constructor
+ * @param scene - Reference to MyScene object
+ * @param keyframes - Array with KeyFrameModels
+ */
 class KeyframeAnimation extends Animation{
 
 	constructor(scene, keyframes) {
@@ -10,6 +12,11 @@ class KeyframeAnimation extends Animation{
         this.instant = 0;
 	}
 
+	/**
+	 * @method update
+	 * Updates the animation matrix with the corresponding values to the instant t
+     * @param t - Time value of the instant
+	 */
     update(t){
         //Reached the end of the animation
         if(t >= this.keyframes[this.keyframes.length - 1].instant){
@@ -47,6 +54,14 @@ class KeyframeAnimation extends Animation{
         this.animationMatrix = newFrame.toMat4();
     }
 
+	/**
+	 * @method interpolateKeyframes
+	 * Given a time value, interpolates two keyframes, returning the resulting KeyframeModel
+     * @param keyframe1 - First KeyframeModel
+     * @param keyframe2 - Second KeyframeModel
+     * @param elapsed_time - Time passed between both Keyframes
+     * @returns New KeyframeModel, interpolated between both Keyframes
+	 */
     interpolateKeyframes(keyframe1, keyframe2, elapsed_time){
         let deltaTime = keyframe2.instant - keyframe1.instant;
         let timeFactor = elapsed_time / deltaTime;
@@ -85,20 +100,6 @@ class KeyframeAnimation extends Animation{
         vec3.multiply(newScale, scaling1, deltaScale);
 
         return new KeyframeModel(0, newTranslate, newRotate, newScale);
-    }
-
-    toMat4(model){
-        let newMatrix = mat4.create();
-
-        let translate = vec3.translate(model.translate);
-        let rotate = vec3.rotate(model.rotate);
-        let scale = vec3.scale(model.scale);
-
-        mat4.multiply(newMatrix, scale, newMatrix);
-        mat4.multiply(newMatrix, rotate, newMatrix);
-        mat4.multiply(newMatrix, translate, newMatrix);
-
-        return newMatrix;
     }
 }
 

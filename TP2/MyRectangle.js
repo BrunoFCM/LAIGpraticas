@@ -19,6 +19,10 @@ class MyRectangle extends CGFobject {
 		this.initBuffers();
 	}
 	
+	/**
+	 * @method initBuffers
+	 * Sets values for vertices, normals and texCoords
+	 */
 	initBuffers() {
 		this.vertices = [
 			this.x1, this.y1, 0,	//0

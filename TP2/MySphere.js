@@ -1,6 +1,11 @@
 /**
 * MySphere
 * @constructor
+ * @param scene - Reference to MyScene object
+ * @param id - Id of the object
+ * @param radius - Radius of the sphere
+ * @param slices - Slices in the object
+ * @param stacks - Stacks in the object
 */
 class MySphere extends CGFobject {
     constructor(scene, id, radius, slices, stacks) {
@@ -14,6 +19,10 @@ class MySphere extends CGFobject {
         this.initBuffers();
     }
 
+	/**
+	 * @method initBuffers
+	 * Sets values for vertices, normals and texCoords
+	 */
     initBuffers() {
         this.vertices = [];
         this.indices = [];

@@ -1,9 +1,12 @@
 /**
- * Plane
+ * Cylinder2
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param base - Radius of the base lid
+ * @param top - Radius of the top lid
+ * @param height - Height of the cylinder
+ * @param slices - Number of slices in the cylinder
+ * @param stacks - Number of stacks in the cylinder
  */
 class Cylinder2 extends CGFobject {
 	constructor(scene, base, top, height, slices, stacks) {
@@ -18,6 +21,10 @@ class Cylinder2 extends CGFobject {
 		this.initBuffers();
 	}
 	
+	/**
+	 * @method initBuffers
+	 * Initializes the surfaces with the correct control points and creates the corresponding nurbsObject's
+	 */
 	initBuffers() {
         let extendedBase = 1.33 * this.base;
         let extendedTop = 1.33 * this.top;
@@ -59,7 +66,11 @@ class Cylinder2 extends CGFobject {
 
         this.object2 = new CGFnurbsObject(this.scene, this.stacks, this.slices / 2, this.surface2);
     }
-    
+
+    /**
+	 * @method display
+	 * Displays the cylinder in the scene
+	 */
     display(){
         this.object1.display();
         this.object2.display();

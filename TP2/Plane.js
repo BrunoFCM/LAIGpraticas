@@ -2,8 +2,8 @@
  * Plane
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param udivs - Number of divisions of the plane in the u axis
+ * @param vdivs - Number of divisions of the plane in the v axis
  */
 class Plane extends CGFobject {
 	constructor(scene, udivs, vdivs) {
@@ -15,6 +15,10 @@ class Plane extends CGFobject {
 		this.initBuffers();
 	}
 	
+	/**
+	 * @method initBuffers
+	 * Initializes the surface with the correct control points and creates the corresponding nurbsObject
+	 */
 	initBuffers() {
         this.controlPoints = [
 			[
@@ -32,6 +36,10 @@ class Plane extends CGFobject {
         this.object = new CGFnurbsObject(this.scene, this.udivs, this.vdivs, this.surface);
     }
     
+    /**
+	 * @method display
+	 * Displays the Plane in the scene
+	 */
     display(){
         this.object.display();
     }

@@ -131,10 +131,17 @@ class XMLscene extends CGFscene {
         this.interface.updateGUI();          
     }
 
+    /**
+     * Changes the current camera
+     * @param value - Index of the new view 
+     */
     onSelectedViewChanged(value){
         this.camera = this.graph.views[value];
     }
 
+    /**
+     * Checks if the M key was pressed and, if it was, changes de material indexes of every valid object
+     */
     checkKeys() {
         // Check for key codes e.g. in https://keycode.info/
         if (this.gui.isKeyPressed("KeyM")) {
@@ -142,6 +149,10 @@ class XMLscene extends CGFscene {
         }
     }
 
+    /**
+     * Checks for pressed keys and updates animations' and the security camera's time values
+     * @param t - Time value 
+     */
     update(t){
         this.checkKeys();
 
@@ -152,6 +163,9 @@ class XMLscene extends CGFscene {
         this.securityCamera.update(t - this.startingInstant);
     }
 
+    /**
+     * Inits the rtt Camera
+     */
     initRTTCamera(){
         this.rttTexture = new CGFtextureRTT(this, window.innerWidth, window.innerHeight);
 
@@ -161,17 +175,18 @@ class XMLscene extends CGFscene {
         this.securityCamera = new MySecurityCamera(this, this.RTTShader);
     }
 
+    /**
+     * Displays the scene
+     */
     display(){
         let tempCamera = this.camera;
 
-        this.camera = this.rttCamera;
         this.rttTexture.attachToFrameBuffer();
         this.render(this.rttCamera);
      
-        this.camera = tempCamera;
-        this.interface.setActiveCamera(this.camera);
+        this.interface.setActiveCamera(tempCamera);
         this.rttTexture.detachFromFrameBuffer();
-        this.render(this.camera);
+        this.render(tempCamera);
 
         this.gl.disable(this.gl.DEPTH_TEST);
         this.rttTexture.bind(0);
@@ -184,6 +199,7 @@ class XMLscene extends CGFscene {
      * Renders the scene.
      */
     render(camera) {
+        this.camera = camera;
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene

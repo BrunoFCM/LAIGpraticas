@@ -1,7 +1,11 @@
 /**
-* KeyframeModel
-* @constructor
-*/
+ * KeyFrameModel
+ * @constructor
+ * @param instant - Instant in which the Keyframe begins
+ * @param translate - vec3 object corresponding to the translate component of the frame
+ * @param rotate - vec3 object corresponding to the rotate component of the frame
+ * @param scale - vec3 object corresponding to the scale component of the frame
+ */
 class KeyframeModel {
 
 	constructor(instant, translate, rotate, scale) {
@@ -11,6 +15,11 @@ class KeyframeModel {
         this.scale = scale;
     }
 
+    /**
+	 * @method origin
+	 * Static function that returns the KeyframeModel in the first instant of any animation 
+     * @returns Default KeyframeModel
+	 */
     static origin(){
         let instant = 0;
         let translate = vec3.create();
@@ -20,6 +29,11 @@ class KeyframeModel {
         return new KeyframeModel(instant, translate, rotate, scale);
     }
 
+    /**
+	 * @method toMat4
+	 * Returns a mat4 object corresponding to the calling KeyframeModel object
+     * @returns mat4 object
+	 */
     toMat4(){
         let newMat4 = mat4.create();
 

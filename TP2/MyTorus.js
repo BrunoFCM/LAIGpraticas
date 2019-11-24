@@ -1,6 +1,12 @@
 /**
 * MyTorus
 * @constructor
+ * @param scene - Reference to MyScene object
+ * @param id - Id of the object
+ * @param inner - Inner radius of the torus
+ * @param outer - Outer radius of the torus
+ * @param slices - Slices in the object
+ * @param loops - Loops in the object
 */
 class MyTorus extends CGFobject {
     constructor(scene, id, inner, outer, slices, loops) {
@@ -15,6 +21,10 @@ class MyTorus extends CGFobject {
         this.initBuffers();
     }
 
+	/**
+	 * @method initBuffers
+	 * Sets values for vertices, normals and texCoords
+	 */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
