@@ -422,6 +422,19 @@
             </keyframe>
         </animation>
 
+        <animation id="Glyph" >
+            <keyframe instant="11">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="15">
+                <translate x="0" y="-10" z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </animation>
+
         <animation id="Staff" >
             <keyframe instant="1">
                 <translate x="0" y="0" z="0" />
@@ -2075,10 +2088,12 @@
 
         <component id="Great_Glyph">
             <transformation>
-                <translate x="0" y="0" z="5" />
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="-1" z="0.1" /> 
                 <rotate axis="z" angle="90" />
                 <rotate axis="x" angle="-90" />
             </transformation>
+            <animationref id="Glyph" />
             <materials>
                 <material id="demoMaterial" />
                 <material id="circleMat1" />
