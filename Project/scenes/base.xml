@@ -1,0 +1,203 @@
+<lxs>
+    <scene root="smoothtest" axis_length="0"/>
+
+    <views default="defaultCamera">
+        <perspective id="defaultCamera" near="0.01" far="500" angle="45">
+            <from x="-15" y="5" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <ortho id="Altar View"  near="0.01" far="50" left="-5" right="5" top="5" bottom="0" >
+            <from x="5.5" y="3" z="0" />
+            <to x="10" y="0" z="0" />
+            <up x="0" y="1" z="0" /> 
+        </ortho>
+    </views>
+
+    <globals>
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </globals>
+
+    <lights>
+        <omni id="flameLight1" enabled="1">
+            <location x="-7" y="4.5" z="4.7" w="1.0" />
+            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
+            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
+            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
+            <attenuation constant="0" linear="1" quadratic="0" />  
+        </omni>
+        <spot id="pepe_spot" enabled="0" angle="20" exponent="200">
+            <location x="7" y="7.5" z="0" w="1" />
+            <target x="20" y="-50" z="0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1" />
+            <specular r="0.8" g="0.8" b="0.8" a="1" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </spot>
+    </lights>
+
+    <textures>
+        <texture id="dead_grass" file="scenes/images/dead_grass.jpg"/>
+    </textures>
+
+    <materials>
+        <material id="FireMat" shininess="10">
+            <emission r="0.9" g="0.5" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="GlyphTriangleTransform">
+            <rotate axis="z" angle="120" />
+        </transformation>
+    </transformations>
+
+    <animations>
+        <smoothAnimation id="smoothTest" loop="normal">
+            <keyframe instant="0">
+                <translate x="0" y="-0.66" z="0" />
+                <rotate angle_x="80" angle_y="80" angle_z="80" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="0">
+                <translate x="0" y="-0.66" z="5" />
+                <rotate angle_x="160" angle_y="160" angle_z="160" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="0" y="-0.66" z="5" />
+                <rotate angle_x="160" angle_y="160" angle_z="160" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="0" y="-0.66" z="5" />
+                <rotate angle_x="160" angle_y="160" angle_z="160" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="0" y="4" z="5" />
+                <rotate angle_x="240" angle_y="240" angle_z="240" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0" y="4" z="10" />
+                <rotate angle_x="240" angle_y="240" angle_z="240" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0" y="4" z="10" />
+                <rotate angle_x="240" angle_y="240" angle_z="240" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0" y="4" z="15" />
+                <rotate angle_x="360" angle_y="360" angle_z="360" />
+                <scale x="2" y="1" z="0.01" />
+            </keyframe>
+            <keyframe instant="3">
+                <translate x="0" y="-0.66" z="15" />
+                <rotate angle_x="360" angle_y="360" angle_z="360" />
+                <scale x="2" y="1" z="0.01" />
+            </keyframe>
+        </smoothAnimation>
+
+        <linearAnimation id="particle1" >
+            <keyframe instant="1">
+                <translate x="0.3" y="-0.3" z="1" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="2" y="2" z="2" />
+            </keyframe>
+            <keyframe instant="2">
+                <translate x="0" y="0" z="2" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="2" y="2" z="2" />
+            </keyframe>
+            <keyframe instant="3">
+                <translate x="-0.3" y="0.3" z="3" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />.
+            </keyframe>
+            <keyframe instant="4">
+                <translate x="0" y="0" z="4" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0" y="0" z="0" />
+            </keyframe>
+        </linearAnimation>
+    </animations>
+
+    <primitives>
+        <primitive id="pickRectangle">
+            <rectangle x1="0" y1="0" x2="1" y2="1" />
+        </primitive>
+        
+        <primitive id="demoSphere">
+            <sphere radius="1" slices="100" stacks="100" />
+        </primitive>
+        
+        <primitive id="torus">
+            <torus inner="0.05" outer="3" slices="100" loops="100" />
+        </primitive>
+        
+        <primitive id="cylinder">
+            <cylinder base="1" top="1" height="1" slices="100" stacks="3" />
+        </primitive>
+
+        <primitive id="pyramid">
+            <cylinder base="1" top="0" height="1" slices="4" stacks="3" />
+        </primitive>
+
+        <primitive id="triangle">
+            <triangle x1="-0.6" y1="1" z1="0" x2="0.6" y2="1" z2="0" x3="0" y3="2" z3="0" />
+        </primitive> 
+
+        <primitive id="cone">
+            <cylinder2 base="1" top="0" height="1" slices="100" stacks="10" />
+        </primitive>
+        
+        <primitive id="plane">
+            <plane npartsU="10" npartsV="10" />
+        </primitive>
+
+        <primitive id="papiro">
+            <patch npointsU="6" npointsV="2" npartsU="20" npartsV="20" >
+
+                <controlpoint xx="-4" yy="-4" zz="1" />
+                <controlpoint xx="-4" yy="4" zz="1" />
+
+                <controlpoint xx="-4" yy="-4" zz="-1" />
+                <controlpoint xx="-4" yy="4" zz="-1" />
+
+                <controlpoint xx="-1" yy="-4" zz="2" />
+                <controlpoint xx="-1" yy="4" zz="2" />
+
+                <controlpoint xx="2" yy="-4" zz="-0.5" />
+                <controlpoint xx="2" yy="4" zz="-0.5" />
+
+                <controlpoint xx="4" yy="-4" zz="-1" />
+                <controlpoint xx="4" yy="4" zz="-1" />
+
+                <controlpoint xx="4" yy="-4" zz="1" />
+                <controlpoint xx="4" yy="4" zz="1" />
+
+            </patch>
+        </primitive>
+    </primitives>
+
+    <components>        
+        <component id="smoothtest">
+            <transformation>
+                <rotate axis="x" angle="0" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="Cube" />
+            </children>
+        </component>
+    </components>
+</lxs>

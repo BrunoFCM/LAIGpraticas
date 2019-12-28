@@ -27,42 +27,42 @@
     </globals>
 
     <lights>
-        <omni id="flameLight1" enabled="1">
+        <omni id="flameLight1" enabled="0">
             <location x="-7" y="4.5" z="4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
             <specular r="0.6" g="0.5" b="0.2" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight2" enabled="1">
+        <omni id="flameLight2" enabled="0">
             <location x="-2.5" y="4.5" z="4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
             <specular r="0.6" g="0.5" b="0.2" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight3" enabled="1">
+        <omni id="flameLight3" enabled="0">
             <location x="2" y="4.5" z="4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
             <specular r="0.6" g="0.5" b="0.2" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight4" enabled="1">
+        <omni id="flameLight4" enabled="0">
             <location x="-7" y="4.5" z="-4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
             <specular r="0.6" g="0.5" b="0.2" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight5" enabled="1">
+        <omni id="flameLight5" enabled="0">
             <location x="-2.5" y="4.5" z="-4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
             <specular r="0.6" g="0.5" b="0.2" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight6" enabled="1">
+        <omni id="flameLight6" enabled="0">
             <location x="2" y="4.5" z="-4.7" w="1.0" />
             <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
             <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
@@ -722,7 +722,7 @@
             <materials>
                 <material id="FloorMat" />
             </materials>
-            <texture id="church_floor" length_s="1" length_t="1"/>
+            <texture id="fire" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="plane"/>
             </children>
@@ -1067,7 +1067,7 @@
             <materials>
                 <material id="FloorMat" />
             </materials>
-            <texture id="wood3" length_s="1" length_t="1"/>
+            <texture id="wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="Ceiling1"/>
                 <componentref id="Ceiling2"/>
@@ -1112,7 +1112,7 @@
             <materials>
                 <material id="FloorMat" />
             </materials>
-            <texture id="wood3" length_s="1" length_t="1"/>
+            <texture id="wood" length_s="1" length_t="1"/>
             <children>
                 <componentref id="OCeiling1"/>
                 <componentref id="OCeiling2"/>
@@ -2674,7 +2674,7 @@
             <materials>
                 <material id="FloorMat" />
             </materials>
-            <texture id="church_floor" length_s="1" length_t="1" />
+            <texture id="fire" length_s="1" length_t="1" />
             <children>
                 <componentref id="Sanctuary" />
                 <componentref id="mage"/>
