@@ -241,6 +241,9 @@
     </materials>
 
     <transformations>
+        <transformation id="Default">
+            <scale x="1" y="1" z="1" />
+        </transformation>
         <transformation id="GlyphTriangleTransform">
             <rotate axis="z" angle="120" />
         </transformation>
@@ -629,7 +632,7 @@
         </primitive>
 
         <primitive id="board">
-            <board />
+            <board base="object1" transformation="Default"/>
         </primitive>
 
     </primitives>

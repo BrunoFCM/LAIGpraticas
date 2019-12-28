@@ -1259,8 +1259,28 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = obj;
             }
-            else if (primitiveType == 'board'){//TODO Extras
-                let board = new MyBoard(this.scene, undefined, undefined);
+            else if (primitiveType == 'board'){//TODO Shaders
+                let basePrimitiveName = this.reader.getString(grandChildren[0], 'base');
+                if(basePrimitiveName == null || basePrimitiveName == undefined){
+                    return "Unable to read the base primitive of the board";
+                }
+
+                let basePrimitive = this.primitives[basePrimitiveName];
+                if(basePrimitive == null || basePrimitive == undefined){
+                    return "Invalid board base <" + basePrimitiveName + ">";
+                }
+                
+                let baseTransformationName = this.reader.getString(grandChildren[0], 'transformation');
+                if(baseTransformationName == null || baseTransformationName == undefined){
+                    return "Unable to read the base transformation of the board";
+                }
+
+                let baseTransformation = this.transformations[baseTransformationName];
+                if(baseTransformation == null || baseTransformation == undefined){
+                    return "Invalid board base transformation <" + baseTransformationName + ">";
+                }
+                
+                let board = new MyBoard(this.scene, basePrimitive, baseTransformation, undefined);
 
                 this.primitives[primitiveId] = board;
             }

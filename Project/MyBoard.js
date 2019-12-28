@@ -33,7 +33,10 @@ class MyBoard extends CGFobject {
         this.baseObject.display();
 
         this.scene.pushMatrix();
-        this.scene.multMatrix(this.baseTransformation);
+        
+        for(let transform = 0; transform < this.baseTransformation.length; ++transform){
+            this.scene.multMatrix(this.baseTransformation[transform]);
+        }
 
         for(let i = 0; i < 64; ++i){
             this.scene.pushMatrix();
