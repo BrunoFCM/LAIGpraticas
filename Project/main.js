@@ -31,6 +31,9 @@ serialInclude(['../lib/CGF.js',
                 'CGFOBJModel.js',
                 'CGFResourceReader.js',
                 'MyBoard.js',
+                'PrologClient.js',
+                'GameOrchestrator.js',
+                'GameTimer.js',
 
 main=function()
 {
@@ -53,7 +56,9 @@ main=function()
 
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+    var myGraph = new MySceneGraph(filename, myScene);
+    
+    let game = new GameOrchestrator(myInterface, myScene);
 	
 	// start
     app.run();

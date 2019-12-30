@@ -9,4 +9,5 @@ uniform float timeFactor;
 
 void main() {
     discard;
+    gl_FragColor = texture2D(uSampler, vTextureCoord);
 }

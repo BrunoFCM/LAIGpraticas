@@ -17,6 +17,10 @@ class XMLscene extends CGFscene {
         this.viewList = {};
 
         this.startingInstant = 0;
+        this.currentTime = 0;
+
+        this.inputAllowed = false;
+        this.inputEnabled = false;
     }
 
     /**
@@ -160,8 +164,11 @@ class XMLscene extends CGFscene {
         if(this.startingInstant == 0){
             this.startingInstant = t;
         }
-        this.graph.updateAnimations(t - this.startingInstant);
-        this.securityCamera.update(t - this.startingInstant);
+
+        this.currentTime = t - this.startingInstant;
+
+        this.graph.updateAnimations(this.currentTime);
+        this.securityCamera.update(this.currentTime);
     }
 
     /**
@@ -170,7 +177,7 @@ class XMLscene extends CGFscene {
     initRTTCamera(){
         this.rttTexture = new CGFtextureRTT(this, window.innerWidth, window.innerHeight);
 
-        this.RTTShader = new CGFshader(this.gl, "scenes/shaders/vertexShader.vert", "scenes/shaders/cameraFilter.frag");
+        this.RTTShader = new CGFshader(this.gl, "scenes/shaders/vertexShader.vert", "scenes/shaders/fullTransparency.frag");
         this.RTTShader.setUniformsValues({ uSampler: 0 });
 
         this.securityCamera = new MySecurityCamera(this, this.RTTShader);
@@ -183,7 +190,10 @@ class XMLscene extends CGFscene {
 					var obj = this.pickResults[i][0];
 					if (obj) {
 						var customId = this.pickResults[i][1];
-						console.log("Picked object: " + obj + ", with pick id " + customId);						
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+                        if(customId <= 64 && customId >= 1){
+                            this.playerInputHandler(customId);						
+                        }
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);
@@ -195,8 +205,12 @@ class XMLscene extends CGFscene {
      * Displays the scene
      */
     display(){
+        if(this.inputEnabled){
+            this.inputEnabled = false;
+        }
 		this.logPicking();
-		this.clearPickRegistration();
+        this.clearPickRegistration();
+        
         let tempCamera = this.camera;
 
         this.rttTexture.attachToFrameBuffer();
@@ -204,6 +218,10 @@ class XMLscene extends CGFscene {
      
         this.interface.setActiveCamera(tempCamera);
         this.rttTexture.detachFromFrameBuffer();
+
+        if(this.inputAllowed){
+            this.inputEnabled = true;
+        }
         this.render(tempCamera);
 
         this.gl.disable(this.gl.DEPTH_TEST);

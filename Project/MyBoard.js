@@ -31,23 +31,25 @@ class MyBoard extends CGFobject {
     
     display(){
         this.baseObject.display();
-
-        this.scene.pushMatrix();
         
-        for(let transform = 0; transform < this.baseTransformation.length; ++transform){
-            this.scene.multMatrix(this.baseTransformation[transform]);
-        }
-
-        for(let i = 0; i < 64; ++i){
+        if(this.scene.inputEnabled){
             this.scene.pushMatrix();
-            this.scene.translate(-(i % 8) + 3.5, Math.floor(i / 8) - 3.5, 0);
+            
+            for(let transform = 0; transform < this.baseTransformation.length; ++transform){
+                this.scene.multMatrix(this.baseTransformation[transform]);
+            }
 
-            this.scene.registerForPick(i + 1, this.pickingObjects[i]);
-            this.pickingObjects[i].display();
+            for(let i = 0; i < 64; ++i){
+                this.scene.pushMatrix();
+                this.scene.translate(-Math.floor(i / 8) + 3.5, -(i % 8) + 3.5, 0);
 
+                this.scene.registerForPick(i + 1, this.pickingObjects[i]);
+                this.pickingObjects[i].display();
+
+                this.scene.popMatrix();
+            }
             this.scene.popMatrix();
         }
-        this.scene.popMatrix();
     }
 }
 
