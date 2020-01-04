@@ -6,10 +6,29 @@
  */
 class KeyframeAnimation extends Animation{
 
-	constructor(scene, keyframes) {
-        super(scene);
+	constructor(scene, keyframes, requireBuild, duration, endpoint) {
+        super(scene, requireBuild);
         this.keyframes = keyframes;
-	}
+
+        this.requireBuild = requireBuild;
+        this.duration = duration;
+        this.endpoint = endpoint;
+    }
+
+    buildFrames(){
+        let newFrames = [];
+        for(let i = 0; i < this.keyframes.length; ++i){
+            let newTranslate = [];
+            if(newTranslate != undefined){
+                newTranslate[0] = this.keyframes[i].translate[0] * this.endpoint[0];
+                newTranslate[1] = this.keyframes[i].translate[1] * this.endpoint[1];
+                newTranslate[2] = this.keyframes[i].translate[2] * this.endpoint[2];
+            } 
+            newFrames.push(new KeyframeModel(this.scene.currentTime / 1000 + this.keyframes[i].instant * this.duration, newTranslate, this.keyframes[i].rotate, this.keyframes[i].scale));
+        }
+        
+        this.keyframes = newFrames;
+    }
 
 	/**
 	 * @method update
@@ -17,6 +36,11 @@ class KeyframeAnimation extends Animation{
      * @param t - Time value of the instant
 	 */
     update(t){
+        if(this.requireBuild){
+            this.buildFrames();
+            this.requireBuild = false;
+        }
+        
         //Reached the end of the animation
         if(t >= this.keyframes[this.keyframes.length - 1].instant){
             this.animationMatrix = this.keyframes[this.keyframes.length - 1].toMat4();

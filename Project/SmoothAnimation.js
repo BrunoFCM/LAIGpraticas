@@ -4,12 +4,17 @@
  * @param scene - Reference to MyScene object
  * @param keyframes - Array with KeyFrameModels
  */
-class SmoothAnimation extends Animation{
+class SmoothAnimation extends KeyframeAnimation{
 
-	constructor(scene, keyframes) {
-        super(scene);
+	constructor(scene, keyframes, requireBuild, duration, endpoint) {
+        super(scene, requireBuild);
         this.keyframes = keyframes;
-	}
+
+        this.requireBuild = requireBuild;
+        this.built = false;
+        this.duration = duration;
+        this.endpoint = endpoint;
+    }
 
 	/**
 	 * @method update
@@ -17,6 +22,12 @@ class SmoothAnimation extends Animation{
      * @param t - Time value of the instant
 	 */
     update(t){
+        if(this.requireBuild){
+            this.buildFrames();
+            this.requireBuild = false;
+            this.built = true;
+        }
+
         //Reached the end of the animation
         if(t >= this.keyframes[this.keyframes.length - 1].instant){
             this.animationMatrix = this.keyframes[this.keyframes.length - 1].toMat4();
@@ -28,7 +39,7 @@ class SmoothAnimation extends Animation{
         let controlPointIndex = this.keyframes.length - 4;
 
         //find keyframe that comes immediately before the given instant
-        for(let i = 2; i <= controlPointIndex; i += 3){
+        for(let i = 3; i <= controlPointIndex; i += 3){
             if(this.instant < this.keyframes[i].instant){
                 //Found the starting point for the interpolation
                 controlPointIndex = i - 3;

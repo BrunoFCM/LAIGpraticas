@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="smoothtest" axis_length="0"/>
+    <scene root="piecetest" axis_length="0"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
@@ -183,6 +183,10 @@
                 <controlpoint xx="4" yy="4" zz="1" />
 
             </patch>
+        </primitive>
+        
+        <primitive id="piece">
+            <piece/>
         </primitive>
     </primitives>
 

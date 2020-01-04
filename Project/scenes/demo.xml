@@ -6,19 +6,11 @@
             <from x="-15" y="5" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="Perspective 2" near="0.2" far="250" angle="45">
-            <from x="-10" y="4" z="-5" />
-            <to x="0" y="3" z="0" />
-        </perspective>
-        <ortho id="Altar View"  near="0.01" far="50" left="-5" right="5" top="5" bottom="0" >
-            <from x="5.5" y="3" z="0" />
-            <to x="10" y="0" z="0" />
-            <up x="0" y="1" z="0" /> 
-        </ortho>
-        <perspective id="Perspective 3" near="0.2" far="250" angle="45">
-            <from x="-7" y="0.5" z="5" />
-            <to x="0" y="3" z="0" />
-        </perspective>
+        
+        <perspective id="freeCamera" near="0.01" far="500" angle="45">
+                <from x="-15" y="5" z="0" />
+                <to x="0" y="0" z="0" />
+            </perspective>
     </views>
 
     <globals>
@@ -34,57 +26,6 @@
             <specular r="1" g="1" b="1" a="1.0" />
             <attenuation constant="0" linear="1" quadratic="0" />  
         </omni>
-        <omni id="flameLight2" enabled="1">
-            <location x="-2.5" y="4.5" z="4.7" w="1.0" />
-            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
-            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
-            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
-        </omni>
-        <omni id="flameLight3" enabled="1">
-            <location x="2" y="4.5" z="4.7" w="1.0" />
-            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
-            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
-            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
-        </omni>
-        <omni id="flameLight4" enabled="1">
-            <location x="-7" y="4.5" z="-4.7" w="1.0" />
-            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
-            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
-            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
-        </omni>
-        <omni id="flameLight5" enabled="1">
-            <location x="-2.5" y="4.5" z="-4.7" w="1.0" />
-            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
-            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
-            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
-        </omni>
-        <omni id="flameLight6" enabled="1">
-            <location x="2" y="4.5" z="-4.7" w="1.0" />
-            <ambient r="0.6" g="0.4" b="0.2" a="1.0" />
-            <diffuse r="0.6" g="0.5" b="0.2" a="1.0" />
-            <specular r="0.6" g="0.5" b="0.2" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
-        </omni>
-        <spot id="Mage_spot" enabled="0" angle="30" exponent="200">
-            <location x="0" y="7" z="0" w="1" />
-            <target x="0" y="-45" z="0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1" />
-            <diffuse r="0.6" g="0.6" b="0.6" a="1" />
-            <specular r="0.8" g="0.8" b="0.8" a="1" />
-            <attenuation constant="0" linear="1" quadratic="0" />
-        </spot>
-        <spot id="pepe_spot" enabled="0" angle="20" exponent="200">
-            <location x="7" y="7.5" z="0" w="1" />
-            <target x="20" y="-50" z="0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1" />
-            <diffuse r="0.8" g="0.8" b="0.8" a="1" />
-            <specular r="0.8" g="0.8" b="0.8" a="1" />
-            <attenuation constant="1" linear="0" quadratic="0" />
-        </spot>
     </lights>
 
     <textures>
@@ -103,9 +44,25 @@
         <texture id="fire" file="scenes/images/fire.jpg"/>
         <texture id="pepe_painting" file="scenes/images/pepe_painting.jpg"/>
         <texture id="dead_grass" file="scenes/images/dead_grass.jpg"/>
+        <texture id="playerTexture1" file="scenes/images/marble1.jpg" />
+        <texture id="playerTexture2" file="scenes/images/marble2.jpg" />
     </textures>
 
     <materials>
+        <material id="playerMaterial1" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.2" b="0.1" a="1.0" />
+            <diffuse r="0.25" g="0.5" b="0.25" a="1.0" />
+            <specular r="0.5" g="1" b="0.5" a="1.0" />
+        </material>
+            
+        <material id="playerMaterial2" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.2" b="0.1" a="1.0" />
+            <diffuse r="0.25" g="0.5" b="0.25" a="1.0" />
+            <specular r="0.5" g="1" b="0.5" a="1.0" />
+        </material>
+
         <material id="circleMat1" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.1" g="0.2" b="0.1" a="1.0" />
@@ -239,10 +196,28 @@
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
     </materials>
-
+    
+    <shaders>
+        <shader id="pickingShader" vert="basic.vert" frag="basic.frag">
+        </shader>
+        <shader id="changeShader" vert="basic.vert" frag="basic.frag">
+        </shader>
+        <shader id="connectionShader1" vert="basic.vert" frag="basic.frag">
+        </shader>
+        <shader id="connectionShader2" vert="basic.vert" frag="basic.frag">
+        </shader>
+        <shader id="baseShader1" vert="basic.vert" frag="basic.frag">
+        </shader>
+        <shader id="baseShader2" vert="basic.vert" frag="basic.frag">
+        </shader>
+    </shaders>
+    
     <transformations>
         <transformation id="Default">
             <scale x="1" y="1" z="1" />
+        </transformation>
+        <transformation id="BoardTransformation">
+            <rotate axis="x" angle="-90" />
         </transformation>
         <transformation id="GlyphTriangleTransform">
             <rotate axis="z" angle="120" />
@@ -254,6 +229,67 @@
     </transformations>
 
     <animations>
+        <linearAnimation id="baseAnimation" >
+            <keyframe instant="1">
+                <translate x="1" y="1" z="1" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </linearAnimation>
+        <smoothAnimation id="playAnimation" loop="normal">
+            <keyframe instant="0">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="0">
+                <translate x="0.3" y="5" z="0.3 " />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="0">
+                <translate x="0.7" y="5" z="0.7" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="1" y="0" z="1" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </smoothAnimation>
+        <smoothAnimation id="playAnimationTest" loop="normal">
+                <keyframe instant="1">
+                    <translate x="0" y="0" z="0" />
+                    <rotate angle_x="0" angle_y="0" angle_z="0" />
+                    <scale x="1" y="1" z="1" /> 
+                </keyframe>
+                <keyframe instant="1">
+                    <translate x="0" y="0" z="0" />
+                    <rotate angle_x="0" angle_y="0" angle_z="0" />
+                    <scale x="1" y="1" z="1" />
+                </keyframe>
+                <keyframe instant="1">
+                    <translate x="0" y="0" z="0" />
+                    <rotate angle_x="0" angle_y="0" angle_z="0" />
+                    <scale x="1" y="1" z="1" />
+                </keyframe>
+            <keyframe instant="5">
+                <translate x="2" y="10" z="10" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="5">
+                <translate x="8" y="10" z="10" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="10">
+                <translate x="10" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </smoothAnimation>
         <smoothAnimation id="smoothTest" loop="normal">
             <keyframe instant="0">
                 <translate x="0" y="-0.66" z="0" />
@@ -632,9 +668,16 @@
         </primitive>
 
         <primitive id="board">
-            <board base="object1" transformation="Default"/>
+            <board base="triangle" transformation="Default" shader="pickingShader"/>
         </primitive>
 
+        <primitive id="piece">
+            <piece/>
+        </primitive>
+        
+        <primitive id="connection">
+            <connection/>
+        </primitive>
     </primitives>
 
     <components>
@@ -2785,7 +2828,7 @@
         
         <component id="pickingtest">
             <transformation>
-                <rotate axis="x" angle="-90" />
+                <transformationref id="BoardTransformation" />
             </transformation>
             <materials>
                 <material id="FloorMat" />
@@ -2793,6 +2836,33 @@
             <texture id="bank" />
             <children>
                 <primitiveref id="board" />
+            </children>
+        </component>
+        
+        <component id="piecetest">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <animationref id="playAnimationTest" />
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="bank" />
+            <children>
+                <primitiveref id="piece" />
+            </children>
+        </component>
+        
+        <component id="conntest">
+            <transformation>
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="bank" />
+            <children>
+                <primitiveref id="connection" />
             </children>
         </component>
     </components>

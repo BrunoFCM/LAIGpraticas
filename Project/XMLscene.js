@@ -21,6 +21,10 @@ class XMLscene extends CGFscene {
 
         this.inputAllowed = false;
         this.inputEnabled = false;
+
+        this.setPieces = [];
+        this.unhandledPieces = [];
+        this.connections = [];
     }
 
     /**
@@ -169,6 +173,21 @@ class XMLscene extends CGFscene {
 
         this.graph.updateAnimations(this.currentTime);
         this.securityCamera.update(this.currentTime);
+        
+        let objects = this.setPieces;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].update(this.currentTime);
+        }
+        
+        objects = this.connections;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].update(this.currentTime);
+        }
+        
+        objects = this.unhandledPieces;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].update(this.currentTime);
+        }
     }
 
     /**
@@ -199,7 +218,24 @@ class XMLscene extends CGFscene {
 				this.pickResults.splice(0, this.pickResults.length);
 			}
 		}
-	}
+    }
+
+    getUnhandledPiece(){
+        let piece = this.unhandledPieces.pop();
+        this.setPieces.push(piece);
+        return piece;
+    }
+
+    getConnectionAt(x,y,z){
+        for(let i = 0; i < this.connections; ++i){
+            let position = this.connections[i];
+            if(position[0] == x && position[1] == y && position[2] == z){
+                return this.connections[i];
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Displays the scene
@@ -229,6 +265,29 @@ class XMLscene extends CGFscene {
         this.securityCamera.display();
         this.rttTexture.unbind(0);
         this.gl.enable(this.gl.DEPTH_TEST);
+    }
+
+    //TODO comments
+    renderBoardObjects(){
+        this.pushMatrix();
+        //TODO base transformation
+
+        let objects = this.setPieces;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].display();
+        }
+        
+        objects = this.connections;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].display();
+        }
+        
+        objects = this.unhandledPieces;
+        for(let i = 0; i < objects.length; ++i){
+            objects[i].display();
+        }
+
+        this.popMatrix();
     }
 
     /**
@@ -276,6 +335,8 @@ class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
+
+            this.renderBoardObjects();
         }
 
 

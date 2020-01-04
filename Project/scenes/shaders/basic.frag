@@ -6,6 +6,7 @@ varying vec2 vTextureCoord;
 
 uniform sampler2D uSampler;
 uniform float timeFactor;
+uniform float startingInstant;
 
 void main() {
     gl_FragColor = texture2D(uSampler, vTextureCoord);

@@ -39,6 +39,8 @@ class MyBoard extends CGFobject {
                 this.scene.multMatrix(this.baseTransformation[transform]);
             }
 
+			this.pickingShader.apply();
+
             for(let i = 0; i < 64; ++i){
                 this.scene.pushMatrix();
                 this.scene.translate(-Math.floor(i / 8) + 3.5, -(i % 8) + 3.5, 0);
@@ -48,6 +50,9 @@ class MyBoard extends CGFobject {
 
                 this.scene.popMatrix();
             }
+
+            this.scene.setActiveShader(this.scene.defaultShader);
+
             this.scene.popMatrix();
         }
     }

@@ -7,10 +7,11 @@ var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
-var TRANSFORMATIONS_INDEX = 6;
-var ANIMATIONS_INDEX = 7;
-var PRIMITIVES_INDEX = 8;
-var COMPONENTS_INDEX = 9;
+var SHADERS_INDEX = 6;
+var TRANSFORMATIONS_INDEX = 7;
+var ANIMATIONS_INDEX = 8;
+var PRIMITIVES_INDEX = 9;
+var COMPONENTS_INDEX = 10;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -65,6 +66,7 @@ class MySceneGraph {
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
+        this.game.ready();
     }
 
     /**
@@ -157,6 +159,18 @@ class MySceneGraph {
 
             //Parse materials block
             if ((error = this.parseMaterials(nodes[index])) != null)
+                return error;
+        }
+        
+        // <shaders>
+        if ((index = nodeNames.indexOf("shaders")) == -1)
+            return "tag <shaders> missing";
+        else {
+            if (index != SHADERS_INDEX)
+                this.onXMLMinorError("tag <shaders> out of order");
+
+            //Parse shaders block
+            if ((error = this.parseShaders(nodes[index])) != null)
                 return error;
         }
 
@@ -1017,8 +1031,9 @@ class MySceneGraph {
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
                     grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'plane' && 
                     grandChildren[0].nodeName != 'patch' && grandChildren[0].nodeName != 'cylinder2' &&
-                    grandChildren[0].nodeName != 'obj' && grandChildren[0].nodeName != 'board')) {
-                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, obj or board)";
+                    grandChildren[0].nodeName != 'obj' && grandChildren[0].nodeName != 'board'  &&
+                    grandChildren[0].nodeName != 'piece' && grandChildren[0].nodeName != 'connection')) {
+                return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere, torus, plane, patch, cylinder2, obj, board, circle, piece or connection)";
             }
 
             // Specifications for the current primitive.
@@ -1259,7 +1274,7 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = obj;
             }
-            else if (primitiveType == 'board'){//TODO Shaders
+            else if (primitiveType == 'board'){
                 let basePrimitiveName = this.reader.getString(grandChildren[0], 'base');
                 if(basePrimitiveName == null || basePrimitiveName == undefined){
                     return "Unable to read the base primitive of the board";
@@ -1280,14 +1295,104 @@ class MySceneGraph {
                     return "Invalid board base transformation <" + baseTransformationName + ">";
                 }
                 
-                let board = new MyBoard(this.scene, basePrimitive, baseTransformation, undefined);
+                let pickingShaderName = this.reader.getString(grandChildren[0], 'shader');
+                if(pickingShaderName == null || pickingShaderName == undefined){
+                    return "Unable to read the picking Shader of the board";
+                }
+
+                let pickingShaderAttributes = this.shaders[pickingShaderName];
+                if(pickingShaderAttributes == null || pickingShaderAttributes == undefined){
+                    return "Invalid picking Shader <" + pickingShaderName + ">";
+                }
+                let pickingShader = new MyShader(this.scene, pickingShaderAttributes);
+                
+                let board = new MyBoard(this.scene, basePrimitive, baseTransformation, pickingShader);
 
                 this.primitives[primitiveId] = board;
+            }
+            else if (primitiveType == 'piece'){                
+                let piece = new MyDefaultPiece(this.scene);
+
+                this.primitives[primitiveId] = piece;
+            }
+            else if (primitiveType == 'connection'){                
+                let connection = new MyDefaultConnection(this.scene);
+
+                this.primitives[primitiveId] = connection;
             }
         }
 
         this.log("Parsed primitives");
         return null;
+    }
+
+    //TODO comments
+    parseShaders(shadersNode){
+        let children = shadersNode.children;
+
+        this.shaders = {};
+
+        for(let i = 0; i < children.length; ++i){
+
+            if (children[i].nodeName != "shader") {
+                this.onXMLMinorError("unexpected tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current shader.
+            let shaderID = this.reader.getString(children[i], 'id');
+            if (shaderID == null || shaderID == undefined)
+                return "no ID defined for shaderID";
+
+            // Checks for repeated IDs.
+            if (this.shaders[shaderID] != null && this.shaders[shaderID] != undefined)
+                return "ID must be unique for each shader (conflict: ID = " + shaderID + ")";
+            
+            // Get vertex component of the current shader.
+            let vert = this.reader.getString(children[i], 'vert');
+            if (vert == null)
+                return "no vertex component ID defined for shaderID";
+                
+            // Get fragment component of the current shader.
+            let frag = this.reader.getString(children[i], 'frag');
+            if (frag == null)
+                return "no fragment component ID defined for shaderID";
+
+            let textures = {};
+
+            let grandChildren = children[i].children;
+            for(let j = 0; j < grandChildren.length; ++j){
+                if (grandChildren[j].nodeName != "shader") {
+                    this.onXMLMinorError("unexpected tag <" + grandChildren[j].nodeName + ">");
+                    continue;
+                }
+
+                let bindNumber = this.reader.getfloat(grandChildren[j], 'bind');
+
+                if(textures[bindNumber]){
+                    this.onXMLMinorError("Repeated bind number in <" + shaderID + ">");
+                    continue;
+                }
+
+                let textureId = this.reader.getString(grandChildren[j], 'texture');
+                let texture = this.textures[textureId]; 
+                
+                if(texture == undefined){
+                    this.onXMLMinorError("The texture <" + textureId + "> could not be found in <" + shaderID + ">");
+                    continue;
+                }
+
+                textures[bindNumber] = texture;
+            }
+
+            this.shaders[shaderID] = {
+                                        vert: vert,
+                                        frag: frag,
+                                        textures: textures
+                                    };
+        }
+
+        console.log("Parsed shaders");
     }
 
     /**
