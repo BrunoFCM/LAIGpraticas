@@ -221,7 +221,7 @@ class XMLscene extends CGFscene {
     }
 
     getUnhandledPiece(){
-        let piece = this.unhandledPieces.pop();
+        let piece = this.unhandledPieces.shift();
         this.setPieces.push(piece);
         return piece;
     }

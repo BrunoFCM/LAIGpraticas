@@ -16,7 +16,6 @@ class MyDefaultPiece extends CGFobject {
         this.edgeLength = 1 / (1 + Math.sqrt(2));
         this.circleRadius = this.edgeLength / 2 * Math.sqrt(4 + 2 * Math.sqrt(2));
         this.mediumDiagonal = this.edgeLength * (1 + Math.sqrt(2));
-        console.log(this.edgeLength,this.circleRadius, this.mediumDiagonal);
         this.initObjects();
     }
     

@@ -84,11 +84,8 @@ simulateFollowingPaths(Depth, Turns, BoardState, [_|AlternativePlays]):-
 
 /*------------------------------------------------------------------------------------------------------*/
 
-getAIinput(-1, _, [BoardPieces,_], Input):-
-    findAllEmpty(BoardPieces, PossiblePlays),
-    subtractRandomIndex(PossiblePlays, Input, _).
-
 getAIinput(Depth, Turns, BoardState, Input):-
+    Depth >= 0,
     simulatePaths(Depth, Turns, BoardState, Input).
 
 getAIinput(_, _, [BoardPieces,_], Input):-

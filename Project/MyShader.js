@@ -6,14 +6,27 @@
  */
 //TODO comments
 class MyShader {
-	constructor(scene, shaderAttributes, startingInstant) {
+	constructor(scene, shaderAttributes, startingInstant, duration) {
         this.scene = scene;
 
         this.shader = new CGFshader(this.scene.gl, "scenes/shaders/"+shaderAttributes.vert, "scenes/shaders/"+shaderAttributes.frag);
         this.textures = shaderAttributes.textures;
 
         this.startingInstant = 0 || startingInstant;
-        this.shader.setUniformsValues({ startingInstant: this.startingInstant});
+        this.duration = duration;
+        this.shader.setUniformsValues({ startingInstant: this.startingInstant,
+                                        duration: this.duration});
+        
+        let texturesNumber = 0;
+        for(let key in this.textures){
+            texturesNumber++;
+        }
+        if(texturesNumber >= 1){
+            this.shader.setUniformsValues({ uSampler2: 1});
+        }
+        if(texturesNumber == 2){
+            this.shader.setUniformsValues({ uSampler3: 2});
+        }
     }
 
 	/**

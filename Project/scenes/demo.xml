@@ -198,9 +198,13 @@
     </materials>
     
     <shaders>
-        <shader id="pickingShader" vert="basic.vert" frag="basic.frag">
+        <shader id="pickingShader" vert="basic.vert" frag="fullTransparency.frag">
         </shader>
-        <shader id="changeShader" vert="basic.vert" frag="basic.frag">
+        <shader id="changeShader1" vert="basic.vert" frag="change.frag">
+            <sampler bind="1" texture="playerTexture1" />
+        </shader>
+        <shader id="changeShader2" vert="basic.vert" frag="change.frag">
+            <sampler bind="1" texture="playerTexture2" />
         </shader>
         <shader id="connectionShader1" vert="basic.vert" frag="basic.frag">
         </shader>
@@ -229,6 +233,18 @@
     </transformations>
 
     <animations>
+        <linearAnimation id="connectionAnimation" >
+            <keyframe instant="0">
+                <translate x="1" y="1" z="1" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="0.01" y="0.01" z="0.01" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="1" y="1" z="1" />
+                <rotate angle_x="0" angle_y="1080" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </linearAnimation>
         <linearAnimation id="baseAnimation" >
             <keyframe instant="1">
                 <translate x="1" y="1" z="1" />
@@ -244,17 +260,17 @@
             </keyframe>
             <keyframe instant="0">
                 <translate x="0.3" y="5" z="0.3 " />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="60" angle_z="0" />
                 <scale x="1" y="1" z="1" /> 
             </keyframe>
             <keyframe instant="0">
                 <translate x="0.7" y="5" z="0.7" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="300" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
             <keyframe instant="1">
                 <translate x="1" y="0" z="1" />
-                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <rotate angle_x="0" angle_y="360" angle_z="0" />
                 <scale x="1" y="1" z="1" />
             </keyframe>
         </smoothAnimation>

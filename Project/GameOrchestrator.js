@@ -15,7 +15,7 @@ class GameOrchestrator {
         
         this.baseState = 'Connecting';
         
-        this.playerStates = [0,1]; //0 is human, -1 is random AI, anything above 0 is a "better" AI (keep it under 5, for your cpu's sake)
+        this.playerStates = [0,-1]; 
 
         this.timer = new GameTimer(60,this.timeOut.bind(this));
         this.pieceDispatcher = new PieceDispatcher(this.scene);
@@ -70,12 +70,12 @@ class GameOrchestrator {
             this.gameState.CurrentPlayer = 1;
         }
 
-        let playerIndex = this.gameState.CurrentPlayer - 1;
-        let numberOfPieces = this.gameState.Turns[playerIndex];
-
-        let pieces = this.pieceDispatcher.dispatchPieces(this.gameState.CurrentPlayer, numberOfPieces);
-        
-        this.scene.unhandledPieces.push(...pieces);
+        if(this.scene.unhandledPieces.length == 0){
+            let playerIndex = this.gameState.CurrentPlayer - 1;
+            let numberOfPieces = this.gameState.Turns[playerIndex];
+            let pieces = this.pieceDispatcher.dispatchPieces(this.gameState.CurrentPlayer, numberOfPieces);
+            this.scene.unhandledPieces.push(...pieces);
+        }
         
         setTimeout(this.doPlayerTurn.bind(this), 1000);
     }
@@ -151,7 +151,7 @@ class GameOrchestrator {
                 let location = [];
                 location[0] = 3 - connectionsCoordinates[i][1];
                 
-                location[1] = 1;
+                location[1] = 0;
                 
                 location[2] = connectionsCoordinates[i][0] - 3;
 

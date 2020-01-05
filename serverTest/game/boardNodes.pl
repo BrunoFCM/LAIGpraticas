@@ -118,23 +118,23 @@ getDiagonals(GameState, Player, Point, Diagonals):-
 /*------------------------------------------------------------------------------------------------------*/
 
 findAllEmpty(BoardPieces, Points):-
-    findAllEmpty(BoardPieces, 8, 8, Points), !.
+    findAllEmpty(BoardPieces, 1, 1, Points), !.
 
-findAllEmpty(_, _, 0, []).
+findAllEmpty(_, _, 9, []).
 
 findAllEmpty([Row|BoardPieces], X, Y, Points):-
     findAllEmpty(Row, X, XValues),
     makePointList(XValues, Y, RowPoints),
-    Yn is Y - 1,
+    Yn is Y + 1,
     findAllEmpty(BoardPieces, X, Yn, ExtraPoints),
     append(RowPoints, ExtraPoints, Points).
 
-findAllEmpty(_, 0, []).
+findAllEmpty(_, 9, []).
 
 findAllEmpty([0|Row], X, [X|XValues]):-
-    Xn is X - 1,
+    Xn is X + 1,
     findAllEmpty(Row, Xn, XValues).
 
 findAllEmpty([_|Row], X, XValues):-
-    Xn is X - 1,
+    Xn is X + 1,
     findAllEmpty(Row, Xn, XValues).
