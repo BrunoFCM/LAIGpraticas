@@ -35,6 +35,15 @@ class MySceneGraph {
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
+        
+        this.stylesNames = {
+            "base": 0,
+            "extra": 1
+        }
+
+        this.selectedStyle = 0;
+
+        this.styleFiles = ["base.xml","extra.xml"];
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -44,6 +53,11 @@ class MySceneGraph {
          * After the file is read, the reader calls onXMLReady on this object.
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
+        this.reader.open('scenes/' + filename, this);
+    }
+
+    onSelectedStyleChanged(v){
+        let filename = this.styleFiles[v];
         this.reader.open('scenes/' + filename, this);
     }
 

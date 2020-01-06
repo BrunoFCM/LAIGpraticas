@@ -27,7 +27,7 @@ class GameTimer {
         this.currentTime -= 1;
         this.DOMelement.innerText = "" + this.currentTime;
         if(this.currentTime == 0){
-            clearInterval(this.interval);
+            this.stopTimer();
             this.timeOut();
         }
     }

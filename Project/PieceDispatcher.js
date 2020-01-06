@@ -11,40 +11,28 @@ class PieceDispatcher {
     }
 
     dispatchPieces(type, amount){
-        let baseObject = this.scene.graph.primitives['piece'];
-
+        let baseObject;
         let material;
-        if(type == 1){
-            material = this.scene.graph.materials['playerMaterial1'];
-        }
-        else{
-            material = this.scene.graph.materials['playerMaterial2'];
-        }
-        
         let texture;
-        if(type == 1){
-            texture = this.scene.graph.textures['playerTexture1'];
-        }
-        else{
-            texture = this.scene.graph.textures['playerTexture2'];
-        }
-
         let baseAnimation;
         let animationObject = this.scene.graph.animations.get('baseAnimation');
-        if(type == 1){
-            baseAnimation = this.buildAnimation(animationObject, [15,0,0], 1);
-        }
-        else{
-            baseAnimation = this.buildAnimation(animationObject, [-15,0,0], 1);
-        }
-
         let shaderAttributes;
+
         if(type == 1){
+            baseObject = this.scene.graph.primitives['piece1'];
+            material = this.scene.graph.materials['playerMaterial1'];
+            texture = this.scene.graph.textures['playerTexture1'];
+            baseAnimation = this.buildAnimation(animationObject, [15,0,0], 1);
             shaderAttributes = this.scene.graph.shaders['baseShader1'];
         }
         else{
+            baseObject = this.scene.graph.primitives['piece2'];
+            material = this.scene.graph.materials['playerMaterial2'];
+            texture = this.scene.graph.textures['playerTexture2'];
+            baseAnimation = this.buildAnimation(animationObject, [-15,0,0], 1);
             shaderAttributes = this.scene.graph.shaders['baseShader2'];
         }
+
         let shader = new MyShader(this.scene, shaderAttributes);
 
         let out = [];

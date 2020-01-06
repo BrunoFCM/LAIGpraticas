@@ -3,8 +3,8 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
-            <from x="-10" y="7" z="0" />
-            <to x="0" y="0" z="0" />
+            <from x="-6" y="10" z="0.01" />
+            <to x="0.01" y="-5" z="0.01" />
         </perspective>
         
         <perspective id="freeCamera" near="0.01" far="500" angle="45">
@@ -19,18 +19,27 @@
     </globals>
 
     <lights>
-        <omni id="flameLight1" enabled="1">
-            <location x="-7" y="4.5" z="-4.7" w="1.0" />
+        <omni id="Light1" enabled="1">
+            <location x="0" y="6" z="0" w="1.0" />
             <ambient r="1" g="1" b="1" a="1.0" />
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="1" g="1" b="1" a="1.0" />
-            <attenuation constant="0" linear="1" quadratic="0" />  
+            <attenuation constant="1" linear="0" quadratic="0" />  
         </omni>
+        <spot id="Board_spot" enabled="0" angle="30" exponent="200">
+            <location x="0" y="7" z="0" w="1" />
+            <target x="0" y="-45" z="0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1" />
+            <diffuse r="1" g="1" b="1" a="1" />
+            <specular r="0.8" g="0.8" b="0.8" a="1" />
+            <attenuation constant="0" linear="1" quadratic="0" />
+        </spot>
     </lights>
 
     <textures>
         <texture id="playerTexture1" file="scenes/images/marble1.jpg" />
         <texture id="playerTexture2" file="scenes/images/marble2.jpg" />
+        <texture id="boardTexture" file="scenes/images/boardtex.jpg" />
     </textures>
 
     <materials>
@@ -46,6 +55,13 @@
             <ambient r="0.1" g="0.2" b="0.1" a="1.0" />
             <diffuse r="0.25" g="0.5" b="0.25" a="1.0" />
             <specular r="0.5" g="1" b="0.5" a="1.0" />
+        </material>
+
+        <material id="BoardMaterial" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.6" g="0.6" b="0.6" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0.6" g="0.7" b="0.6" a="1.0" />
         </material>
     </materials>
     
@@ -73,11 +89,12 @@
             <scale x="1" y="1" z="1" />
         </transformation>
         <transformation id="BoardTransformation">
-            <scale x="5" y="5" z="5" />
+            <scale x="8" y="8" z="8" />
             <rotate axis="x" angle="-90" />
         </transformation>
         <transformation id="PickingTransformation">
-            <scale x="0.2" y="0.2" z="0.2" />
+            <scale x="0.125" y="0.125" z="0.125" />
+            <translate x="0" y="0" z="0.01" />
         </transformation>
     </transformations>
 
@@ -269,7 +286,11 @@
             <board base="demoRectangle" transformation="PickingTransformation" shader="pickingShader"/>
         </primitive>
 
-        <primitive id="piece">
+        <primitive id="piece1">
+            <piece/>
+        </primitive>
+        
+        <primitive id="piece2">
             <piece/>
         </primitive>
         
@@ -284,9 +305,9 @@
                 <transformationref id="BoardTransformation" />
             </transformation>
             <materials>
-                <material id="playerMaterial1" />
+                <material id="BoardMaterial" />
             </materials>
-            <texture id="playerTexture2" />
+            <texture id="boardTexture" />
             <children>
                 <primitiveref id="board" />
             </children>

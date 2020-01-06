@@ -68,6 +68,7 @@ class MyInterface extends CGFinterface {
      * Updates dat.gui controllers
      */
     updateGUI() {
+
         if(this.game == undefined){
             this.game = new GameOrchestrator(this, this.scene);
             this.movie = new MovieOrchestrator(this.game, this.scene);
@@ -88,10 +89,6 @@ class MyInterface extends CGFinterface {
             this.gui.add(this.scene.graph.lights[key], '0').name(key); 
             ++lightIndex;
         }
-    }
-
-    startMovie(){
-
     }
 
     initDOMgui(){
