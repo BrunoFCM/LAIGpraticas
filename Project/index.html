@@ -21,7 +21,7 @@ canvas {
 div#Timer {
     position: fixed;
     z-index: 1;
-    box-shadow: 2px 2px 2px 2px black;
+    text-shadow: 2px 2px black, -2px -2px black, 2px -2px black, -2px 2px black;
     color: white;
     right:50%;
     top:0%;
@@ -44,14 +44,17 @@ div#results{
     z-index: 2;
     right: 50%;
     top: 50%;
+    transform: translate(+50%, -50%);
     font-size: 5em;
     color: gold;
-    box-shadow: 3px 3px 3px 3px black;
+    text-shadow: 3px 3px black, -3px -3px black, 3px -3px black, -3px 3px black;
 }
 </style>
 </head>
 <body>
 <div id="Timer">
+</div>
+<div id="results">
 </div>
 <div id="undo">
     <img src="scenes/images/undo.png" alt="">

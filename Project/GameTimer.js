@@ -19,6 +19,7 @@ class GameTimer {
 
     startTimer(){
         this.currentTime = this.timeLimit;
+        this.DOMelement.innerText = "" + this.currentTime;
         this.interval = setInterval(this.decreaseTimer.bind(this), 1000);
     }
 

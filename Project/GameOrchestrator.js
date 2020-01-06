@@ -25,6 +25,22 @@ class GameOrchestrator {
         this.timer = new GameTimer(10,this.timeOut.bind(this));
         this.pieceDispatcher = new PieceDispatcher(this.scene);
         this.logicClient = new PrologClient(this.connected.bind(this));
+
+        this.resultsElement = document.getElementById("results");
+        
+        this.followingFunctionTimeout;
+        this.auxiliaryTimeout;
+    }
+
+    stop(){
+        this.timer.stopTimer();
+        this.logicClient.cancelRequests();
+        if(this.followingFunctionTimeout){
+            clearTimeout(this.followingFunctionTimeout);
+        }
+        if(this.auxiliaryTimeout){
+            clearTimeout(this.auxiliaryTimeout);
+        }
     }
 
     connected(){
@@ -41,6 +57,8 @@ class GameOrchestrator {
     }
 
     startGame(){
+        this.movie.stop();
+        this.resultsElement.innerText = "";
         this.sequence = [];
         this.gameState = {
                             BoardState: { 
@@ -84,13 +102,15 @@ class GameOrchestrator {
         }
 
         if(this.scene.unhandledPieces.length == 0){
+            this.scene.rotateCamera(this.gameState.CurrentPlayer);
+
             let playerIndex = this.gameState.CurrentPlayer - 1;
             let numberOfPieces = this.gameState.Turns[playerIndex];
             let pieces = this.pieceDispatcher.dispatchPieces(this.gameState.CurrentPlayer, numberOfPieces);
             this.scene.unhandledPieces.push(...pieces);
         }
         
-        setTimeout(this.doPlayerTurn.bind(this), 1000);
+        this.followingFunctionTimeout = setTimeout(this.doPlayerTurn.bind(this), 1000);
     }
 
     doPlayerTurn(){
@@ -182,12 +202,11 @@ class GameOrchestrator {
                         changed: connections.changed,
                         previousState: JSON.parse(JSON.stringify(this.gameState))};
             this.sequence.push(move);
-            console.log(this.sequence);
 
             let playerIndex = this.gameState.CurrentPlayer - 1;
             if(responseObject[2][playerIndex] == 0){
                 this.pieceDispatcher.removePieces(this.scene.unhandledPieces);
-                setTimeout(function(){this.scene.unhandledPieces = [];}.bind(this), 1000);
+                this.auxiliaryTimeout = setTimeout(function(){this.scene.unhandledPieces = [];}.bind(this), 1000);
             }
 
             this.gameState.BoardState.Pieces = responseObject[0];
@@ -215,15 +234,15 @@ class GameOrchestrator {
         this.scene.inputAllowed = false;
         this.undoAllowed = false;
         if(this.gameState.Turns[0] == 0){
-            gameOver(0);
+            this.gameOver(1);
         }
         else{
-            gameOver(1);
+            this.gameOver(2);
         }
     }
 
     gameOver(Winner){
-        console.log(Winner, " won");
+        this.resultsElement.innerText = "Player " + Winner + " won!";
     }
 
     undo(){
@@ -231,6 +250,7 @@ class GameOrchestrator {
             let lastMove = this.sequence.pop();
             console.log(lastMove);
             if(lastMove){
+                this.timer.stopTimer();
                 this.logicClient.cancelRequests();
                 this.scene.unhandledPieces.length = 0;
                 this.scene.removeObjects(lastMove.added);

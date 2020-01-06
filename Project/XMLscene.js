@@ -26,7 +26,10 @@ class XMLscene extends CGFscene {
         this.unhandledPieces = [];
         this.connections = [];
 
-        this.cameraRotateStart = 0;
+        this.cameraAngle = 0;
+        this.targetCameraAngle = 0;
+
+        this.rotationSpeed = Math.PI / 1000;
 
     }
 
@@ -172,6 +175,33 @@ class XMLscene extends CGFscene {
             this.startingInstant = t;
         }
 
+        if(this.cameraAngle != this.targetCameraAngle){
+            let deltaTime = t - this.startingInstant - this.currentTime;
+
+            if(this.cameraAngle < this.targetCameraAngle){
+                if(this.cameraAngle + this.rotationSpeed * deltaTime < this.targetCameraAngle){
+                    this.graph.views[0].orbit(CGFcameraAxis.Y, this.rotationSpeed * deltaTime);
+                    this.cameraAngle += this.rotationSpeed * deltaTime;
+                }
+                else{
+                    let angleDelta = this.targetCameraAngle - this.cameraAngle;
+                    this.graph.views[0].orbit(CGFcameraAxis.Y, angleDelta);
+                    this.cameraAngle = this.targetCameraAngle;
+                }
+            }
+            else{
+                if(this.cameraAngle - this.rotationSpeed * deltaTime > this.targetCameraAngle){
+                    this.graph.views[0].orbit(CGFcameraAxis.Y, this.rotationSpeed * deltaTime);
+                    this.cameraAngle -= this.rotationSpeed * deltaTime;
+                }
+                else{
+                    let angleDelta = this.cameraAngle - this.targetCameraAngle;
+                    this.graph.views[0].orbit(CGFcameraAxis.Y, angleDelta);
+                    this.cameraAngle = this.targetCameraAngle;
+                }
+            }
+        }
+        
         this.currentTime = t - this.startingInstant;
 
         this.graph.updateAnimations(this.currentTime);
@@ -265,6 +295,15 @@ class XMLscene extends CGFscene {
         this.connections.length = 0;
     }
 
+    rotateCamera(player){
+        if(player == 1){
+            this.targetCameraAngle = 0;
+        }
+        else{
+            this.targetCameraAngle = Math.PI;
+        }
+    }
+
     /**
      * Displays the scene
      */
@@ -276,23 +315,25 @@ class XMLscene extends CGFscene {
         this.clearPickRegistration();
         
         let tempCamera = this.camera;
-
+/*
         this.rttTexture.attachToFrameBuffer();
         this.render(this.rttCamera);
-     
-        this.interface.setActiveCamera(tempCamera);
-        this.rttTexture.detachFromFrameBuffer();
+     */
+        if(tempCamera != this.graph.views[0]){
+            this.interface.setActiveCamera(tempCamera);
+        }
+        //this.rttTexture.detachFromFrameBuffer();
 
         if(this.inputAllowed){
             this.inputEnabled = true;
         }
         this.render(tempCamera);
-
+/*
         this.gl.disable(this.gl.DEPTH_TEST);
         this.rttTexture.bind(0);
         this.securityCamera.display();
         this.rttTexture.unbind(0);
-        this.gl.enable(this.gl.DEPTH_TEST);
+        this.gl.enable(this.gl.DEPTH_TEST);*/
     }
 
     //TODO comments
