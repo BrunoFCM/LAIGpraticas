@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="pickingtest" axis_length="5"/>
+    <scene root="scene_test" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
@@ -20,7 +20,7 @@
 
     <lights>
         <omni id="flameLight1" enabled="1">
-            <location x="-7" y="4.5" z="-4.7" w="1.0" />
+            <location x="0" y="3" z="0" w="1.0" />
             <ambient r="1" g="1" b="1" a="1.0" />
             <diffuse r="1" g="1" b="1" a="1.0" />
             <specular r="1" g="1" b="1" a="1.0" />
@@ -29,9 +29,7 @@
     </lights>
 
     <textures>
-        <texture id="vidral" file="scenes/images/vidral.jpg" />
         <texture id="bank" file="scenes/images/bank.jpg" />
-        <texture id="trunk" file="scenes/images/trunk-image.jpg" />
         <texture id="crystal" file="scenes/images/crystal.jpg" />
         <texture id="satin" file="scenes/images/satin.jpg" />
         <texture id="runes" file="scenes/images/runes.jpg" />
@@ -39,8 +37,6 @@
         <texture id="church_wall" file="scenes/images/church_wall.jpg"/>
         <texture id="granite" file="scenes/images/granite.jpg"/>
         <texture id="wood" file="scenes/images/wood.jpg"/>
-        <texture id="wood2" file="scenes/images/wood2.jpg"/>
-        <texture id="wood3" file="scenes/images/wood3.jpg"/>
         <texture id="fire" file="scenes/images/fire.jpg"/>
         <texture id="pepe_painting" file="scenes/images/pepe_painting.jpg"/>
         <texture id="dead_grass" file="scenes/images/dead_grass.jpg"/>
@@ -195,6 +191,56 @@
             <diffuse r="0.0" g="0.0" b="0.0" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
+
+        <material id="OceanMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0" g="0" b="0.1" a="1.0" />
+            <diffuse r="0" g="0.1" b="0.172" a="1.0" />
+            <specular r="0" g="0" b="0.172" a="1.0" />
+        </material>
+
+        <material id="WoodMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.3" g="0.2" b="0.1" a="1.0" />
+            <diffuse r="0.3" g="0.2" b="0.1" a="1.0" />
+            <specular r="0" g="0" b="0" a="1.0" />
+        </material>
+
+        <material id="SandCastleMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.6" b="0.2" a="1.0" />
+            <diffuse r="0.7" g="0.6" b="0.2" a="1.0" />
+            <specular r="0.7" g="0.6" b="0.2" a="1.0" />
+        </material>
+
+        <material id="CastleMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
+            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+        </material>
+
+        <material id="IslandMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.8" g="0.7" b="0" a="1.0" />
+            <diffuse r="0.8" g="0.7" b="0" a="1.0" />
+            <specular r="0.8" g="0.7" b="0" />
+        </material>
+
+        <material id="BlackMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" />
+        </material>
+
+        <material id="WhiteMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+            <diffuse r="0.8" g="0.8" b="0.8" a="1.0" />
+            <specular r="0.8" g="0.8" b="0.8" />
+        </material>
+
     </materials>
     
     <shaders>
@@ -701,9 +747,48 @@
             <cylinder2 base="1" top="1" height="1" slices="100" stacks="3" />
         </primitive>
 
-        <primitive id="object1">
+        <!-- <primitive id="object1">
             <obj file="models/male.obj" wireframe="0"/>
+        </primitive> -->
+
+        <primitive id="mesa_base">
+            <obj file="models/mesa_base.obj" wireframe="0"/>
         </primitive>
+
+        <primitive id="mesa_baseP2">
+            <obj file="models/mesa_baseP2.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="base_piece">
+            <obj file="models/peca_base.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="ponte_base">
+            <obj file="models/ponte_base.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="desert_island">
+            <obj file="models/desert_island.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="ponte_madeira">
+            <obj file="models/ponte_madeira.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="ponte_arabe">
+            <obj file="models/ponte_arabe.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="castle_piece">
+            <obj file="models/medieval_castle.obj" wireframe="0"/>
+        </primitive>
+
+        <primitive id="arabian_piece">
+            <obj file="models/arabian_castle.obj" wireframe="0"/>
+        </primitive>
+
+
+
 
         <primitive id="board">
             <board base="triangle" transformation="Default" shader="pickingShader"/>
@@ -2873,7 +2958,7 @@
             </materials>
             <texture id="bank" />
             <children>
-                <primitiveref id="board" />
+                <primitiveref id="mesa_base" />
             </children>
         </component>
         
@@ -2903,5 +2988,188 @@
                 <primitiveref id="connection" />
             </children>
         </component>
+
+
+
+
+
+
+        <component id="mesabase">
+            <transformation>
+                <translate x="-1.875" y="0.1" z="0" />
+            </transformation>
+            <materials>
+                <material id="WoodMat" />
+            </materials>
+            <texture id="wood" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="mesa_base" />
+            </children>
+        </component>
+
+        <component id="mesatopo">
+            <transformation>
+             <translate x="0" y="0.215" z="0" />
+            </transformation>
+            <materials>
+                <material id="OceanMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="mesa_baseP2" />
+            </children>
+        </component>
+
+        <component id="mesa">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <componentref id="mesabase" />
+                <componentref id="mesatopo" />
+            </children>
+        </component>
+
+        <component id="peca_preta">
+            <transformation>
+                <translate x="-4.7" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="BlackMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="base_piece" />
+            </children>
+        </component>
+
+        <component id="peca_branca">
+            <transformation>
+                <translate x="-5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="WhiteMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="base_piece" />
+            </children>
+        </component>
+
+        <component id="ponte_preta">
+            <transformation>
+                <translate x="-4.7" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="BlackMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="ponte_base" />
+            </children>
+        </component>
+
+        <component id="ponte_branca">
+            <transformation>
+                <translate x="-5" y="0" z="0" />
+            </transformation>
+            <materials>
+                <material id="WhiteMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="ponte_base" />
+            </children>
+        </component>
+
+        <component id="peca_castelo">
+            <transformation>
+                <translate x="-5" y="0.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="CastleMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="castle_piece" />
+            </children>
+        </component>
+
+        <component id="peca_arabe">
+            <transformation>
+                <translate x="-5" y="0.5" z="0" />
+            </transformation>
+            <materials>
+                <material id="SandCastleMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="arabian_piece" />
+            </children>
+        </component>
+
+        <component id="ponte_castelo">
+            <transformation>
+                <translate x="-5" y="-1.8" z="0" />
+            </transformation>
+            <materials>
+                <material id="CastleMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="ponte_madeira" />
+            </children>
+        </component>
+
+        <component id="ponte_arabee">
+            <transformation>
+                <translate x="-5" y="-1.8" z="0" />
+            </transformation>
+            <materials>
+                <material id="SandCastleMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="ponte_arabe" />
+            </children>
+        </component>
+
+         <component id="desert_island">
+            <transformation>
+                <translate x="-5" y="0.5" z="1.8" />
+            </transformation>
+            <materials>
+                <material id="IslandMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="desert_island" />
+            </children>
+        </component>
+
+        <component id="scene_test">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="FloorMat" />
+            </materials>
+            <texture id="bank"  length_s="1" length_t="1"/>
+            <children>
+                <componentref id="mesa" />
+                <componentref id="peca_preta" />
+                <componentref id="peca_branca" />
+                <componentref id="ponte_preta" />
+                <componentref id="ponte_branca" />
+                <componentref id="peca_castelo" />
+                <componentref id="peca_arabe" />
+                <componentref id="ponte_castelo" />
+                <componentref id="ponte_arabee" />
+                <componentref id="desert_island" />
+            </children>
+        </component>
+
     </components>
 </lxs>
