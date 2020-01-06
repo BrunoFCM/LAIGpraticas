@@ -70,8 +70,11 @@ class MyInterface extends CGFinterface {
     updateGUI() {
         if(this.game == undefined){
             this.game = new GameOrchestrator(this, this.scene);
+            this.movie = new MovieOrchestrator(this.game, this.scene);
+            this.game.movie = this.movie;
             this.initDOMgui();
             this.gui.add(this.game, 'startGame').name("Start");
+            this.gui.add(this.movie, 'startMovie').name("Movie");
             this.gui.add(this.game.playerStates, '0', this.game.playerStatesNames).onChange(this.game.changePlayer1State.bind(this.game)).name("Player1");
             this.gui.add(this.game.playerStates, '1', this.game.playerStatesNames).onChange(this.game.changePlayer2State.bind(this.game)).name("Player2");
         } 
@@ -85,6 +88,10 @@ class MyInterface extends CGFinterface {
             this.gui.add(this.scene.graph.lights[key], '0').name(key); 
             ++lightIndex;
         }
+    }
+
+    startMovie(){
+
     }
 
     initDOMgui(){
