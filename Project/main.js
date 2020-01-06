@@ -63,10 +63,6 @@ main=function()
 	// create and load graph, and associate it to scene. 
 	// Check console for loading errors
     var myGraph = new MySceneGraph(filename, myScene);
-    
-    
-    let game = new GameOrchestrator(myInterface, myScene);
-    myGraph.game = game;
 	
 	// start
     app.run();

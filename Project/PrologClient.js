@@ -11,6 +11,7 @@ class PrologClient {
     constructor(connected) {
         this.connected = connected;
         this.connect();
+        this.currentRequest;
     }
 
     connect(){
@@ -26,17 +27,22 @@ class PrologClient {
         }
     }
 
+    cancelRequests(){
+        this.currentRequest.onload = function(){console.log("Received a cancelled request response");};
+        this.currentRequest.onerror = function(){console.log("Received a cancelled request response");};
+    }
+
     getPrologRequest(requestString, onSuccess, onError, port)
     {
-        var requestPort = port || 8081
-        var request = new XMLHttpRequest();
-        request.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
+        let requestPort = port || 8081
+        this.currentRequest = new XMLHttpRequest();
+        this.currentRequest.open('GET', 'http://localhost:'+requestPort+'/'+requestString, true);
 
-        request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
-        request.onerror = onError || function(){console.log("Error waiting for response");};
+        this.currentRequest.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
+        this.currentRequest.onerror = onError || function(){console.log("Error waiting for response");};
 
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        request.send();
+        this.currentRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        this.currentRequest.send();
     }
 
     checkPlayerVictory(Player, BoardState, callback){

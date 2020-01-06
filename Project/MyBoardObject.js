@@ -26,9 +26,9 @@ class MyBoardObject extends CGFobject {
     update(t){
     	if(this.baseAnimation){
         	this.baseAnimation.update(t / 1000);
-    	}
-        if(this.shader){
-            this.shaderObject.shader.setUniformsValues({ timeFactor: t / 1000 });
+        }
+        if(this.shaderObject){
+            this.shaderObject.update(t / 1000);
         }
     }
     

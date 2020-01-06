@@ -62,13 +62,20 @@ class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
-
     
     /**
      * @method updateGUI
      * Updates dat.gui controllers
      */
     updateGUI() {
+        if(this.game == undefined){
+            this.game = new GameOrchestrator(this, this.scene);
+            this.initDOMgui();
+            this.gui.add(this.game, 'startGame').name("Start");
+            this.gui.add(this.game.playerStates, '0', this.game.playerStatesNames).onChange(this.game.changePlayer1State.bind(this.game)).name("Player1");
+            this.gui.add(this.game.playerStates, '1', this.game.playerStatesNames).onChange(this.game.changePlayer2State.bind(this.game)).name("Player2");
+        } 
+
         //adding controls dependent on contents read from the xml scene 
         this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
 
@@ -78,5 +85,10 @@ class MyInterface extends CGFinterface {
             this.gui.add(this.scene.graph.lights[key], '0').name(key); 
             ++lightIndex;
         }
+    }
+
+    initDOMgui(){
+        this.undoButton = document.getElementById("undo");
+        this.undoButton.onclick = this.game.undo.bind(this.game);
     }
 }

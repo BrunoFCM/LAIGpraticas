@@ -3,14 +3,14 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.01" far="500" angle="45">
-            <from x="-15" y="5" z="0" />
+            <from x="-10" y="7" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
         
         <perspective id="freeCamera" near="0.01" far="500" angle="45">
-                <from x="-15" y="5" z="0" />
-                <to x="0" y="0" z="0" />
-            </perspective>
+            <from x="-15" y="5" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
     </views>
 
     <globals>
@@ -233,6 +233,28 @@
     </transformations>
 
     <animations>
+        <smoothAnimation id="removeAnimation" loop="normal">
+            <keyframe instant="0">
+                <translate x="0" y="0" z="0" />
+                <rotate angle_x="0" angle_y="0" angle_z="0" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="0">
+                <translate x="0" y="2" z="0" />
+                <rotate angle_x="0" angle_y="60" angle_z="0" />
+                <scale x="1" y="1" z="1" /> 
+            </keyframe>
+            <keyframe instant="0">
+                <translate x="0" y="7" z="0" />
+                <rotate angle_x="0" angle_y="300" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+            <keyframe instant="1">
+                <translate x="0" y="20" z="0" />
+                <rotate angle_x="0" angle_y="1080" angle_z="0" />
+                <scale x="1" y="1" z="1" />
+            </keyframe>
+        </smoothAnimation>
         <linearAnimation id="connectionAnimation" >
             <keyframe instant="0">
                 <translate x="1" y="1" z="1" />
