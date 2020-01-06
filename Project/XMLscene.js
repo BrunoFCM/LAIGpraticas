@@ -25,6 +25,9 @@ class XMLscene extends CGFscene {
         this.setPieces = [];
         this.unhandledPieces = [];
         this.connections = [];
+
+        this.cameraRotateStart = 0;
+
     }
 
     /**
@@ -176,16 +179,19 @@ class XMLscene extends CGFscene {
         
         let objects = this.setPieces;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].update(this.currentTime);
         }
         
         objects = this.connections;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].update(this.currentTime);
         }
         
         objects = this.unhandledPieces;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].update(this.currentTime);
         }
     }
@@ -221,7 +227,7 @@ class XMLscene extends CGFscene {
     }
 
     getUnhandledPiece(){
-        let piece = this.unhandledPieces.pop();
+        let piece = this.unhandledPieces.shift();
         this.setPieces.push(piece);
         return piece;
     }
@@ -235,6 +241,28 @@ class XMLscene extends CGFscene {
         }
 
         return false;
+    }
+
+    removeObjects(objects){
+        for(let i = 0; i < objects.length; ++i){
+            let index = this.setPieces.indexOf(objects[i]);
+            if(index != -1){
+                this.setPieces.splice(index,1);
+                console.log(this.setPieces);
+                continue;
+            }
+
+            index = this.connections.indexOf(objects[i]);
+            if(index != -1){
+                this.connections.splice(index,1);
+            }
+        }
+    }
+
+    reset(){
+        this.setPieces.length = 0;
+        this.unhandledPieces.length = 0;
+        this.connections.length = 0;
     }
 
     /**
@@ -274,16 +302,19 @@ class XMLscene extends CGFscene {
 
         let objects = this.setPieces;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].display();
         }
         
         objects = this.connections;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].display();
         }
         
         objects = this.unhandledPieces;
         for(let i = 0; i < objects.length; ++i){
+            if(objects[i] == undefined){objects.splice(i,1); --i; continue}
             objects[i].display();
         }
 

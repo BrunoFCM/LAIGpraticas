@@ -26,9 +26,9 @@ class MyBoardObject extends CGFobject {
     update(t){
     	if(this.baseAnimation){
         	this.baseAnimation.update(t / 1000);
-    	}
-        if(this.shader){
-            this.shaderObject.shader.setUniformsValues({ timeFactor: t / 1000 });
+        }
+        if(this.shaderObject){
+            this.shaderObject.update(t / 1000);
         }
     }
     
@@ -41,11 +41,11 @@ class MyBoardObject extends CGFobject {
         }
 
         this.scene.pushMatrix();
+
+        this.scene.translate(this.basePosition[0],this.basePosition[1],this.basePosition[2]);
         if(this.baseAnimation){
             this.baseAnimation.apply();
         }
-
-        this.scene.translate(this.basePosition[0],this.basePosition[1],this.basePosition[2]);
         this.scene.rotate(-Math.PI / 2, 1,0,0);
         this.baseObject.display();
         this.scene.popMatrix();

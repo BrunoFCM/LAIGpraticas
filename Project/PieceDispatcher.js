@@ -12,14 +12,6 @@ class PieceDispatcher {
 
     dispatchPieces(type, amount){
         let baseObject = this.scene.graph.primitives['piece'];
-        
-        let basePosition;
-        if(type == 1){
-            basePosition = [-10,0,0];
-        }
-        else{
-            basePosition = [10,0,0];
-        }
 
         let material;
         if(type == 1){
@@ -40,10 +32,10 @@ class PieceDispatcher {
         let baseAnimation;
         let animationObject = this.scene.graph.animations.get('baseAnimation');
         if(type == 1){
-            baseAnimation = this.buildAnimation(animationObject, [5,0,0], 1);
+            baseAnimation = this.buildAnimation(animationObject, [15,0,0], 1);
         }
         else{
-            baseAnimation = this.buildAnimation(animationObject, [-5,0,0], 1);
+            baseAnimation = this.buildAnimation(animationObject, [-15,0,0], 1);
         }
 
         let shaderAttributes;
@@ -53,12 +45,19 @@ class PieceDispatcher {
         else{
             shaderAttributes = this.scene.graph.shaders['baseShader2'];
         }
-        let shader = new MyShader(this.scene, shaderAttributes, this.scene.currentInstant);
+        let shader = new MyShader(this.scene, shaderAttributes);
 
         let out = [];
 
         for(let i = 0; i < amount; ++i){
-            basePosition[1] = i;
+            let basePosition;
+            if(type == 1){
+                basePosition = [-20,0,i];
+            }
+            else{
+                basePosition = [20,0,-i];
+            }
+
             let piece = new MyBoardObject(this.scene, type, baseObject, basePosition, material, texture, baseAnimation, shader);
             out.push(piece);
         }
@@ -107,6 +106,9 @@ class PieceDispatcher {
     }
 
     dispatchConnections(type, connectionsCoordinates){
+        let out = {added: [],
+                    changed: []};
+
         let baseObject = this.scene.graph.primitives['connection'];
 
         let material;
@@ -132,44 +134,63 @@ class PieceDispatcher {
         else{
             shaderAttributes = this.scene.graph.shaders['connectionShader2'];
         }
-        let shader = new MyShader(this.scene, shaderAttributes, this.scene.currentInstant);
-
-        let out = [];
+        let shader = new MyShader(this.scene, shaderAttributes);
 
         for(let i = 0; i < connectionsCoordinates.length; ++i){
             let x = connectionsCoordinates[i][0];
-            let y = connectionsCoordinates[i][1];
+            let y = -1;
             let z = connectionsCoordinates[i][2];
 
             let foundConnection = this.scene.getConnectionAt(x,y,z);
             if(foundConnection){
-                let changeShaderParameters = this.scene.graph.shaders['changeShader'];
+                let changeShaderParameters;
+                if(type == 1){
+                    changeShaderParameters = this.scene.graph.shaders['changeShader2'];;
+                }
+                else{
+                    changeShaderParameters = this.scene.graph.shaders['changeShader1'];
+                }
                 if(changeShaderParameters){
-                    let changeShader = this.buildShader(changeShaderParameters);
+                    let changeShader = this.buildShader(changeShaderParameters,  1);
                     foundConnection.shader = changeShader;
                 }
 
                 let changeAnimationObject = this.scene.graph.animations.get('changeAnimation');
                 if(changeAnimationObject){
-                    let changeAnimation = this.buildAnimation(changeAnimationObject, [x,-1,z], 1);
+                    let changeAnimation = this.buildAnimation(changeAnimationObject, [0,-1,0], 1);
                     foundConnection.basePosition = [x,y,0];
                     foundConnection.baseAnimation = changeAnimation;
                 }
+
+                out.changed.push(foundConnection);
                 
                 continue;
             }
 
-            let basePosition = [x,-1,z];            
+            let basePosition = [x,y,z];            
 
             let animationObject = this.scene.graph.animations.get('connectionAnimation');
-            let baseAnimation = this.buildAnimation(animationObject, [x,y,z], 1);
+            let baseAnimation = this.buildAnimation(animationObject, [0,1,0], 1);
 
-            basePosition[1] = i;
             let connection = new MyBoardObject(this.scene, type, baseObject, basePosition, material, texture, baseAnimation, shader);
-            out.push(connection);
+            out.added.push(connection);
         }
 
         return out;
+    }
+
+    revertConnections(connections){
+        for(let i = 0; i < connections.length; ++i){
+            let oldShaderAttributes;
+            if(connections[i].type == 1){
+                oldShaderAttributes = this.scene.graph.shaders['connectionShader1'];
+            }
+            else{
+                oldShaderAttributes = this.scene.graph.shaders['connectionShader2'];
+            }
+
+            connections[i].shaderObject = buildShader(oldShaderAttributes);
+        }
     }
     
     resetStyle(){
@@ -195,6 +216,16 @@ class PieceDispatcher {
             animation = new SmoothAnimation(this.scene, animationObject.keyframes, true, duration, endPoint);
         }
         return animation;
+    }
+
+    buildShader(shaderAttributes){
+        if(shaderAttributes == undefined){
+            return undefined;
+        }
+
+        let shader = new MyShader(this.scene, shaderAttributes);
+
+        return shader;
     }
 }
 

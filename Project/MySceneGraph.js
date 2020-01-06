@@ -66,7 +66,6 @@ class MySceneGraph {
 
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
-        this.game.ready();
     }
 
     /**
@@ -1362,12 +1361,12 @@ class MySceneGraph {
 
             let grandChildren = children[i].children;
             for(let j = 0; j < grandChildren.length; ++j){
-                if (grandChildren[j].nodeName != "shader") {
+                if (grandChildren[j].nodeName != "sampler") {
                     this.onXMLMinorError("unexpected tag <" + grandChildren[j].nodeName + ">");
                     continue;
                 }
 
-                let bindNumber = this.reader.getfloat(grandChildren[j], 'bind');
+                let bindNumber = this.reader.getFloat(grandChildren[j], 'bind');
 
                 if(textures[bindNumber]){
                     this.onXMLMinorError("Repeated bind number in <" + shaderID + ">");

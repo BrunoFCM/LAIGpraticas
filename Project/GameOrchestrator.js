@@ -13,15 +13,17 @@ class GameOrchestrator {
         this.scene = scene;
         this.scene.playerInputHandler = this.handlePlayerInput.bind(this);
         
-        this.baseState = 'Connecting';
+        this.undoAllowed = false;
         
-        this.playerStates = [0,1]; //0 is human, -1 is random AI, anything above 0 is a "better" AI (keep it under 5, for your cpu's sake)
+        this.playerStates = [0,1]; 
+        this.playerStatesNames = {
+            "Human": 0,
+            "Random": -1,
+            "Normal CPU": 1
+        };
 
-        this.timer = new GameTimer(60,this.timeOut.bind(this));
+        this.timer = new GameTimer(10,this.timeOut.bind(this));
         this.pieceDispatcher = new PieceDispatcher(this.scene);
-    }
-
-    ready(){
         this.logicClient = new PrologClient(this.connected.bind(this));
     }
 
@@ -30,8 +32,16 @@ class GameOrchestrator {
         this.startGame();
     }
 
+    changePlayer1State(v){
+        this.playerStates[0] = v;
+    }
+    
+    changePlayer2State(v){
+        this.playerStates[1] = v;
+    }
+
     startGame(){
-        this.baseState = 'Game';
+        this.sequence = [];
         this.gameState = {
                             BoardState: { 
                                         Pieces: [   
@@ -58,11 +68,14 @@ class GameOrchestrator {
                             Turns: [1,0],
                             CurrentPlayer: 1
                             };
+        this.scene.reset();
 
         this.prepareTurn();
     }
 
     prepareTurn(){
+        this.undoAllowed = true;
+
         if(this.gameState.Turns[0] == 0){
             this.gameState.CurrentPlayer = 2;
         }
@@ -70,12 +83,12 @@ class GameOrchestrator {
             this.gameState.CurrentPlayer = 1;
         }
 
-        let playerIndex = this.gameState.CurrentPlayer - 1;
-        let numberOfPieces = this.gameState.Turns[playerIndex];
-
-        let pieces = this.pieceDispatcher.dispatchPieces(this.gameState.CurrentPlayer, numberOfPieces);
-        
-        this.scene.unhandledPieces.push(...pieces);
+        if(this.scene.unhandledPieces.length == 0){
+            let playerIndex = this.gameState.CurrentPlayer - 1;
+            let numberOfPieces = this.gameState.Turns[playerIndex];
+            let pieces = this.pieceDispatcher.dispatchPieces(this.gameState.CurrentPlayer, numberOfPieces);
+            this.scene.unhandledPieces.push(...pieces);
+        }
         
         setTimeout(this.doPlayerTurn.bind(this), 1000);
     }
@@ -133,6 +146,8 @@ class GameOrchestrator {
     }
 
     handleStateUpdate(data){
+        this.undoAllowed = false;
+
         if(!this.checkResponse(data.target.response)){
             return;
         }
@@ -142,7 +157,8 @@ class GameOrchestrator {
 
             let pieceCoordinates = this.getDifferences(this.gameState.BoardState.Pieces, responseObject[0]);
             let pieceLocation = [3.5 - pieceCoordinates[0][1], 1, pieceCoordinates[0][0] - 3.5];
-            let piece = this.scene.getUnhandledPiece();            
+            let piece = this.scene.getUnhandledPiece();  
+            if(piece == undefined) return;          
             this.pieceDispatcher.movePiece(piece, pieceLocation);
 
             let connectionsCoordinates = this.getDifferences(this.gameState.BoardState.Connections, responseObject[1]);
@@ -151,14 +167,22 @@ class GameOrchestrator {
                 let location = [];
                 location[0] = 3 - connectionsCoordinates[i][1];
                 
-                location[1] = 1;
+                location[1] = 0;
                 
                 location[2] = connectionsCoordinates[i][0] - 3;
 
                 connectionLocations.push(location);
             }
             let connections = this.pieceDispatcher.dispatchConnections(this.gameState.CurrentPlayer, connectionLocations);
-            this.scene.connections.push(...connections);
+            this.scene.connections.push(...connections.added);
+
+            let added = connections.added;
+            added.push(piece);
+            let move = {added: added,
+                        changed: connections.changed,
+                        previousState: JSON.parse(JSON.stringify(this.gameState))};
+            this.sequence.push(move);
+            console.log(this.sequence);
 
             let playerIndex = this.gameState.CurrentPlayer - 1;
             if(responseObject[2][playerIndex] == 0){
@@ -188,8 +212,8 @@ class GameOrchestrator {
     }
 
     timeOut(){
-        this.baseState = 'End';
         this.scene.inputAllowed = false;
+        this.undoAllowed = false;
         if(this.gameState.Turns[0] == 0){
             gameOver(0);
         }
@@ -200,5 +224,21 @@ class GameOrchestrator {
 
     gameOver(Winner){
         console.log(Winner, " won");
+    }
+
+    undo(){
+        if(this.undoAllowed){
+            let lastMove = this.sequence.pop();
+            console.log(lastMove);
+            if(lastMove){
+                this.logicClient.cancelRequests();
+                this.scene.unhandledPieces.length = 0;
+                this.scene.removeObjects(lastMove.added);
+                this.pieceDispatcher.revertConnections(lastMove.changed);
+                this.gameState = lastMove.previousState;
+        
+                this.prepareTurn();
+            }
+        }
     }
 }
