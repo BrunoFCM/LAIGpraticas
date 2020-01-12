@@ -15,22 +15,22 @@ class PieceDispatcher {
         let material;
         let texture;
         let baseAnimation;
-        let animationObject = this.scene.graph.animations.get('baseAnimation');
+        let animationObject = this.scene.graphs[this.scene.activeGraph].animations.get('baseAnimation');
         let shaderAttributes;
 
         if(type == 1){
-            baseObject = this.scene.graph.primitives['piece1'];
-            material = this.scene.graph.materials['playerMaterial1'];
-            texture = this.scene.graph.textures['playerTexture1'];
+            baseObject = this.scene.graphs[this.scene.activeGraph].primitives['piece1'];
+            material = this.scene.graphs[this.scene.activeGraph].materials['playerMaterial1'];
+            texture = this.scene.graphs[this.scene.activeGraph].textures['playerTexture1'];
             baseAnimation = this.buildAnimation(animationObject, [15,0,0], 1);
-            shaderAttributes = this.scene.graph.shaders['baseShader1'];
+            shaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['baseShader1'];
         }
         else{
-            baseObject = this.scene.graph.primitives['piece2'];
-            material = this.scene.graph.materials['playerMaterial2'];
-            texture = this.scene.graph.textures['playerTexture2'];
+            baseObject = this.scene.graphs[this.scene.activeGraph].primitives['piece2'];
+            material = this.scene.graphs[this.scene.activeGraph].materials['playerMaterial2'];
+            texture = this.scene.graphs[this.scene.activeGraph].textures['playerTexture2'];
             baseAnimation = this.buildAnimation(animationObject, [-15,0,0], 1);
-            shaderAttributes = this.scene.graph.shaders['baseShader2'];
+            shaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['baseShader2'];
         }
 
         let shader = new MyShader(this.scene, shaderAttributes);
@@ -67,7 +67,7 @@ class PieceDispatcher {
         delta[1] -= startPoint[1];
         delta[2] -= startPoint[2];
         
-        let animationObject = this.scene.graph.animations.get('playAnimation');
+        let animationObject = this.scene.graphs[this.scene.activeGraph].animations.get('playAnimation');
 
         Piece.baseAnimation = this.buildAnimation(animationObject, delta, 1);
     
@@ -88,7 +88,7 @@ class PieceDispatcher {
             let delta = startPoint;
             delta[1] += 5;
 
-            let animationObject = this.scene.graph.animations.get('removeAnimation');
+            let animationObject = this.scene.graphs[this.scene.activeGraph].animations.get('removeAnimation');
             Piece.baseAnimation = this.buildAnimation(animationObject, delta, 1);
         }
     }
@@ -97,30 +97,30 @@ class PieceDispatcher {
         let out = {added: [],
                     changed: []};
 
-        let baseObject = this.scene.graph.primitives['connection'];
+        let baseObject = this.scene.graphs[this.scene.activeGraph].primitives['connection'];
 
         let material;
         if(type == 1){
-            material = this.scene.graph.materials['playerMaterial1'];
+            material = this.scene.graphs[this.scene.activeGraph].materials['playerMaterial1'];
         }
         else{
-            material = this.scene.graph.materials['playerMaterial2'];
+            material = this.scene.graphs[this.scene.activeGraph].materials['playerMaterial2'];
         }
         
         let texture;
         if(type == 1){
-            texture = this.scene.graph.textures['playerTexture1'];
+            texture = this.scene.graphs[this.scene.activeGraph].textures['playerTexture1'];
         }
         else{
-            texture = this.scene.graph.textures['playerTexture2'];
+            texture = this.scene.graphs[this.scene.activeGraph].textures['playerTexture2'];
         }
         
         let shaderAttributes;
         if(type == 1){
-            shaderAttributes = this.scene.graph.shaders['connectionShader1'];
+            shaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['connectionShader1'];
         }
         else{
-            shaderAttributes = this.scene.graph.shaders['connectionShader2'];
+            shaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['connectionShader2'];
         }
         let shader = new MyShader(this.scene, shaderAttributes);
 
@@ -133,17 +133,17 @@ class PieceDispatcher {
             if(foundConnection){
                 let changeShaderParameters;
                 if(type == 1){
-                    changeShaderParameters = this.scene.graph.shaders['changeShader2'];;
+                    changeShaderParameters = this.scene.graphs[this.scene.activeGraph].shaders['changeShader2'];;
                 }
                 else{
-                    changeShaderParameters = this.scene.graph.shaders['changeShader1'];
+                    changeShaderParameters = this.scene.graphs[this.scene.activeGraph].shaders['changeShader1'];
                 }
                 if(changeShaderParameters){
                     let changeShader = this.buildShader(changeShaderParameters,  1);
                     foundConnection.shader = changeShader;
                 }
 
-                let changeAnimationObject = this.scene.graph.animations.get('changeAnimation');
+                let changeAnimationObject = this.scene.graphs[this.scene.activeGraph].animations.get('changeAnimation');
                 if(changeAnimationObject){
                     let changeAnimation = this.buildAnimation(changeAnimationObject, [0,-1,0], 1);
                     foundConnection.basePosition = [x,y,0];
@@ -157,7 +157,7 @@ class PieceDispatcher {
 
             let basePosition = [x,y,z];            
 
-            let animationObject = this.scene.graph.animations.get('connectionAnimation');
+            let animationObject = this.scene.graphs[this.scene.activeGraph].animations.get('connectionAnimation');
             let baseAnimation = this.buildAnimation(animationObject, [0,1,0], 1);
 
             let connection = new MyBoardObject(this.scene, type, baseObject, basePosition, material, texture, baseAnimation, shader);
@@ -171,10 +171,10 @@ class PieceDispatcher {
         for(let i = 0; i < connections.length; ++i){
             let oldShaderAttributes;
             if(connections[i].type == 1){
-                oldShaderAttributes = this.scene.graph.shaders['connectionShader1'];
+                oldShaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['connectionShader1'];
             }
             else{
-                oldShaderAttributes = this.scene.graph.shaders['connectionShader2'];
+                oldShaderAttributes = this.scene.graphs[this.scene.activeGraph].shaders['connectionShader2'];
             }
 
             connections[i].shaderObject = buildShader(oldShaderAttributes);
