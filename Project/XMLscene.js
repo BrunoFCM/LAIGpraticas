@@ -63,6 +63,26 @@ class XMLscene extends CGFscene {
 		this.setPickEnabled(true);
     }
 
+    addNewGraph(graph) {
+		this.graphs[graph.id] = graph;
+    }
+
+
+    updateGraph(id) {
+        if(this.activeGraph == id) 
+            return;
+
+        this.activeGraph = id;
+        this.graphs[this.activeGraph].resetNodeAnimations();
+        
+        this.axis = new CGFaxis(this, this.graphs[this.activeGraph].referenceLength);
+        this.gl.clearColor(this.graphs[this.activeGraph].background[0], this.graphs[this.activeGraph].background[1], this.graphs[this.activeGraph].background[2], this.graphs[this.activeGraph].background[3]);
+        this.setGlobalAmbientLight(this.graphs[this.activeGraph].ambient[0], this.graphs[this.activeGraph].ambient[1], this.graphs[this.activeGraph].ambient[2], this.graphs[this.activeGraph].ambient[3]);
+        this.initLights();
+        this.gameOrchestrator.loadTemplates(this.graphs[this.activeGraph].templates); 
+        this.normalCamera = this.graphs[this.activeGraph].views[this.activeCameraID]; 
+    }
+
     /**
      * Initializes the scene cameras.
      */
