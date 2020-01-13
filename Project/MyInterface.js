@@ -81,7 +81,9 @@ class MyInterface extends CGFinterface {
         } 
 
         //adding controls dependent on contents read from the xml scene 
-        this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); //controller 0
+        this.gui.add(this.scene, 'selectedView', this.scene.viewList).onChange(this.scene.onSelectedViewChanged.bind(this.scene)).name('View'); 
+
+        this.gui.add(this.scene, 'activeGraph', this.scene.graphList).onChange(this.scene.onSelectedGraphChanged.bind(this.scene)).name('Graph'); 
 
         let lightIndex = 0;
         //Add a controller for every light

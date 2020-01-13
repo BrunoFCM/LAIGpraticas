@@ -20,6 +20,10 @@ class XMLscene extends CGFscene {
 
         this.selectedView = 0;
         this.viewList = {};
+        this.graphList = {
+            "Base": 0,
+            "Extra": 1
+        }
 
         this.startingInstant = 0;
         this.currentTime = 0;
@@ -179,6 +183,9 @@ class XMLscene extends CGFscene {
         this.camera = this.graphs[this.activeGraph].views[value];
     }
 
+    onSelectedGraphChanged(value){
+        this.activeGraph = value;
+    }
     /**
      * Checks if the M key was pressed and, if it was, changes de material indexes of every valid object
      */
