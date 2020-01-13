@@ -81,9 +81,9 @@ class MySceneGraph {
         this.scene.loadedGraphs++;
         this.scene.addNewGraph(this);
 
-
+        if(this.scene.loadedGraphs == this.scene.nGraphs){
             this.scene.onGraphLoaded();
-
+        }
     }
 
     /**
