@@ -39,7 +39,7 @@
         <textures>
             <texture id="playerTexture1" file="scenes/images/marble1.jpg" />
             <texture id="playerTexture2" file="scenes/images/marble2.jpg" />
-            <texture id="boardTexture" file="scenes/images/boardtex.jpg" />
+            <texture id="boardTexture" file="scenes/images/boardtex2.jpg" />
             <texture id="wood" file="scenes/images/wood.jpg" />
             <texture id="cubetop" file="scenes/images/py.png" />
             <texture id="cubebottom" file="scenes/images/ny.png" />
@@ -355,7 +355,7 @@
             </primitive>
             
             <primitive id="connection">
-                <connection/>
+                <obj file="models/tower.obj" wireframe="0"/>
             </primitive>
 
             <primitive id="divisions">
