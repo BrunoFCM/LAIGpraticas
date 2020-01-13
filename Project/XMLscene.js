@@ -15,7 +15,7 @@ class XMLscene extends CGFscene {
 
         this.graphs = [];
         this.nGraphs = nGraphs;
-        this.activeGraph = 0;
+        this.activeGraph = 1;
         this.loadedGraphs = 0;
 
         this.selectedView = 0;
