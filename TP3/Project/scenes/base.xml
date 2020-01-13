@@ -558,8 +558,8 @@
 
             <component id="holder1">
                 <transformation>
-                    <translate x="-0.624" y="0" z="-0.08" />
-                    <scale x="0.7" y="0.7" z="1" />
+                    <translate x="-0.624" y="-0.07" z="-0.08" />
+                    <scale x="0.7" y="1.4" z="1" />
                     <rotate axis="x" angle="90"  />
                 </transformation>
                 <materials>
@@ -572,8 +572,8 @@
             </component>
             <component id="holder2">
                 <transformation>
-                    <translate x="0.624" y="0" z="-0.08" />
-                    <scale x="0.7" y="0.7" z="1" />
+                    <translate x="0.624" y="0.07" z="-0.08" />
+                    <scale x="0.7" y="1.4" z="1" />
                     <rotate axis="x" angle="90"  />
                 </transformation>
                 <materials>
